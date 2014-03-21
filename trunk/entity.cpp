@@ -323,15 +323,15 @@ void entity::hit(entity* aEntity)
                 createGeoms = true;
             }
 
-            game::mSound.playTrackGroup(SOUNDID_ENEMYHITA, SOUNDID_ENEMYHITA);
+            game::mSound.playTrack(SOUNDID_ENEMYHIT);
         }
         else if (aEntity && aEntity->getType() == entity::ENTITY_TYPE_BLACKHOLE)
         {
-            game::mSound.playTrackGroup(SOUNDID_ENEMYHITA, SOUNDID_ENEMYHITA);
+            game::mSound.playTrack(SOUNDID_ENEMYHIT);
         }
         else if (aEntity && (aEntity->getType() == entity::ENTITY_TYPE_PLAYER1) || (aEntity->getType() == entity::ENTITY_TYPE_PLAYER2))
         {
-            game::mSound.playTrackGroup(SOUNDID_ENEMYHITA, SOUNDID_ENEMYHITA);
+            game::mSound.playTrack(SOUNDID_ENEMYHIT);
         }
     }
     else

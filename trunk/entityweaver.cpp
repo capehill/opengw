@@ -100,7 +100,7 @@ void entityWeaver::spawnTransition()
 {
     entity::spawnTransition();
     mRotationRate = -.06;
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN3A);
+    game::mSound.playTrack(SOUNDID_ENEMYSPAWN3);
 }
 
 

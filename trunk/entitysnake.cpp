@@ -410,7 +410,7 @@ void entitySnake::spawnTransition()
 		mSegments[i].postSpawnTransition();
     }
 
-	game::mSound.playTrack(SOUNDID_ENEMYSPAWN6A);
+	game::mSound.playTrack(SOUNDID_ENEMYSPAWN6);
 }
 
 void entitySnake::spawn()

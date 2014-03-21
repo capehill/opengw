@@ -191,7 +191,7 @@ void entityBlackHole::spawnTransition()
     mHumSpeedTarget = mHumSpeed;
     mHumLoopSoundId = -1;
 
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN5A);
+    game::mSound.playTrack(SOUNDID_ENEMYSPAWN5);
 }
 
 void entityBlackHole::destroyTransition()

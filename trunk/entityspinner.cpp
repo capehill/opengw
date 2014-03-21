@@ -113,7 +113,7 @@ void entitySpinner::hit(entity* aEntity)
 void entitySpinner::spawnTransition()
 {
     entity::spawnTransition();
-    game::mSound.playTrackGroup(SOUNDID_ENEMYSPAWN2A, SOUNDID_ENEMYSPAWN2A);
+    game::mSound.playTrack(SOUNDID_ENEMYSPAWN2);
 }
 
 

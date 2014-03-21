@@ -173,40 +173,40 @@ void player::run()
                 case 0:
                     firePattern1(rightStick, playerSpeed);
                     {
-                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE1A))
-                            game::mSound.playTrack(SOUNDID_PLAYERFIRE1A);
+                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE1))
+                            game::mSound.playTrack(SOUNDID_PLAYERFIRE1);
 
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE2A);
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE3A);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
                     }
                     break;
                 case 1:
                     firePattern2(rightStick, playerSpeed);
                     {
-                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE2A))
-                            game::mSound.playTrack(SOUNDID_PLAYERFIRE2A);
+                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE2))
+                            game::mSound.playTrack(SOUNDID_PLAYERFIRE2);
 
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE1A);
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE3A);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
                     }
                     break;
                 case 2:
                     firePattern3(rightStick, playerSpeed);
                     {
-                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE3A))
-                            game::mSound.playTrack(SOUNDID_PLAYERFIRE3A);
+                        if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE3))
+                            game::mSound.playTrack(SOUNDID_PLAYERFIRE3);
 
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE1A);
-                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE2A);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
+                        game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
                     }
                     break;
             }
         }
         else
         {
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE1A);
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE2A);
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE3A);
+            game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
+            game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
+            game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
         }
     }
 
@@ -365,8 +365,6 @@ void player::firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed)
     {
         mFiringTimer = 6;
 
-//        game::mSound.playTrackGroup(SOUNDID_PLAYERFIRE1A, SOUNDID_PLAYERFIRE1F);
-
         // Find an unused missile
         entityPlayerMissile* missile1 = NULL;
         for (int i=0; i<mMaxMissiles; i++)
@@ -510,9 +508,6 @@ void player::firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed)
             missile3->setAngle(angle - mathutils::DegreesToRads(90));
             missile3->setSpeed(missileSpeedVector + (playerSpeed * .5));
             missile3->mVelocity = speed;
-
-
-//            game::mSound.playTrackGroup(SOUNDID_PLAYERFIRE2A, SOUNDID_PLAYERFIRE2F);
         }
         else if (missile1 && missile2)
         {
@@ -549,8 +544,6 @@ void player::firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed)
                 missile2->setSpeed(missileSpeedVector + (playerSpeed * .5));
                 missile2->mVelocity = speed;
             }
-
-//            game::mSound.playTrackGroup(SOUNDID_PLAYERFIRE2A, SOUNDID_PLAYERFIRE2F);
 
         }
     }
@@ -719,7 +712,6 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
                 missile4->mVelocity = speed;
             }
 
-//            game::mSound.playTrackGroup(SOUNDID_PLAYERFIRE3A, SOUNDID_PLAYERFIRE3F);
         }
     }
 }
@@ -761,9 +753,9 @@ void player::destroyTransition()
 
     setState(ENTITY_STATE_DESTROYED);
 
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE1A);
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE2A);
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE3A);
+    game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
+    game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
+    game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
 
     if (getNumLives() <= 1)
     {

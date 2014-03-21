@@ -42,13 +42,13 @@ game::game()
     mSound.loadTrack("sounds/musicloop.wav", SOUNDID_MUSICLOOP, .2, true);
     mSound.loadTrack("sounds/menumusicloop.wav", SOUNDID_MENU_MUSICLOOP, .2, true);
 
-    mSound.loadTrack("sounds/backgroundnoiseloop_rip.wav", SOUNDID_BACKGROUND_NOISELOOP, .2, true);
+    mSound.loadTrack("sounds/backgroundnoiseloop.wav", SOUNDID_BACKGROUND_NOISELOOP, .2, true);
 
-    mSound.loadTrack("sounds/playerspawn_rip.wav", SOUNDID_PLAYERSPAWN, 1, false);
-    mSound.loadTrack("sounds/playerhit_rip.wav", SOUNDID_PLAYERHIT, .5, false);
-    mSound.loadTrack("sounds/playerdead_rip.wav", SOUNDID_PLAYERDEAD, .5, false);
-    mSound.loadTrack("sounds/sheildsdown_rip.wav", SOUNDID_SHIELDSLOST, .7, false);
-    mSound.loadTrack("sounds/playerthrust_rip.wav", SOUNDID_PLAYERTHRUST, .2, true);
+    mSound.loadTrack("sounds/playerspawn.wav", SOUNDID_PLAYERSPAWN, 1, false);
+    mSound.loadTrack("sounds/playerhit.wav", SOUNDID_PLAYERHIT, .5, false);
+    mSound.loadTrack("sounds/playerdead.wav", SOUNDID_PLAYERDEAD, .5, false);
+    mSound.loadTrack("sounds/sheildsdown.wav", SOUNDID_SHIELDSLOST, .7, false);
+    mSound.loadTrack("sounds/playerthrust.wav", SOUNDID_PLAYERTHRUST, .2, true);
 
     mSound.loadTrack("sounds/extralife.wav", SOUNDID_EXTRALIFE, .3, false);
     mSound.loadTrack("sounds/extrabomb.wav", SOUNDID_EXTRABOMB, .3, false);
@@ -57,7 +57,7 @@ game::game()
 
     mSound.loadTrack("sounds/multiplieradvance.wav", SOUNDID_MULTIPLIERADVANCE, .3, false);
 
-    mSound.loadTrack("sounds/missilehitwall_rip.wav", SOUNDID_MISSILEHITWALL, .3, false);
+    mSound.loadTrack("sounds/missilehitwall.wav", SOUNDID_MISSILEHITWALL, .3, false);
 
     mSound.loadTrack("sounds/gravitywelldestroyed.wav", SOUNDID_GRAVITYWELLDESTROYED, .3, false);
     mSound.loadTrack("sounds/gravitywelldestroyed.wav", SOUNDID_GRAVITYWELLABSORBED, .1, false);
@@ -72,22 +72,20 @@ game::game()
     mSound.loadTrack("sounds/gravitywellhumloop.wav", SOUNDID_GRAVITYWELL_HUMLOOPE, .3, true);
     mSound.loadTrack("sounds/gravitywellhumloop.wav", SOUNDID_GRAVITYWELL_HUMLOOPF, .3, true);
 
-    mSound.loadTrack("sounds/enemyspawn1_rip.wav", SOUNDID_ENEMYSPAWN1A, .5, false);
-    mSound.loadTrack("sounds/enemyspawn2_rip.wav", SOUNDID_ENEMYSPAWN2A, .5, false);
-    mSound.loadTrack("sounds/enemyspawn3_rip.wav", SOUNDID_ENEMYSPAWN3A, .5, false);
-    mSound.loadTrack("sounds/enemyspawn4_rip.wav", SOUNDID_ENEMYSPAWN4A, .5, false);
-    mSound.loadTrack("sounds/enemyspawn5.wav", SOUNDID_ENEMYSPAWN5A, .3, false);
-    mSound.loadTrack("sounds/enemyspawn6.wav", SOUNDID_ENEMYSPAWN6A, .3, false);
+    mSound.loadTrack("sounds/enemyspawn1.wav", SOUNDID_ENEMYSPAWN1, .5, false);
+    mSound.loadTrack("sounds/enemyspawn2.wav", SOUNDID_ENEMYSPAWN2, .5, false);
+    mSound.loadTrack("sounds/enemyspawn3.wav", SOUNDID_ENEMYSPAWN3, .5, false);
+    mSound.loadTrack("sounds/enemyspawn4.wav", SOUNDID_ENEMYSPAWN4, .5, false);
+    mSound.loadTrack("sounds/enemyspawn5.wav", SOUNDID_ENEMYSPAWN5, .3, false);
+    mSound.loadTrack("sounds/enemyspawn6.wav", SOUNDID_ENEMYSPAWN6, .3, false);
 
-    mSound.loadTrack("sounds/enemyhit_rip.wav", SOUNDID_ENEMYHITA, .5, false);
+    mSound.loadTrack("sounds/enemyhit.wav", SOUNDID_ENEMYHIT, .5, false);
 
     mSound.loadTrack("sounds/mayflies.wav", SOUNDID_MAYFLIES, .1, true);
 
-    mSound.loadTrack("sounds/playerfire1_rip.wav", SOUNDID_PLAYERFIRE1A, .9, true);
-    mSound.loadTrack("sounds/playerfire2_rip.wav", SOUNDID_PLAYERFIRE2A, .5, true);
-    mSound.loadTrack("sounds/playerfire3_rip.wav", SOUNDID_PLAYERFIRE3A, .8, true);
-
-    mSound.loadTrack("sounds/levelchange.wav", SOUNDID_LEVELCHANGE, .2, false);
+    mSound.loadTrack("sounds/playerfire1.wav", SOUNDID_PLAYERFIRE1, .9, true);
+    mSound.loadTrack("sounds/playerfire2.wav", SOUNDID_PLAYERFIRE2, .5, true);
+    mSound.loadTrack("sounds/playerfire3.wav", SOUNDID_PLAYERFIRE3, .8, true);
 
     mSound.startSound();
 
