@@ -76,6 +76,7 @@ void spawner::run(void)
                 game::mPlayers.mPlayer1->takeLife();
                 if (game::mPlayers.mPlayer1->getNumLives() > 0)
                 {
+                    clearWaveListEntities();
                     game::mPlayers.mPlayer1->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
                 }
                 else
@@ -106,6 +107,7 @@ void spawner::run(void)
                     game::mPlayers.mPlayer2->takeLife();
                     if (game::mPlayers.mPlayer2->getNumLives() > 0)
                     {
+                        clearWaveListEntities();
                         game::mPlayers.mPlayer2->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
                     }
                     else
@@ -149,7 +151,6 @@ return;
         //
         int index = getSpawnIndex();
 
-#if 1
         if (++mSpawnCheckTimer > 100)
         {
             mSpawnCheckTimer = 0;
@@ -192,23 +193,16 @@ return;
             }
         }
 
-		// DEBUG
-/*
-        if ((--mWaveStartTimer <= 0) && (mWaveEntity == entity::ENTITY_TYPE_UNDEF))
-        {
-            mWaveStartTimer = 500;
-			mWaveEntity = entity::ENTITY_TYPE_SNAKE;
-			mWaveType = WAVETYPE_RUSH;
-			mWaveEntityCounter = (index >= 10) ? 12 : 6;
-		}
-*/
-#endif
-
+        // Limit the number of waves that can happen at a time
         runWaveListEntities();
         int numWaveEntities = numWaveListEntities();
 
+        // Slowly allow more and more simulatanious waves
+        int numAllowedWaveEntities = 10 - index;
+        if (numAllowedWaveEntities <= 0) numAllowedWaveEntities = 1;
+
         // Start a wave
-        if (numWaveEntities <= 0)
+        if (numWaveEntities < numAllowedWaveEntities)
         {
             if (index >= 2)
             {
@@ -218,7 +212,7 @@ return;
                 {
 //                    mWaveStartTimer = 100;
 
-                    switch ((int)(mathutils::frandFrom0To1() * 16))
+                    switch ((int)(mathutils::frandFrom0To1() * 17))
                     {
                         default:
                         case 0:
@@ -252,34 +246,37 @@ return;
                             mWaveType = WAVETYPE_SWARM;
                             mWaveEntityCounter = mathutils::frandFrom0To1() * 4;
                             break;
-
                         case 5:
                             mWaveEntity = entity::ENTITY_TYPE_GRUNT;
                             mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = 8;
+                            mWaveEntityCounter = 16;
                             break;
                         case 6:
                             mWaveEntity = entity::ENTITY_TYPE_WEAVER;
                             mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = 8;
+                            mWaveEntityCounter = 16;
                             break;
                         case 7:
                             mWaveEntity = entity::ENTITY_TYPE_SNAKE;
                             mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? 8 : 4;
+                            mWaveEntityCounter = (index >= 10) ? 12 : 4;
                             break;
                         case 8:
                             mWaveEntity = entity::ENTITY_TYPE_SPINNER;
                             mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? 8 : 4;
+                            mWaveEntityCounter = (index >= 10) ? 12 : 4;
                             break;
-
+                        case 16:
+                            mWaveEntity = entity::ENTITY_TYPE_BLACKHOLE;
+                            mWaveType = WAVETYPE_RUSH;
+                            mWaveEntityCounter = (index >= 10) ? (mathutils::frandFrom0To1() * 6) : (mathutils::frandFrom0To1() * 4);
+                            break;
                         case 9:
                             if (index >= 8)
                             {
                                 mWaveEntity = entity::ENTITY_TYPE_MAYFLY;
                                 mWaveType = WAVETYPE_SWARM;
-                                mWaveEntityCounter = 50;
+                                mWaveEntityCounter = 100;
                             }
                             break;
                     }
@@ -391,7 +388,7 @@ void spawner::runWaves()
                     float rx = (mathutils::frandFrom0To1() * 4)-2;
                     float ry = (mathutils::frandFrom0To1() * 4)-2;
 
-                    Point3d spawnPoint(30, 0, 0);
+                    Point3d spawnPoint(mWaveEntity == entity::ENTITY_TYPE_BLACKHOLE ? 60 : 30, 0, 0);
                     spawnPoint = mathutils::rotate2dPoint(spawnPoint, mathutils::frandFrom0To1() * (2*PI));
                     spawnPoint.x += playerPos.x + rx;
                     spawnPoint.y += playerPos.y + ry;

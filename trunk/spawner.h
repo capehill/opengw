@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-const int NUM_WAVELIST = 200;
+const int NUM_WAVELIST = 2000;
 
 class spawner
 {

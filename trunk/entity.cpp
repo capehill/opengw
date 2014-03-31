@@ -166,26 +166,7 @@ void entity::draw()
 			glEnd();
         }
 
-
         mModel.draw(pen);
-
-/*
-        // Debug
-        {
-            float delta_theta = 0.05;
-            float r = mRadius;
-
-            glColor4f(0, 0, 1, 1);
-            glLineWidth(1);
-
-            glBegin(GL_LINE_LOOP);
-
-            for (float angle = 0; angle < 2*PI; angle += delta_theta )
-                glVertex3f( mPos.x + (r*cos(angle)), mPos.y + (r*sin(angle)), 0 );
-
-            glEnd();
-        }
-*/
 
     }
 }

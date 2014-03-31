@@ -526,7 +526,6 @@ void entitySnake::draw()
     }
 
 
-
     if (getState() == ENTITY_STATE_SPAWNING)
     {
         for (int i=0; i<NUM_SEGMENTS; i++)

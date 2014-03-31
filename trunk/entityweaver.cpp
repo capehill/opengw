@@ -75,7 +75,7 @@ void entityWeaver::run()
                         float angle = mathutils::calculate2dAngle(mPos, game::mPlayers.mPlayer1->getPos());
                         Point3d moveVector(.8, diff > 0 ? 1.1 : -1.1, 0);
                         moveVector = mathutils::rotate2dPoint(moveVector, angle + mathutils::DegreesToRads(180));
-                        moveVector = mathutils::clamp2dVector(moveVector, .05);
+                        moveVector = mathutils::clamp2dVector(moveVector, .06);
                         mDrift += moveVector;
                     }
                 }

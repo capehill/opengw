@@ -167,6 +167,13 @@ void particle::draw()
                 float speedNormal = mathutils::calculate2dDistance(Point3d(0,0,0), Point3d(particle->speedX, particle->speedY, particle->speedZ));
                 a = a * (speedNormal * .8);
 
+                if (a < .05)
+                {
+                    // This particle died
+                    particle->timeToLive = 0;
+                    continue;
+                }
+
                 glColor4f(particle->color.r, particle->color.g, particle->color.b, a); // RGBA
 
                 for (int p=0; p<NUM_POS_STREAM_ITEMS-1; p++)
@@ -176,7 +183,6 @@ void particle::draw()
 
                     vector::pen pen = particle->color;
                     pen.lineRadius *= pen.a;
-
 
                     glVertex3d(from.x, from.y, 0);
                     glVertex3d(to.x, to.y, 0);
@@ -227,18 +233,6 @@ void particle::run()
                     speedClamp = mathutils::clamp2dVector(speedClamp, 2);
                     particle->speedX = speedClamp.x;
                     particle->speedY = speedClamp.y;
-
-/*
-                    if (particle->hitGrid)
-                    {
-                        float angle = mathutils::frandFrom0To1() * (2*PI);
-                        Point3d vector(particle->speedX, particle->speedY, 0);
-                        vector = mathutils::rotate2dPoint(vector, angle);
-
-                        particle->speedX = vector.x*.9;
-                        particle->speedY = vector.y*.9;
-                    }
-*/
 
                     // Move the particle
                     particle->posStream[0].x += particle->speedX;

@@ -70,7 +70,7 @@ void model::emit(const vector::pen& pen)
 {
     glColor4f(pen.r, pen.g, pen.b, pen.a);
 
-    glBegin(GL_LINES);
+// I THINK THIS IS WRONG    glBegin(GL_LINES);
 
     for (int i=0; i<mNumEdges; i++)
     {
@@ -84,6 +84,6 @@ void model::emit(const vector::pen& pen)
         glVertex3f(to.x, to.y, 0 );
     }
 
-    glEnd();
+//    glEnd();
 }
 
