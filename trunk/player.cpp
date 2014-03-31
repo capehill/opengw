@@ -296,9 +296,6 @@ void player::draw()
             missile->draw();
     }
 
-//    glEnable(GL_MULTISAMPLE);
-//    glEnable(GL_LINE_SMOOTH);
-
     if (getEnabled())
     {
         // Draw the shields
@@ -320,9 +317,6 @@ void player::draw()
 
     if (getState() != entity::ENTITY_STATE_DESTROYED)
         entity::draw();
-
-    glDisable(GL_MULTISAMPLE);
-    glDisable(GL_LINE_SMOOTH);
 
 }
 

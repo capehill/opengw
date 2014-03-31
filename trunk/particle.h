@@ -6,7 +6,8 @@
 #include "mathutils.h"
 
 //#define NUM_POS_STREAM_ITEMS 7
-#define NUM_POS_STREAM_ITEMS 4
+//#define NUM_POS_STREAM_ITEMS 4
+#define NUM_POS_STREAM_ITEMS 5
 
 class particle
 {

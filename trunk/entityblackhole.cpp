@@ -465,9 +465,6 @@ void entityBlackHole::draw()
 
     if (this->getEnabled())
     {
-//        glEnable(GL_MULTISAMPLE);
-//        glEnable(GL_LINE_SMOOTH);
-
         if (getState() == ENTITY_STATE_SPAWNING)
         {
             vector::pen pen = mPen;
@@ -523,9 +520,6 @@ void entityBlackHole::draw()
         }
 
         drawRing();
-
-        glDisable(GL_MULTISAMPLE);
-        glDisable(GL_LINE_SMOOTH);
 
     }
 }

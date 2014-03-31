@@ -385,8 +385,6 @@ void scene::drawNumLives()
     {
         // 2 player display
 
-//        glEnable(GL_LINE_SMOOTH);
-
         vector::pen pen(player1Color, .75, 12);
         float scale = .017;
 
@@ -395,8 +393,6 @@ void scene::drawNumLives()
         game::mPlayers.mPlayer1->getModel()->Rotate(0);
         game::mPlayers.mPlayer1->getModel()->Translate(Point3d(-.9, .9, 0));
         game::mPlayers.mPlayer1->getModel()->draw(pen);
-
-        glDisable(GL_LINE_SMOOTH);
 
         pen = vector::pen(player1Color, .75, 3);
         font::AlphanumericsPrint(font::ALIGN_CENTER, .018, -.85, .9, &pen, "%d", game::m2PlayerNumLives);
@@ -408,8 +404,6 @@ void scene::drawNumLives()
     else
     {
         // 1 player display
-
-//        glEnable(GL_LINE_SMOOTH);
 
         int overflow = 0;
         int num = game::mPlayers.mPlayer1->getNumLives();
@@ -430,8 +424,6 @@ void scene::drawNumLives()
             game::mPlayers.mPlayer1->getModel()->Translate(Point3d(-.12 + (.04*i), .9, 0));
             game::mPlayers.mPlayer1->getModel()->draw(pen);
         }
-
-        glDisable(GL_LINE_SMOOTH);
 
         if (overflow > 0)
         {
@@ -455,8 +447,6 @@ void scene::drawNumBombs()
     {
         // 1 player display
 
-//        glEnable(GL_LINE_SMOOTH);
-
         int overflow = 0;
         int num = game::mPlayers.mPlayer1->getNumBombs();
         if (num > 5)
@@ -476,8 +466,6 @@ void scene::drawNumBombs()
             mShieldSymbol.Translate(Point3d(.12 + (.04*i), .9, 0));
             mShieldSymbol.draw(pen);
         }
-
-        glDisable(GL_LINE_SMOOTH);
 
         if (overflow > 0)
         {

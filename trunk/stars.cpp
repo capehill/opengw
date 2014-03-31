@@ -41,6 +41,7 @@ stars::stars()
         mStars[i].pos.y = mathutils::randFromTo(bottomEdge, topEdge);
         mStars[i].pos.z = z;
         mStars[i].radius = ((mathutils::frandFrom0To1()*.5) + .25);
+        mStars[i].brightness = ((mathutils::frandFrom0To1()*.75) + .25);
 
     }
 }
@@ -56,7 +57,8 @@ void stars::run()
 
 void stars::draw()
 {
-    float brightness = 1;//game::mGrid.brightness;
+    float brightness = 1; //game::mGrid.brightness;
+    float twinkle = 1;
 
     if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
         brightness = 1;
@@ -64,7 +66,6 @@ void stars::draw()
     if (brightness <= 0)
         return;
 
-//    glEnable(GL_POINT_SMOOTH);
     glPointSize(4);
 
     glBegin(GL_POINTS);
@@ -73,11 +74,19 @@ void stars::draw()
     {
         Point3d pt = mStars[i].pos;
 
-        glColor4f(1.0f, 1.0f, 1.0f, (mStars[i].radius+.5) * brightness);
+        if (mathutils::frandFrom0To1() * 100 > 98)
+        {
+            twinkle = .5;
+        }
+        else
+        {
+            twinkle = 1;
+        }
+
+        glColor4f(1.0f, 1.0f, 1.0f, (mStars[i].radius+.5) * brightness * mStars[i].brightness * twinkle);
         glVertex3d(pt.x, pt.y, pt.z);
     }
 
     glEnd();
-    glDisable(GL_POINT_SMOOTH);
 }
 

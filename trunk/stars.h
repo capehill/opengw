@@ -18,6 +18,7 @@ public:
     {
         Point3d pos;
         float radius;
+        float brightness;
     }STAR;
 
     STAR* mStars;

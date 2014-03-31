@@ -144,9 +144,6 @@
     <ClCompile Include="entitygeomlarge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hyperspace.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="filter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -294,9 +291,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="entitygeomlarge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hyperspace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="filter.h">

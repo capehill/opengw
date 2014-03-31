@@ -265,10 +265,10 @@ void entity::destroyTransition()
     // Throw out some particles
     Point3d pos(this->mPos);
     Point3d angle(0,0,0);
-    float speed = 4.0;
+    float speed = 3.5;
     float spread = 2*PI;
-    int num = 25;
-    int timeToLive = 150;
+    int num = 50;
+    int timeToLive = 200;
     vector::pen pen = mPen;
     pen.r *= 1.2;
     pen.g *= 1.2;

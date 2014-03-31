@@ -21,7 +21,6 @@
 #include "spawner.h"
 #include "bomb.h"
 #include "highscore.h"
-#include "hyperspace.h"
 
 enum
 {
@@ -119,7 +118,6 @@ public:
     static spawner mSpawner;
     static bomb mBomb;
 	static highscore mHighscore;
-    static hyperspace mHyperspace;
 
     static int mSkillLevel;
 

@@ -130,7 +130,6 @@
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="OpenGW.cpp" />
     <ClCompile Include="highscore.cpp" />
-    <ClCompile Include="hyperspace.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="mathutils.cpp" />
     <ClCompile Include="model.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="grid.h" />
     <ClInclude Include="OpenGW.h" />
     <ClInclude Include="highscore.h" />
-    <ClInclude Include="hyperspace.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="mathutils.h" />
     <ClInclude Include="matrix.h" />

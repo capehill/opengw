@@ -55,7 +55,7 @@ void particle::emitter(Point3d* position, Point3d* angle, float speed, float spr
         //    timeToLive *= .98;
 
         speedVertex.x = 0;
-        speedVertex.y = speed + ((mathutils::frandFrom0To1()*.5)-.25);
+        speedVertex.y = speed * mathutils::frandFrom0To1();
         speedVertex.z = 0;
 
         matrix mat;

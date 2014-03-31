@@ -903,7 +903,6 @@ namespace font
 
         glLineWidth(color->lineRadius);
         glColor4f(color->r, color->g, color->b, color->a);
-//        glEnable(GL_LINE_SMOOTH);
         glBegin(GL_LINES);
 
 
@@ -1196,7 +1195,6 @@ namespace font
         }
 
         glEnd();
-        glDisable(GL_LINE_SMOOTH);
 
     }
 

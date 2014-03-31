@@ -14,7 +14,6 @@ blackholes game::mBlackHoles;
 spawner game::mSpawner;
 bomb game::mBomb;
 highscore game::mHighscore;
-hyperspace game::mHyperspace;
 
 
 #define NUM_POINT_DISPLAYS 40
@@ -148,8 +147,6 @@ void game::run()
 
     // Run the camera
     mCamera.run();
-
-    mHyperspace.run();
 
     switch(mGameMode)
     {
@@ -313,7 +310,7 @@ void game::run()
                 float angle = mathutils::calculate2dAngle(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
                 float distance = mathutils::calculate2dDistance(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
 
-                float strength = 50;
+                float strength = 20;
                 if (distance < mAttractModeBlackHoles[i]->getRadius())
                 {
                     distance = mAttractModeBlackHoles[i]->getRadius();
@@ -379,7 +376,7 @@ void game::run()
         // Fireworks display
         static int fw = 99999;
         ++fw;
-        if (fw >= 200)
+        if (fw >= 5)
         {
             fw= 0;
             static float colorTimer=0;
@@ -387,17 +384,27 @@ void game::run()
 
             Point3d pos(mathutils::frandFrom0To1() * sizex, mathutils::frandFrom0To1() * sizey);
 
-            for (int i=0; i<500; i++)
+            //for (int i=0; i<200; i++)
             {
                 Point3d angle(0, 0, 0);
                 float speed = mathutils::frandFrom0To1() * 2;
                 float spread = (2*PI);
-                int num = 1;
+                int num = 200;
                 int timeToLive = 99999;
                 vector::pen pen;
-                pen.r = sin(colorTimer+((2*PI)/1)) + .3;
-                pen.g = sin(colorTimer+((2*PI)/2)) + .3;
-                pen.b = sin(colorTimer+((2*PI)/3)) + .3;
+
+                pen.r = sin(colorTimer+((2*PI)/1));
+                pen.g = sin(colorTimer+((2*PI)/2));
+                pen.b = sin(colorTimer+((2*PI)/3));
+
+                if (pen.r < 0) pen.r = 0;
+                if (pen.g < 0) pen.g = 0;
+                if (pen.b < 0) pen.b = 0;
+
+                pen.r += .4;
+                pen.g += .4;
+                pen.b += .4;
+
                 pen.a = 1;
                 pen.lineRadius=4;
                 mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, FALSE, .98, TRUE);
@@ -422,7 +429,6 @@ void game::draw(int pass)
     }
 
     {
-
         glDisable(GL_MULTISAMPLE);
         glDisable(GL_LINE_SMOOTH);
 
@@ -436,9 +442,6 @@ void game::draw(int pass)
             glLineWidth(5);
             mGrid.draw();
         }
-
-        glDisable(GL_MULTISAMPLE);
-        glDisable(GL_LINE_SMOOTH);
 
         // Particles
         if (pass == scene::RENDERPASS_PRIMARY)
@@ -454,9 +457,8 @@ void game::draw(int pass)
 #endif
         }
 
-//        glEnable(GL_MULTISAMPLE);
-//        glEnable(GL_LINE_SMOOTH);
-
+        glEnable(GL_MULTISAMPLE);
+        glEnable(GL_LINE_SMOOTH);
 
         // Enemies
         if (mGameMode == GAMEMODE_PLAYING)
@@ -479,7 +481,14 @@ void game::draw(int pass)
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
         {
+            glEnable(GL_POINT_SMOOTH);
+            glEnable(GL_MULTISAMPLE);
+
             mStars.draw();
+
+            glDisable(GL_POINT_SMOOTH);
+            glDisable(GL_MULTISAMPLE);
+
         }
 
         // Bombs
@@ -488,8 +497,8 @@ void game::draw(int pass)
             mBomb.draw();
         }
 
-//        glEnable(GL_MULTISAMPLE);
-//        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_MULTISAMPLE);
+        glEnable(GL_LINE_SMOOTH);
 
         // Point displays
         {
@@ -497,8 +506,6 @@ void game::draw(int pass)
             drawPointDisplays();
         }
 
-        glDisable(GL_MULTISAMPLE);
-        glDisable(GL_LINE_SMOOTH);
 	}
 }
 
