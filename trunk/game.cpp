@@ -429,9 +429,6 @@ void game::draw(int pass)
     }
 
     {
-        glDisable(GL_MULTISAMPLE);
-        glDisable(GL_LINE_SMOOTH);
-
         // Grid
         if (((mGameMode == GAMEMODE_PLAYING) || (mGameMode == GAMEMODE_GAMEOVER) || (mGameMode == GAMEMODE_GAMEOVER_TRANSITION))
 #ifndef GRID_GLOW
@@ -446,25 +443,42 @@ void game::draw(int pass)
         // Particles
         if (pass == scene::RENDERPASS_PRIMARY)
         {
+            glEnable(GL_LINE_SMOOTH);
+            glEnable(GL_MULTISAMPLE);
             glLineWidth(4);
+
             mParticles.draw();
+
+            glDisable(GL_MULTISAMPLE);
+            glDisable(GL_LINE_SMOOTH);
         }
         else
         {
 #ifdef PARTICLE_GLOW
-            glLineWidth(8);
+            glLineWidth(12);
             mParticles.draw();
 #endif
         }
-
-        glEnable(GL_MULTISAMPLE);
-        glEnable(GL_LINE_SMOOTH);
 
         // Enemies
         if (mGameMode == GAMEMODE_PLAYING)
         {
             glLineWidth(4);
-            mEnemies.draw();
+
+            if (pass == scene::RENDERPASS_PRIMARY)
+            {
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+
+                mEnemies.draw();
+
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
+            }
+            else
+            {
+                mEnemies.draw();
+            }
         }
 
         // Players
@@ -472,7 +486,21 @@ void game::draw(int pass)
         {
             glLineWidth(4);
             glPointSize(4/2);
-            mPlayers.draw();
+
+            if (pass == scene::RENDERPASS_PRIMARY)
+            {
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+
+                mPlayers.draw();
+
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
+            }
+            else
+            {
+                mPlayers.draw();
+            }
         }
 
         glDisable(GL_LINE_SMOOTH);
@@ -486,9 +514,8 @@ void game::draw(int pass)
 
             mStars.draw();
 
-            glDisable(GL_POINT_SMOOTH);
             glDisable(GL_MULTISAMPLE);
-
+            glDisable(GL_POINT_SMOOTH);
         }
 
         // Bombs
@@ -497,13 +524,24 @@ void game::draw(int pass)
             mBomb.draw();
         }
 
-        glEnable(GL_MULTISAMPLE);
-        glEnable(GL_LINE_SMOOTH);
-
         // Point displays
         {
             glLineWidth(4);
-            drawPointDisplays();
+
+            if (pass == scene::RENDERPASS_PRIMARY)
+            {
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+
+                drawPointDisplays();
+
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
+            }
+            else
+            {
+                drawPointDisplays();
+            }
         }
 
 	}

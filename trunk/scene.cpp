@@ -251,6 +251,8 @@ void scene::draw(int pass)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_MULTISAMPLE);
 
 		if (game::mGameMode != game::GAMEMODE_HIGHSCORES)
 			drawScores();
@@ -339,6 +341,10 @@ void scene::draw(int pass)
             drawNumLives();
             drawNumBombs();
         }
+
+        glDisable(GL_MULTISAMPLE);
+        glDisable(GL_LINE_SMOOTH);
+
 		glDisable2D();
     }
 
