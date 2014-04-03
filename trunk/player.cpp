@@ -106,12 +106,11 @@ void player::run()
             angle -= mathutils::DegreesToRads(90);
 
             // Rotate to the correct angle
-			angle = fmod((double)angle, 2*PI);
-            float currentAngle = fmod((double)this->getAngle(), 2*PI);
+			angle = mathutils::wrapRadians(angle);
+            float currentAngle = mathutils::wrapRadians(this->getAngle());
             float diff = mathutils::diffAngles(angle, currentAngle);
             currentAngle += diff * .2;
             this->setAngle(currentAngle);
-
 
             // Move
             playerSpeed = thrust;
@@ -136,7 +135,7 @@ void player::run()
             static float spreadIndex = 0;
             // First swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (sin(spreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(spreadIndex) * .3));
                 exhaustOffset += getPos();
 
                 float spread = .1;
@@ -144,7 +143,7 @@ void player::run()
             }
             // Second swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (sin(-spreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(-spreadIndex) * .3));
                 exhaustOffset += getPos();
 
                 float spread = .1;
@@ -309,7 +308,7 @@ void player::draw()
             glBegin(GL_LINE_LOOP);
 
             for (float angle = 0; angle < 2*PI; angle += delta_theta )
-                glVertex3f( mPos.x + (r*cos(angle)), mPos.y + (r*sin(angle)), 0 );
+                glVertex3f( mPos.x + (r*get_cos(angle)), mPos.y + (r*get_sin(angle)), 0 );
 
             glEnd();
         }

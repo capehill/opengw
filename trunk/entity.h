@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-
+#include "mathutils.h"
 #include "defines.h"
 #include "point3d.h"
 #include "vector.h"
@@ -65,7 +65,7 @@ public:
     void setDrift(const Point3d& drift) { mDrift = drift; }
 
     float getAngle() const { return mAngle; }
-    void setAngle(const float& angle) { mAngle = angle; }
+    void setAngle(const float& angle) { mAngle = mathutils::wrapRadians(angle); }
 
     float getRotationRate() const { return mRotationRate; }
     void setRotationRate(const float& rate) { mRotationRate = rate; }

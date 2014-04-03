@@ -140,6 +140,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sincos.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="spawner.cpp" />
     <ClCompile Include="stars.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="point3d.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="sincos.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="spawner.h" />
     <ClInclude Include="stars.h" />

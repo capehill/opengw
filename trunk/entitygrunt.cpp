@@ -1,6 +1,6 @@
 #include "entitygrunt.h"
 #include "game.h"
-
+#include "sincos.h"
 
 entityGrunt::entityGrunt()
     : entity()
@@ -52,8 +52,8 @@ void entityGrunt::run()
 
         // Run animation
         mAnimationIndex += .07;
-        mScale.x = 2 + (sin(mAnimationIndex) * .4);
-        mScale.y = 2.5 + (sin(-mAnimationIndex) * .4);
+        mScale.x = 2 + (get_sin(mAnimationIndex) * .4);
+        mScale.y = 2.5 + (get_sin(-mAnimationIndex) * .4);
 
     }
     entity::run();

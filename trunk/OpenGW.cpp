@@ -12,6 +12,7 @@
 #include "scene.h"
 
 #include "blur.h"
+#include "sincos.h"
 
 
 #define filterWidth 5 
@@ -108,6 +109,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	}
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_OPENGW));
+
+    // Seed random number table
+    srand(GetTickCount());
+
+    // Create sin/cos tables
+    make_sin_cos_tables();
 
     OGLCreate();
 
@@ -492,7 +499,7 @@ void OGLPaint(HDC hDC)
 
 
     // ****************************************
-/*
+
     ++frameCount;
 
     DWORD newTime = GetTickCount();
@@ -510,7 +517,7 @@ void OGLPaint(HDC hDC)
         ::SetWindowText(hWnd, s);
 
     }
-*/
+
     // ****************************************
 
     wglMakeCurrent(hDC, hRC);

@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include "point3d.h"
+#include "sincos.h"
 
 class matrix
 {
@@ -68,18 +69,18 @@ public:
 
         // x axis
 
-        xmat._matrix[1][1]=cos(rx);  xmat._matrix[1][2]=sin(rx);
-        xmat._matrix[2][0]=0;        xmat._matrix[2][1]=-sin(rx); xmat._matrix[2][2]=cos(rx);
+        xmat._matrix[1][1]=get_cos(rx); xmat._matrix[1][2]=get_sin(rx);
+        xmat._matrix[2][0]=0;           xmat._matrix[2][1]=-get_sin(rx); xmat._matrix[2][2]=get_cos(rx);
 
         // y axis
 
-        ymat._matrix[0][0]=cos(ry);  ymat._matrix[0][2]=-sin(ry);
-        ymat._matrix[2][0]=sin(ry);  ymat._matrix[2][2]=cos(ry);
+        ymat._matrix[0][0]=get_cos(ry);  ymat._matrix[0][2]=-get_sin(ry);
+        ymat._matrix[2][0]=get_sin(ry);  ymat._matrix[2][2]=get_cos(ry);
 
         // z axis
 
-        zmat._matrix[0][0]=cos(rz);  zmat._matrix[0][1]=sin(rz);
-        zmat._matrix[1][0]=-sin(rz); zmat._matrix[1][1]=cos(rz);
+        zmat._matrix[0][0]=get_cos(rz);  zmat._matrix[0][1]=get_sin(rz);
+        zmat._matrix[1][0]=-get_sin(rz); zmat._matrix[1][1]=get_cos(rz);
 
         matrix temp(xmat);
         temp.Multiply(ymat);

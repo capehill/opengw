@@ -1,5 +1,6 @@
 #include "entityproton.h"
 #include "game.h"
+#include "sincos.h"
 
 entityProton::entityProton(void)
 {
@@ -28,7 +29,7 @@ entityProton::entityProton(void)
     int i = 0;
     for (float angle = 0; i<mModel.mNumVertex; angle += delta_theta, i++ )
     {
-        mModel.mVertexList[i] = Point3d(r*cos(angle), r*sin(angle));
+        mModel.mVertexList[i] = Point3d(r*get_cos(angle), r*get_sin(angle));
     }
 
     i = 0;

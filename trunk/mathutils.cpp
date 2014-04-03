@@ -1,7 +1,15 @@
 #include "mathutils.h"
+#include "sincos.h"
+
 
 namespace mathutils
 {
+    float wrapRadians(float radians)
+    {
+        radians = fmodf(radians, RADIAN);
+        if (radians < 0.0) radians += RADIAN;
+        return radians;
+    }
 
     float calculate2dDistance(Point3d p1, Point3d p2)
     {
@@ -62,8 +70,8 @@ namespace mathutils
 
     float diffAngles(float angle1, float angle2)
     {
-      angle1 = fmod(angle1, mathutils::DegreesToRads(360));
-      angle2 = fmod(angle2, mathutils::DegreesToRads(360));
+      angle1 = mathutils::wrapRadians(angle1);
+      angle2 = mathutils::wrapRadians(angle2);
 
       float angle = angle1-angle2;
 
@@ -92,7 +100,7 @@ namespace mathutils
     {
         float normalx = point.x;
         float normaly = point.y;
-        Point3d pt(normalx * cos(angle) - normaly * sin(angle), normalx * sin(angle) + normaly * cos(angle));
+        Point3d pt(normalx * get_cos(angle) - normaly * get_sin(angle), normalx * get_sin(angle) + normaly * get_cos(angle));
         return pt;
     }
 
@@ -111,7 +119,6 @@ namespace mathutils
     Point3d translate2dPointFromPointByRadius(const Point3d& point, const Point3d& fromPoint, float distance)
     {
         float angle = mathutils::calculate2dAngle(point, fromPoint);
-//        float distance = mathutils::calculate2dDistance(point, fromPoint);
 
         Point3d vPoint(distance,0,0);
         Point3d rPoint = mathutils::rotate2dPoint(vPoint, angle);

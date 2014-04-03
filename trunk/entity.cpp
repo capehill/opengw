@@ -183,7 +183,7 @@ void entity::run()
     mPos += mSpeed;
     mPos += mDrift;
     mAngle += mRotationRate;
-    mAngle = fmod((double)mAngle, 2.0f*PI);
+    mAngle = fmodf(mAngle, 2.0f*PI);
 
     // Keep it on the grid
     if (mGridBound)

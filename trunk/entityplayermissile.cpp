@@ -58,8 +58,8 @@ void entityPlayerMissile::run()
 	                    Point3d v2 = blackHole->getPos();
 	                    Point3d v1 = mPos;
 
-	                    float angle = fmod((double)mathutils::calculate2dAngle(v1, v2), 2*PI);
-                        float heading = fmod((double)getAngle() + mathutils::DegreesToRads(90), 2*PI);
+	                    float angle = mathutils::wrapRadians(mathutils::calculate2dAngle(v1, v2));
+                        float heading = mathutils::wrapRadians(getAngle() + mathutils::DegreesToRads(90));
 
 	                    float targetingAngle = mathutils::diffAngles(angle, heading);
 	                    float targetingOffset = fabs(targetingAngle);
@@ -85,7 +85,7 @@ void entityPlayerMissile::run()
         mPos += mSpeed;
         mPos += mDrift;
         mAngle -= mRotationRate;
-        mAngle = fmod((double)mAngle, 2.0f*PI);
+        mAngle = fmodf(mAngle, 2.0f*PI);
 
         // Update the model's matrix
         mModel.Identity();

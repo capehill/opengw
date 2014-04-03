@@ -6,6 +6,8 @@
 
 namespace mathutils
 {
+    float wrapRadians(float radians);
+
     float calculate2dDistance(Point3d p1, Point3d p2);
 
     float calculate2dAngle(Point3d from, Point3d to);

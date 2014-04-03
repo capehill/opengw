@@ -384,7 +384,6 @@ void game::run()
 
             Point3d pos(mathutils::frandFrom0To1() * sizex, mathutils::frandFrom0To1() * sizey);
 
-            //for (int i=0; i<200; i++)
             {
                 Point3d angle(0, 0, 0);
                 float speed = mathutils::frandFrom0To1() * 2;
@@ -393,9 +392,9 @@ void game::run()
                 int timeToLive = 99999;
                 vector::pen pen;
 
-                pen.r = sin(colorTimer+((2*PI)/1));
-                pen.g = sin(colorTimer+((2*PI)/2));
-                pen.b = sin(colorTimer+((2*PI)/3));
+                pen.r = get_sin(colorTimer+((2*PI)/1));
+                pen.g = get_sin(colorTimer+((2*PI)/2));
+                pen.b = get_sin(colorTimer+((2*PI)/3));
 
                 if (pen.r < 0) pen.r = 0;
                 if (pen.g < 0) pen.g = 0;
@@ -443,19 +442,19 @@ void game::draw(int pass)
         // Particles
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            glEnable(GL_LINE_SMOOTH);
-            glEnable(GL_MULTISAMPLE);
+            //glEnable(GL_LINE_SMOOTH);
+            //glEnable(GL_MULTISAMPLE);
             glLineWidth(4);
 
             mParticles.draw();
 
-            glDisable(GL_MULTISAMPLE);
-            glDisable(GL_LINE_SMOOTH);
+            //glDisable(GL_MULTISAMPLE);
+            //glDisable(GL_LINE_SMOOTH);
         }
         else
         {
 #ifdef PARTICLE_GLOW
-            glLineWidth(12);
+            glLineWidth(10);
             mParticles.draw();
 #endif
         }
@@ -502,9 +501,6 @@ void game::draw(int pass)
                 mPlayers.draw();
             }
         }
-
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_MULTISAMPLE);
 
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)

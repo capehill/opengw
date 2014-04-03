@@ -1,6 +1,6 @@
 #include "entityblackhole.h"
 #include "game.h"
-
+#include "sincos.h"
 
 entityBlackHole::entityBlackHole()
 {
@@ -364,7 +364,7 @@ void entityBlackHole::hit(entity* aEntity)
         float r;
         if (mActivated)
         {
-            r = mRadius + (sin(mAnimationIndex)*mAnimationDepth);
+            r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
             r *= mStrength + (mBalance*.1);
         }
         else
@@ -533,7 +533,7 @@ void entityBlackHole::drawRing()
     float r;
     if (activated)
     {
-        r = mRadius + (sin(mAnimationIndex)*mAnimationDepth);
+        r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
         r *= mStrength + (mBalance*.1);
 		r *= .8;
     }
@@ -557,7 +557,7 @@ void entityBlackHole::drawRing()
         float c = r;
 
         for (float angle = 0; angle < 2.01*PI; angle += delta_theta )
-            glVertex3f( mPos.x + (c*cos(angle)), mPos.y + (c*sin(angle)), 0 );
+            glVertex3f( mPos.x + (c*get_cos(angle)), mPos.y + (c*get_sin(angle)), 0 );
 
         glEnd();
 
@@ -578,7 +578,7 @@ void entityBlackHole::drawRing()
         float c = r+.2;
 
         for (float angle = 0; angle < 2*PI; angle += delta_theta )
-            glVertex3f( mPos.x + (c*cos(angle)), mPos.y + (c*sin(angle)), 0 );
+            glVertex3f( mPos.x + (c*get_cos(angle)), mPos.y + (c*get_sin(angle)), 0 );
 
         glEnd();
 
@@ -588,7 +588,7 @@ void entityBlackHole::drawRing()
         c = r;
 
         for (float angle = 0; angle < 2*PI; angle += delta_theta )
-            glVertex3f( mPos.x + (c*cos(angle)), mPos.y + (c*sin(angle)), 0 );
+            glVertex3f( mPos.x + (c*get_cos(angle)), mPos.y + (c*get_sin(angle)), 0 );
 
         glEnd();
 
@@ -597,7 +597,7 @@ void entityBlackHole::drawRing()
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     }
 
-    float c =(sin(mAnimationIndex)*mAnimationDepth);
+    float c =(get_sin(mAnimationIndex)*mAnimationDepth);
 
     if (activated)
     {
@@ -621,7 +621,7 @@ void entityBlackHole::drawRing()
     glBegin(GL_LINE_LOOP);
 
     for (float angle = 0; angle < 2*PI; angle += delta_theta )
-        glVertex3f( mPos.x + (r*cos(angle)), mPos.y + (r*sin(angle)), 0 );
+        glVertex3f( mPos.x + (r*get_cos(angle)), mPos.y + (r*get_sin(angle)), 0 );
 
     glEnd();
 
@@ -640,7 +640,7 @@ const float entityBlackHole::getRadius() const
     float r;
     if (mActivated)
     {
-        r = mRadius + (sin(mAnimationIndex)*mAnimationDepth);
+        r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
         r *= mStrength + (mBalance*.1);
     }
     else

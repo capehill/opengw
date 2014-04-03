@@ -1,6 +1,6 @@
 #include "entitySpinner.h"
 #include "game.h"
-
+#include "sincos.h"
 
 entitySpinner::entitySpinner()
     : entity()
@@ -57,7 +57,7 @@ void entitySpinner::run()
 
         // Run animation
         mAnimationIndex += .12; // .07
-        mAngle = (sin(mAnimationIndex)) * .5;
+        mAngle = (get_sin(mAnimationIndex)) * .5;
     }
     entity::run();
 }
