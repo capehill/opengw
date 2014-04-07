@@ -536,6 +536,7 @@ void enemies::explodeEntity(entity& e)
             if (pen.g > 1) pen.g = 1;
             if (pen.b > 1) pen.b = 1;
             if (pen.a > 1) pen.a = 1;
+            pen.a = 999;
             line->setPen(pen);
 
             Point3d from = m->mVertexList[m->mEdgeList[i].from];
@@ -553,7 +554,7 @@ void enemies::explodeEntity(entity& e)
 
             float variation = (mathutils::frandFrom0To1() * 2) - 1;
 
-            Point3d speedVector(0,.2,0);
+            Point3d speedVector(0,.4,0);
             speedVector = mathutils::rotate2dPoint(speedVector, angle + variation);
 
             speedVector += e.getDrift() * .1;

@@ -51,16 +51,19 @@ void entityPlayer1::initPlayerForGame()
 
     if (game::mNumPlayers == 1)
     {
-        mPen = vector::pen(1, 1, 1, .5, 12);
+        mPen = vector::pen(1, 1, 1, 1, 12);
+        mExhaustPen = vector::pen(1, .5, .2, 40, 5);
+
         mPos.x = theGame.mGrid.extentX() / 2;
         mPos.y = theGame.mGrid.extentY() / 2;
         mPos.z = 0;
     }
-    else if (game::mNumPlayers == 2)
+    else
     {
-        mPen = vector::pen(1, .7, .7, .5, 12);
-        mPos.x = (theGame.mGrid.extentX() / 2) - 10;
-        mPos.y = theGame.mGrid.extentY() / 2;
+        mPen = vector::pen(1, .3, .3, 1, 12);
+
+        mPos.x = (theGame.mGrid.extentX() / 2) - 9;
+        mPos.y = (theGame.mGrid.extentY() / 2) + 9;
         mPos.z = 0;
     }
 
@@ -70,11 +73,13 @@ void entityPlayer1::spawnTransition()
 {
     player::spawnTransition();
 
-    if (game::mNumPlayers == 2)
+    if (game::mNumPlayers > 1)
     {
-        mPen = vector::pen(1, .7, .7, .5, 12);
-        mPos.x = (theGame.mGrid.extentX() / 2) - 10;
-        mPos.y = theGame.mGrid.extentY() / 2;
+        mPen = vector::pen(1, .3, .3, 1, 12);
+        mExhaustPen = vector::pen(1, .4, .4, 40, 5);
+
+        mPos.x = (theGame.mGrid.extentX() / 2) - 9;
+        mPos.y = (theGame.mGrid.extentY() / 2) + 9;
         mPos.z = 0;
         mAngle = 0;
     }

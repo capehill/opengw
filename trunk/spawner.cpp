@@ -48,103 +48,100 @@ void spawner::run(void)
         }
     }
 
-/*
-    // Keep things simple for the first level
-    if (game::mLevel == 0)
-    {
-        if (mSpawnIndex > 1)
-            mSpawnIndex = 1;
-    }
-*/
-
-    // Update player 1 and player 2
-
-    static int player1SpawnTimer = 0;
-    static int player2SpawnTimer = 0;
-
-    // Monitor Player1 and respawn as needed
-    if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_INACTIVE)
-    {
-        mSpawnWaitTimer = 50;
-
-        if (++player1SpawnTimer >= 50)
-        {
-            player1SpawnTimer = 0;
-
-            if (game::mPlayers.mPlayer1->getNumLives() > 0)
-            {
-                game::mPlayers.mPlayer1->takeLife();
-                if (game::mPlayers.mPlayer1->getNumLives() > 0)
-                {
-                    clearWaveListEntities();
-                    game::mPlayers.mPlayer1->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
-                }
-                else
-                {
-                    // else game over
-	    			game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
-                }
-            }
-            else
-            {
-                // else game over
-	    		game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
-            }
-        }
-    }
-
-    // Monitor Player2 and respawn as needed
-    if (game::mNumPlayers == 2)
-    {
-        if (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_INACTIVE)
-        {
-            if (++player2SpawnTimer >= 50)
-            {
-                player2SpawnTimer = 0;
-
-                if (game::mPlayers.mPlayer2->getNumLives() > 0)
-                {
-                    game::mPlayers.mPlayer2->takeLife();
-                    if (game::mPlayers.mPlayer2->getNumLives() > 0)
-                    {
-                        clearWaveListEntities();
-                        game::mPlayers.mPlayer2->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
-                    }
-                    else
-                    {
-                        // else game over
-    	    			game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
-                    }
-                }
-                else
-                {
-                    // else game over
-    	    		game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
-                }
-            }
-        }
-    }
-
-/*
-    if (game::mEnemies.getNumActiveEnemiesOfType(entity::ENTITY_TYPE_BLACKHOLE) == 0)
-    {
-        spawnEntities(entity::ENTITY_TYPE_BLACKHOLE, 1);
-    }
-return;
-*/
-
     int numPlayersActive = 0;
-    if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING)
-        ++numPlayersActive;
-    if (game::mNumPlayers == 2)
+    if (game::mNumPlayers >= 1)
+    {
+        if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING)
+            ++numPlayersActive;
+    }
+    if (game::mNumPlayers >= 2)
     {
         if (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
+    if (game::mNumPlayers >= 3)
+    {
+        if (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING)
+            ++numPlayersActive;
+    }
+    if (game::mNumPlayers >= 4)
+    {
+        if (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING)
+            ++numPlayersActive;
+    }
+
+    // Respawn the players as needed
+
+    static int player1SpawnTimer = 0;
+    static int player2SpawnTimer = 0;
+    static int player3SpawnTimer = 0;
+    static int player4SpawnTimer = 0;
+
+    // Monitor Player1 and respawn as needed
+    for (int i = 0; i<game::mNumPlayers; i++)
+    {
+        player* player;
+        int* timer;
+        switch(i)
+        {
+            case 0:
+                player = game::mPlayers.mPlayer1;
+                timer = &player1SpawnTimer;
+                break;
+            case 1:
+                player = game::mPlayers.mPlayer2;
+                timer = &player2SpawnTimer;
+                break;
+            case 2:
+                player = game::mPlayers.mPlayer3;
+                timer = &player3SpawnTimer;
+                break;
+            case 3:
+                player = game::mPlayers.mPlayer4;
+                timer = &player4SpawnTimer;
+                break;
+        }
+
+        if (player->getState() == entity::ENTITY_STATE_INACTIVE)
+        {
+            if (game::mNumPlayers == 1)
+            {
+                mSpawnWaitTimer = 50;
+            }
+
+            if (++(*timer) >= 50)
+            {
+                *timer = 0;
+
+                player->takeLife();
+                if (player->getNumLives() > 0)
+                {
+                    clearWaveListEntities();
+                    player->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+                }
+                else
+                {
+                    if (game::mNumPlayers == 1)
+                    {
+	    			    game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
+                    }
+                    else
+                    {
+                        // Multiplayer
+                        // Wait until no more players are active
+                        if (numPlayersActive == 0)
+                        {
+    	    			    game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     if (mSpawnWaitTimer > 0) --mSpawnWaitTimer;
 
-    if ((mSpawnWaitTimer == 0) && (numPlayersActive == game::mNumPlayers))
+    if ((mSpawnWaitTimer == 0) && numPlayersActive)
     {
         //
         // Randomly spawn enemies here and there
@@ -375,8 +372,23 @@ void spawner::runWaves()
         if (mWaveType == WAVETYPE_RUSH)
         {
             // Pick a player to attack
-            Point3d playerPos = (game::mNumPlayers == 1) ? game::mPlayers.mPlayer1->getPos()
-                : (mathutils::frandFrom0To1() * 100 < 50 ? game::mPlayers.mPlayer1->getPos() : game::mPlayers.mPlayer2->getPos());
+            Point3d playerPos = game::mPlayers.mPlayer1->getPos();
+            int playerNum = ceil(game::mNumPlayers * mathutils::frandFrom0To1());
+            switch (playerNum)
+            {
+                case 0:
+                    playerPos = game::mPlayers.mPlayer1->getPos();
+                    break;
+                case 1:
+                    playerPos = game::mPlayers.mPlayer2->getPos();
+                    break;
+                case 2:
+                    playerPos = game::mPlayers.mPlayer3->getPos();
+                    break;
+                case 3:
+                    playerPos = game::mPlayers.mPlayer4->getPos();
+                    break;
+            }
 
             do
             {

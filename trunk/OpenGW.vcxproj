@@ -117,6 +117,8 @@
     <ClCompile Include="entitymayfly.cpp" />
     <ClCompile Include="entityPlayer1.cpp" />
     <ClCompile Include="entityPlayer2.cpp" />
+    <ClCompile Include="entityPlayer3.cpp" />
+    <ClCompile Include="entityPlayer4.cpp" />
     <ClCompile Include="entityplayermissile.cpp" />
     <ClCompile Include="entityproton.cpp" />
     <ClCompile Include="entitysnake.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="entitymayfly.h" />
     <ClInclude Include="entityPlayer1.h" />
     <ClInclude Include="entityPlayer2.h" />
+    <ClInclude Include="entityPlayer3.h" />
+    <ClInclude Include="entityPlayer4.h" />
     <ClInclude Include="entityplayermissile.h" />
     <ClInclude Include="entityproton.h" />
     <ClInclude Include="entitysnake.h" />

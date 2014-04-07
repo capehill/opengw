@@ -3,6 +3,8 @@
 
 player* players::mPlayer1;
 player* players::mPlayer2;
+player* players::mPlayer3;
+player* players::mPlayer4;
 
 players::players()
 {
@@ -11,19 +13,43 @@ players::players()
 
     mPlayer2 = new entityPlayer2;
     mPlayer2->setState(entity::ENTITY_STATE_INACTIVE);
+
+    mPlayer3 = new entityPlayer3;
+    mPlayer3->setState(entity::ENTITY_STATE_INACTIVE);
+
+    mPlayer4 = new entityPlayer4;
+    mPlayer4->setState(entity::ENTITY_STATE_INACTIVE);
 }
 
 players::~players()
 {
     delete mPlayer1;
     delete mPlayer2;
+    delete mPlayer3;
+    delete mPlayer4;
 }
 
 void players::run()
 {
-    for (int i=0; i<2; i++)
+    for (int i=0; i<4; i++)
     {
-        player* currentPlayer = (i==0) ? mPlayer1 : mPlayer2;
+        player* currentPlayer;
+        
+        switch (i)
+        {
+            case 0:
+                currentPlayer = mPlayer1;
+                break;
+            case 1:
+                currentPlayer = mPlayer2;
+                break;
+            case 2:
+                currentPlayer = mPlayer3;
+                break;
+            case 3:
+                currentPlayer = mPlayer4;
+                break;
+        }
 
         currentPlayer->runMissiles();
 
@@ -100,6 +126,8 @@ void players::draw()
 {
     mPlayer1->draw();
     mPlayer2->draw();
+    mPlayer3->draw();
+    mPlayer4->draw();
 }
 
 player* players::getPlayerClosestToPosition(const Point3d& point)
@@ -111,15 +139,53 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
     }
     else
     {
-        if (mPlayer1->getEnabled() && mPlayer2->getEnabled())
+        float distancePlayer1 = 999999;
+        float distancePlayer2 = 999999;
+        float distancePlayer3 = 999999;
+        float distancePlayer4 = 999999;
+
+        if (mPlayer1->getEnabled())
         {
-            float distance1 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer1->getPos());
-            float distance2 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer2->getPos());
-            return (distance1 < distance2) ? mPlayer1 : mPlayer2;
+            distancePlayer1 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer1->getPos());
         }
-        else if (mPlayer2->getEnabled())
-            return mPlayer2;
-        else
-            return mPlayer1;
+        if (mPlayer2->getEnabled())
+        {
+            distancePlayer2 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer2->getPos());
+        }
+        if (mPlayer3->getEnabled())
+        {
+            distancePlayer3 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer3->getPos());
+        }
+        if (mPlayer4->getEnabled())
+        {
+            distancePlayer4 = mathutils::calculate2dDistance(point, game::mPlayers.mPlayer4->getPos());
+        }
+
+        float minDistance = 999999;
+        player* closePlayer = NULL;
+
+        if (distancePlayer1 < minDistance)
+        {
+            minDistance = distancePlayer1;
+            closePlayer = game::mPlayers.mPlayer1;
+        }
+        if (distancePlayer2 < minDistance)
+        {
+            minDistance = distancePlayer2;
+            closePlayer = game::mPlayers.mPlayer2;
+        }
+        if (distancePlayer3 < minDistance)
+        {
+            minDistance = distancePlayer3;
+            closePlayer = game::mPlayers.mPlayer3;
+        }
+        if (distancePlayer4 < minDistance)
+        {
+            minDistance = distancePlayer4;
+            closePlayer = game::mPlayers.mPlayer4;
+        }
+
+        return closePlayer ? closePlayer : mPlayer1; // just in case
+
     }
 }

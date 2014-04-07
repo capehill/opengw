@@ -10,6 +10,7 @@
 #include "defines.h"
 #include "OpenGW.h"
 #include "scene.h"
+#include "game.h"
 
 #include "blur.h"
 #include "sincos.h"
@@ -185,7 +186,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        In this function, we save the instance handle in a global variable and
 //        create and display the main program window.
 //
-//#define FULLSCREEN
+#define FULLSCREEN
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
@@ -454,7 +455,10 @@ void drawOffscreens()
     glBindTexture(GL_TEXTURE_2D, texOffscreen);
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
 
-    superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 3);
+    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 8);
+    else
+        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 3);
 
     // Bind the blur result back to our texture
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, blurBufferWidth, blurBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
@@ -470,7 +474,10 @@ void drawOffscreens()
     glEnable( GL_TEXTURE_2D );
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
-    glColor4f(1, 1, 1, .8); // .8
+    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+        glColor4f(1, 1, 1, 1);
+    else
+        glColor4f(1, 1, 1, .8);
 
     // Draw it on the screen
     glBegin( GL_QUADS );
@@ -478,6 +485,13 @@ void drawOffscreens()
     glTexCoord2d(1.0,0.0); glVertex2d(1.0, -1.0);
     glTexCoord2d(1.0,1.0); glVertex2d(1.0, 1.0);
     glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+    {
+        glTexCoord2d(0.0,0.0); glVertex2d(-1.0, -1.0);
+        glTexCoord2d(1.0,0.0); glVertex2d(1.0, -1.0);
+        glTexCoord2d(1.0,1.0); glVertex2d(1.0, 1.0);
+        glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+    }
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, 0);

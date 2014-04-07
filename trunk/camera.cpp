@@ -2,7 +2,7 @@
 #include "camera.h"
 
 static const int zoomedIn = 50; // 50
-static const int zoomedOut = 66;
+static const int zoomedOut = 66; // 66
 
 camera::camera()
 {
@@ -21,30 +21,111 @@ void camera::followPlayer()
 {
     // If there is an active player or players, follow it
     Point3d playerPos;
-
-    if (game::mNumPlayers == 1)
+    bool firstPlayer = true;
+    int targets = 0;
+    for (int i=0; i<4; i++)
     {
-		// One player game
+        player* player;
+        switch(i)
+        {
+            case 0:
+                player = game::mPlayers.mPlayer1;
+                break;
+            case 1:
+                player = game::mPlayers.mPlayer2;
+                break;
+            case 2:
+                player = game::mPlayers.mPlayer3;
+                break;
+            case 3:
+                player = game::mPlayers.mPlayer4;
+                break;
+        }
 
-        playerPos = game::mPlayers.mPlayer1->getPos();
+        if (player->getState() != entity::ENTITY_STATE_INACTIVE)
+        {
+            ++targets;
+            if (firstPlayer)
+            {
+                firstPlayer = false;
+                playerPos = player->getPos();
+            }
+            else
+            {
+                playerPos.x = (playerPos.x + player->getPos().x) / 2;
+                playerPos.y = (playerPos.y + player->getPos().y) / 2;
+            }
+        }
     }
-    else
+
+    if (targets == 0)
     {
-		// Two player game
-
-        // Get the midpoint and distance between the players
-        playerPos = Point3d((game::mPlayers.mPlayer1->getPos().x + game::mPlayers.mPlayer2->getPos().x) / 2, (game::mPlayers.mPlayer1->getPos().y + game::mPlayers.mPlayer2->getPos().y) / 2, 0);
-        float distance = mathutils::calculate2dDistance(game::mPlayers.mPlayer1->getPos(), game::mPlayers.mPlayer2->getPos()) * 4;
-
-        static const float hypotenuse = sqrt((float)(theGame.mGrid.extentX()*theGame.mGrid.extentX()) + (theGame.mGrid.extentY()*theGame.mGrid.extentY()));
-
-        mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * (distance / hypotenuse);
-
-        if (mTargetZoom < zoomedIn)
-            mTargetZoom = zoomedIn;
-        else if (mTargetZoom > zoomedOut)
-            mTargetZoom = zoomedOut;
+        // Nothing to follow
+        return;
     }
+
+    // Figure out our largest distance between players
+    float playerDistance = 0;
+
+    for (int i=0; i<4; i++)
+    {
+        player* playerA;
+        switch(i)
+        {
+            case 0:
+                playerA = game::mPlayers.mPlayer1;
+                break;
+            case 1:
+                playerA = game::mPlayers.mPlayer2;
+                break;
+            case 2:
+                playerA = game::mPlayers.mPlayer3;
+                break;
+            case 3:
+                playerA = game::mPlayers.mPlayer4;
+                break;
+        }
+
+        if (playerA->getState() != entity::ENTITY_STATE_INACTIVE)
+        {
+            for (int j=0; j<4; j++)
+            {
+                player* playerB;
+                switch(j)
+                {
+                    case 0:
+                        playerB = game::mPlayers.mPlayer1;
+                        break;
+                    case 1:
+                        playerB = game::mPlayers.mPlayer2;
+                        break;
+                    case 2:
+                        playerB = game::mPlayers.mPlayer3;
+                        break;
+                    case 3:
+                        playerB = game::mPlayers.mPlayer4;
+                        break;
+                }
+
+                if (playerA == playerB) continue;
+                if (playerB->getState() != entity::ENTITY_STATE_INACTIVE)
+                {
+                    float abDistance = mathutils::calculate2dDistance(playerA->getPos(), playerB->getPos());
+                    if (abDistance > playerDistance)
+                        playerDistance = abDistance;
+                }
+            }
+        }
+    }
+
+    static const float hypotenuse = sqrt((float)(theGame.mGrid.extentX()*theGame.mGrid.extentX()) + (theGame.mGrid.extentY()*theGame.mGrid.extentY()));
+
+    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*4) / hypotenuse);
+
+    if (mTargetZoom < zoomedIn)
+        mTargetZoom = zoomedIn;
+    else if (mTargetZoom > zoomedOut)
+        mTargetZoom = zoomedOut;
 
     float ax = (playerPos.x / theGame.mGrid.extentX());
     float ay = (playerPos.y / theGame.mGrid.extentY());
@@ -59,8 +140,8 @@ void camera::run()
 {
     mCurrentZoom += (mTargetZoom - mCurrentZoom) / 20.0f;
 
-    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 16.0f;
-    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 16.0f;
+    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 20.0f;
+    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 20.0f;
 
     mCurrentPos.z = mCurrentZoom;
 }

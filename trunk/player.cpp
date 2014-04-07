@@ -10,6 +10,8 @@ player::player()
 
     mDestroyTime = 50;
 
+    mExhaustSpreadIndex = mathutils::randFromTo(0,1);
+
     setState(ENTITY_STATE_INACTIVE);
 
     // Create our missiles
@@ -123,33 +125,33 @@ void player::run()
             float speed = .5;
             int num = 1;
             int timeToLive = 200;
-            vector::pen pen = (mPlayerAssignment==0) ? vector::pen(1, .5, .2, 40, 5) : vector::pen(.5, .5, 1, 40, 5);
+            vector::pen pen = this->getExhaustPen();
+            pen.a = 99999;
 
             // Main stream
             {
-                float spread = .9;
+                float spread = .1;
                 exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -2, 0), angle);
                 exhaustOffset += getPos();
                 game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
             }
-            static float spreadIndex = 0;
             // First swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(spreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(mExhaustSpreadIndex) * .3));
                 exhaustOffset += getPos();
 
-                float spread = .1;
+                float spread = 0;
                 game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
             }
             // Second swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(-spreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(-mExhaustSpreadIndex) * .3));
                 exhaustOffset += getPos();
 
-                float spread = .1;
+                float spread = 0;
                 game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
             }
-            spreadIndex += .24;
+            mExhaustSpreadIndex += .18;
 
             if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERTHRUST))
                 game::mSound.playTrack(SOUNDID_PLAYERTHRUST);
@@ -815,7 +817,7 @@ void player::addKillAtLocation(int points, Point3d pos)
         }
     }
 
-    vector::pen pen = (mPlayerAssignment==0) ? vector::pen(1, .5, .2, .9, 5) : vector::pen(.5, .5, 1, .9, 5);
+    vector::pen pen = this->mPen;
 
     if (showMultiplier)
     {
@@ -865,6 +867,12 @@ void player::takeLife()
     if (game::mNumPlayers == 1)
         --mNumLives;
     else --game::m2PlayerNumLives;
+
+    if (mNumLives < 0)
+        mNumLives = 0;
+
+    if (game::m2PlayerNumLives < 0)
+        game::m2PlayerNumLives = 0;
 }
 
 void player::addBomb()

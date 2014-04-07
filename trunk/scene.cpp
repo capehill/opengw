@@ -311,15 +311,23 @@ void scene::draw(int pass)
 						vector::pen pen(1,1,1,.5,3);
 						if (game::mCredits == 1)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 Player Start");
-						else
+						else if (game::mCredits == 2)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 or 2 Player Start");
+						else if (game::mCredits == 3)
+							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, or 3 Player Start");
+						else if (game::mCredits == 4)
+							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, 3, or 4 Player Start");
 
 						pen.a=.1;
 						pen.lineRadius = 8;
 						if (game::mCredits == 1)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 Player Start");
-						else
+						else if (game::mCredits == 2)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 or 2 Player Start");
+						else if (game::mCredits == 3)
+							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, or 3 Player Start");
+						else if (game::mCredits == 4)
+							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, 3, or 4 Player Start");
 					}
 				}
 				else

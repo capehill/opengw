@@ -70,8 +70,6 @@ void model::emit(const vector::pen& pen)
 {
     glColor4f(pen.r, pen.g, pen.b, pen.a);
 
-// I THINK THIS IS WRONG    glBegin(GL_LINES);
-
     for (int i=0; i<mNumEdges; i++)
     {
         Point3d from = mVertexList[mEdgeList[i].from];
@@ -84,6 +82,5 @@ void model::emit(const vector::pen& pen)
         glVertex3f(to.x, to.y, 0 );
     }
 
-//    glEnd();
 }
 

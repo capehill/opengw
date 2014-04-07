@@ -205,8 +205,23 @@ void entityPlayerMissile::draw()
 {
     if (getState() == entity::ENTITY_STATE_RUNNING)
     {
-        // Set the proper color for the player1/player2 source
-        mPen = (mPlayerSource == 0) ? vector::pen(1, .9, .2, .7, 12) : vector::pen(.5, .5, 1, .7, 12);
+        // Set the proper color for the player
+        switch (mPlayerSource)
+        {
+            case 0:
+                mPen = game::mPlayers.mPlayer1->getPen();
+                break;
+            case 1:
+                mPen = game::mPlayers.mPlayer2->getPen();
+                break;
+            case 2:
+                mPen = game::mPlayers.mPlayer3->getPen();
+                break;
+            case 3:
+                mPen = game::mPlayers.mPlayer4->getPen();
+                break;
+        }
+
         entity::draw();
     }
 }

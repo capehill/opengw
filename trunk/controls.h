@@ -17,6 +17,8 @@ public:
     bool getTriggerButton(int player);
     bool getStart1Button();
     bool getStart2Button();
+    bool getStart3Button();
+    bool getStart4Button();
 
 private:
 

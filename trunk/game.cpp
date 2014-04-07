@@ -160,6 +160,8 @@ void game::run()
             break;
         case GAMEMODE_CREDITED:
             {
+                // IT'S STUPID TO HAVE A START BUTTON FOR EACH NUMBER OF PLAYERS
+                // I'D RATHER GO WITH A "JOIN" STAGE OF STARTING THE GAME
                 if (mControls.getStart1Button())
                 {
                     startGame(1);
@@ -167,6 +169,14 @@ void game::run()
                 else if (mControls.getStart2Button())
                 {
                     startGame(2);
+                }
+                else if (mControls.getStart3Button())
+                {
+                    startGame(3);
+                }
+                else if (mControls.getStart4Button())
+                {
+                    startGame(4);
                 }
             }
             break;
@@ -181,21 +191,31 @@ void game::run()
                 mSpawner.run();
                 runPointDisplays();
 
+                // Music speed
+
                 mMusicSpeedTarget = 1;
-                if (this->mNumPlayers == 1)
+
+                // Slow the music down when someone is respawning
+                if (this->mNumPlayers >= 1)
                 {
                     if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED)
                         mMusicSpeedTarget = .5;
                 }
-                else if (this->mNumPlayers == 2)
+                if (this->mNumPlayers >= 2)
                 {
-                    if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED)
-                        mMusicSpeedTarget = .5;
                     if (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED)
                         mMusicSpeedTarget = .5;
                 }
-
-                // Music speed
+                if (this->mNumPlayers >= 3)
+                {
+                    if (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED)
+                        mMusicSpeedTarget = .5;
+                }
+                if (this->mNumPlayers >= 4)
+                {
+                    if (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED)
+                        mMusicSpeedTarget = .5;
+                }
 
                 if (mMusicSpeed < mMusicSpeedTarget)
 				{
@@ -255,7 +275,7 @@ void game::run()
             {
     			if (game::mNumPlayers == 1)
 					game::mGameMode = game::GAMEMODE_HIGHSCORES_CHECK;
-                else
+                else // TODO - MULTIPLAYER HIGH SCORES?????
                     mGameMode = GAMEMODE_ATTRACT;
             }
             break;
@@ -296,7 +316,7 @@ void game::run()
                 {
                     att->strength = -40;
                     att->zStrength = 0;
-                    att->radius = 20;
+                    att->radius = 40;
                     att->pos = pos;
                     att->enabled = TRUE;
                     att->attractsParticles = TRUE;
@@ -310,7 +330,7 @@ void game::run()
                 float angle = mathutils::calculate2dAngle(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
                 float distance = mathutils::calculate2dDistance(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
 
-                float strength = 20;
+                float strength = 2;
                 if (distance < mAttractModeBlackHoles[i]->getRadius())
                 {
                     distance = mAttractModeBlackHoles[i]->getRadius();
@@ -388,8 +408,8 @@ void game::run()
                 Point3d angle(0, 0, 0);
                 float speed = mathutils::frandFrom0To1() * 2;
                 float spread = (2*PI);
-                int num = 200;
-                int timeToLive = 99999;
+                int num = 500;
+                int timeToLive = 5000;
                 vector::pen pen;
 
                 pen.r = get_sin(colorTimer+((2*PI)/1));
@@ -466,13 +486,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_MULTISAMPLE);
+//                glEnable(GL_LINE_SMOOTH);
+//                glEnable(GL_MULTISAMPLE);
 
                 mEnemies.draw();
 
-                glDisable(GL_MULTISAMPLE);
-                glDisable(GL_LINE_SMOOTH);
+//                glDisable(GL_MULTISAMPLE);
+//                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -488,13 +508,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_MULTISAMPLE);
+//                glEnable(GL_LINE_SMOOTH);
+//                glEnable(GL_MULTISAMPLE);
 
                 mPlayers.draw();
 
-                glDisable(GL_MULTISAMPLE);
-                glDisable(GL_LINE_SMOOTH);
+//                glDisable(GL_MULTISAMPLE);
+//                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -505,13 +525,13 @@ void game::draw(int pass)
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            glEnable(GL_POINT_SMOOTH);
-            glEnable(GL_MULTISAMPLE);
+//            glEnable(GL_POINT_SMOOTH);
+//            glEnable(GL_MULTISAMPLE);
 
             mStars.draw();
 
-            glDisable(GL_MULTISAMPLE);
-            glDisable(GL_POINT_SMOOTH);
+//            glDisable(GL_MULTISAMPLE);
+//            glDisable(GL_POINT_SMOOTH);
         }
 
         // Bombs
@@ -526,13 +546,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_MULTISAMPLE);
+//                glEnable(GL_LINE_SMOOTH);
+//                glEnable(GL_MULTISAMPLE);
 
                 drawPointDisplays();
 
-                glDisable(GL_MULTISAMPLE);
-                glDisable(GL_LINE_SMOOTH);
+//                glDisable(GL_MULTISAMPLE);
+//                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -557,17 +577,27 @@ void game::startGame(int numPlayers)
 
     mSpawner.init();
 
-    if (mNumPlayers == 1)
+    // Fire up the players
+
+    if (mNumPlayers >= 1)
     {
-        // Fire up player 1
         this->mPlayers.mPlayer1->initPlayerForGame();
     }
-    else
+    if (mNumPlayers >= 2)
     {
-        // Fire up both players
-        this->mPlayers.mPlayer1->initPlayerForGame();
         this->mPlayers.mPlayer2->initPlayerForGame();
+    }
+    if (mNumPlayers >= 3)
+    {
+        this->mPlayers.mPlayer3->initPlayerForGame();
+    }
+    if (mNumPlayers >= 4)
+    {
+        this->mPlayers.mPlayer4->initPlayerForGame();
+    }
 
+    if (mNumPlayers > 1)
+    {
         // Shared lives and bombs
         m2PlayerNumLives = 5;
         m2PlayerNumBombs = 0;

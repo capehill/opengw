@@ -78,6 +78,16 @@ bool controls::getStart2Button()
     return readKeyboardStart2();
 }
 
+bool controls::getStart3Button()
+{
+    return readKeyboardStart3();
+}
+
+bool controls::getStart4Button()
+{
+    return readKeyboardStart4();
+}
+
 //
 // Keyboard controller
 //

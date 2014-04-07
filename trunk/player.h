@@ -48,6 +48,8 @@ public:
 
     void addPointsNoMultiplier(int points);
 
+    vector::pen getExhaustPen() const { return mExhaustPen; }
+
 protected:
 
     void firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed);
@@ -72,6 +74,11 @@ protected:
     int mNumLives;
     int mNumBombs;
     int mGeoms;
+
+    float mExhaustSpreadIndex;
+
+    vector::pen mExhaustPen;
+
 };
 
 #define PLAYER_SHEILD_TIME 250

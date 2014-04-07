@@ -18,7 +18,8 @@ entityPlayer2::entityPlayer2()
     mSpawnTime = 35;
     mSheildTimer = PLAYER_SHEILD_TIME;
 
-    mPen = vector::pen(.5, .5, 1, .7, 12);
+    mPen = vector::pen(.3, .3, 1, 1, 12);
+    mExhaustPen = vector::pen(.5, .5, 1, 40, 5);
 
     int i=0;
 
@@ -66,11 +67,10 @@ void entityPlayer2::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    // TODO - HAVE THE GRID DECIDE WHAT THE SPAWN POINTS ARE
     if (game::mNumPlayers == 2)
     {
-        mPos.x = (theGame.mGrid.extentX() / 2) + 10;
-        mPos.y = theGame.mGrid.extentY() / 2;
+        mPos.x = (theGame.mGrid.extentX() / 2) + 9;
+        mPos.y = (theGame.mGrid.extentY() / 2) + 9;
         mPos.z = 0;
     }
 }
@@ -79,9 +79,8 @@ void entityPlayer2::spawnTransition()
 {
     player::spawnTransition();
 
-    // TODO - HAVE THE GRID DECIDE WHAT THE SPAWN POINTS ARE
-    mPos.x = (theGame.mGrid.extentX() / 2) + 10;
-    mPos.y = theGame.mGrid.extentY() / 2;
+    mPos.x = (theGame.mGrid.extentX() / 2) + 9;
+    mPos.y = (theGame.mGrid.extentY() / 2) + 9;
     mPos.z = 0;
     mAngle = 0;
 }
