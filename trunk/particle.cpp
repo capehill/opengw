@@ -16,7 +16,8 @@ static float particleLineRadius = 3;
 
 particle::particle()
 {
-    mNumParticles = 1000; // PERFORMANCE: The larger this number is, the larger the performance hit!
+    mNumParticles = 2000; // PERFORMANCE: The larger this number is, the larger the performance hit!
+    mIndex = 0;
 
     mParticles = new PARTICLE[mNumParticles];
     if (mParticles)
@@ -52,8 +53,6 @@ void particle::emitter(Point3d* position, Point3d* angle, float speed, float spr
     {
         Point3d speedVertex, speedVector;
 
-        //    timeToLive *= .98;
-
         speedVertex.x = 0;
         speedVertex.y = speed * mathutils::frandFrom0To1();
         speedVertex.z = 0;
@@ -80,39 +79,8 @@ void particle::assignParticle(Point3d* position,
 {
     int i;
 
-    // Find an unused particle
-    PARTICLE* particle = NULL;
-
-    if (mParticles)
-    {
-        for (i=0; i<mNumParticles; i++)
-        {
-            if (mParticles[i].timeToLive <= 0)
-            {
-                // Found one
-                particle = &mParticles[i];
-                break;
-            }
-        }
-    }
-
-    if (!particle)
-    {
-        // Out of particles - pick off the particle closest to being done
-        int minTime = 320000;
-        int minIndex = 0;
-
-        for (i=0; i<mNumParticles; i++)
-        {
-            if (mParticles[i].timeToLive <= minTime)
-            {
-                minIndex = i;
-                minTime = mParticles[i].timeToLive;
-            }
-        }
-
-        particle = &mParticles[minIndex];
-    }
+    PARTICLE* particle = &mParticles[mIndex++];
+    if (mIndex >= mNumParticles) mIndex = 0;
 
     if (particle)
     {

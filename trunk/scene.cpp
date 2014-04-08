@@ -156,10 +156,12 @@ void scene::draw(int pass)
     {
         float top = .65;
         float bottom = -.4;
+//        float top = 1;
+//        float bottom = -1;
 
         glEnable(GL_BLEND);
 
-        glColor4f(0, 0, 0, .5);
+        glColor4f(0, .1, 0, .9);
 	    glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 
         glBegin( GL_QUADS );
@@ -194,7 +196,7 @@ void scene::draw(int pass)
 
 				// Enable the texture for OpenGL.
 				glEnable( GL_TEXTURE_2D );
-				glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+				glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
 				mTextureMarquee.bind();
 
@@ -210,7 +212,7 @@ void scene::draw(int pass)
 				glTexCoord2d(1, 1); glVertex2d(x+(width/2), y-(height/2));
 				glTexCoord2d(1, 0); glVertex2d(x+(width/2), y+(height/2));
 				glTexCoord2d(0, 0); glVertex2d(x-(width/2), y+(height/2));
-				glEnd();
+                glEnd();
 
 				mTextureMarquee.unbind();
 
@@ -492,19 +494,19 @@ void scene::drawScores()
             {
                 case 0:
                     player = game::mPlayers.mPlayer1;
-                    pos = Point3d(-.6, .9, 0);
+                    pos = Point3d(-.7, .9, 0);
                     break;
                 case 1:
                     player = game::mPlayers.mPlayer2;
-                    pos = Point3d(.6, .9, 0);
+                    pos = Point3d(.3, .9, 0);
                     break;
                 case 2:
                     player = game::mPlayers.mPlayer3;
-                    pos = Point3d(-.6, -.9, 0);
+                    pos = Point3d(-.7, -.9, 0);
                     break;
                 case 3:
                     player = game::mPlayers.mPlayer4;
-                    pos = Point3d(.6, -.9, 0);
+                    pos = Point3d(.3, -.9, 0);
                     break;
             }
 

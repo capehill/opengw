@@ -120,7 +120,7 @@ void camera::followPlayer()
 
     static const float hypotenuse = sqrt((float)(theGame.mGrid.extentX()*theGame.mGrid.extentX()) + (theGame.mGrid.extentY()*theGame.mGrid.extentY()));
 
-    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*4) / hypotenuse);
+    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*2) / hypotenuse);
 
     if (mTargetZoom < zoomedIn)
         mTargetZoom = zoomedIn;
@@ -138,10 +138,10 @@ void camera::followPlayer()
 
 void camera::run()
 {
-    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 50.0f;
+    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 120.0f;
 
-    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 50.0f;
-    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 50.0f;
+    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 30.0f;
+    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 30.0f;
 
     mCurrentPos.z = mCurrentZoom;
 }

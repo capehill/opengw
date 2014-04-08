@@ -88,7 +88,7 @@ game::game()
 
     mSound.startSound();
 
-    mBrightness = 1;
+    mBrightness = 0;
 
     mCamera.center();
 
@@ -408,10 +408,10 @@ void game::run()
 
             {
                 Point3d angle(0, 0, 0);
-                float speed = mathutils::frandFrom0To1() * 2;
+                float speed = mathutils::frandFrom0To1() * 4;
                 float spread = (2*PI);
-                int num = 500;
-                int timeToLive = 5000;
+                int num = 100;
+                int timeToLive = 99999;
                 vector::pen pen;
 
                 pen.r = get_sin(colorTimer+((2*PI)/1));
@@ -426,18 +426,17 @@ void game::run()
                 pen.g += .4;
                 pen.b += .4;
 
-                pen.a = 1;
+                pen.a = 100;
                 pen.lineRadius=4;
                 mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, FALSE, .98, TRUE);
             }
         }
-
     }
 
     mParticles.run();
 }
 
-//#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
+#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
 #define PARTICLE_GLOW // PERFORMANCE: Uncomment to get glowing particles, but it has a performance hit!
 
 void game::draw(int pass)
@@ -572,6 +571,7 @@ void game::startGame(int numPlayers)
     mBrightness = 1;
 
     mCamera.center();
+    mCamera.mCurrentZoom = 120;
 
     mLevel = 0;
 
@@ -635,8 +635,6 @@ void game::endGame()
 
     mSound.playTrack(SOUNDID_PLAYERDEAD);
     mSound.playTrack(SOUNDID_MENU_MUSICLOOP);
-
-    mCamera.center();
 
     // Kill all players
     mPlayers.mPlayer1->setState(entity::ENTITY_STATE_INACTIVE);

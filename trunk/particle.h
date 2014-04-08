@@ -49,6 +49,7 @@ public:
 
     PARTICLE* mParticles;
     int mNumParticles;
+    int mIndex;
 
 private:
 
