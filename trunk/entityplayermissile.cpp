@@ -209,18 +209,20 @@ void entityPlayerMissile::draw()
         switch (mPlayerSource)
         {
             case 0:
-                mPen = game::mPlayers.mPlayer1->getPen();
+                mPen = game::mPlayers.mPlayer1->getMissilesPen();
                 break;
             case 1:
-                mPen = game::mPlayers.mPlayer2->getPen();
+                mPen = game::mPlayers.mPlayer2->getMissilesPen();
                 break;
             case 2:
-                mPen = game::mPlayers.mPlayer3->getPen();
+                mPen = game::mPlayers.mPlayer3->getMissilesPen();
                 break;
             case 3:
-                mPen = game::mPlayers.mPlayer4->getPen();
+                mPen = game::mPlayers.mPlayer4->getMissilesPen();
                 break;
         }
+
+        mPen.lineRadius = 12;
 
         entity::draw();
     }

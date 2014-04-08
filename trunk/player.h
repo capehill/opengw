@@ -49,6 +49,8 @@ public:
     void addPointsNoMultiplier(int points);
 
     vector::pen getExhaustPen() const { return mExhaustPen; }
+    vector::pen getMissilesPen() const { return mMissilesPen; }
+    vector::pen getFontPen() const { return mFontPen; }
 
 protected:
 
@@ -78,6 +80,8 @@ protected:
     float mExhaustSpreadIndex;
 
     vector::pen mExhaustPen;
+    vector::pen mMissilesPen;
+    vector::pen mFontPen;
 
 };
 

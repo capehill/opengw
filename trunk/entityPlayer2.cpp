@@ -20,6 +20,8 @@ entityPlayer2::entityPlayer2()
 
     mPen = vector::pen(.3, .3, 1, 1, 12);
     mExhaustPen = vector::pen(.5, .5, 1, 40, 5);
+    mMissilesPen = vector::pen(.5, .5, 1, 40, 5);
+    mFontPen = vector::pen(.5, .5, 1, 40, 5);
 
     int i=0;
 

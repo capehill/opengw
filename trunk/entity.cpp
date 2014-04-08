@@ -300,6 +300,10 @@ void entity::hit(entity* aEntity)
                     game::mPlayers.mPlayer1->addKillAtLocation(mScoreValue, getPos());
                 else if (missile->mPlayerSource == 1)
                     game::mPlayers.mPlayer2->addKillAtLocation(mScoreValue, getPos());
+                else if (missile->mPlayerSource == 2)
+                    game::mPlayers.mPlayer3->addKillAtLocation(mScoreValue, getPos());
+                else if (missile->mPlayerSource == 3)
+                    game::mPlayers.mPlayer4->addKillAtLocation(mScoreValue, getPos());
 
                 createGeoms = true;
             }

@@ -138,10 +138,10 @@ void camera::followPlayer()
 
 void camera::run()
 {
-    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 20.0f;
+    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 50.0f;
 
-    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 20.0f;
-    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 20.0f;
+    mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 50.0f;
+    mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 50.0f;
 
     mCurrentPos.z = mCurrentZoom;
 }

@@ -148,6 +148,9 @@ void game::run()
     // Run the camera
     mCamera.run();
 
+    // Run the point displays
+    runPointDisplays();
+
     switch(mGameMode)
     {
         case GAMEMODE_ATTRACT:
@@ -189,7 +192,6 @@ void game::run()
                 mPlayers.run();
                 mBomb.run();
                 mSpawner.run();
-                runPointDisplays();
 
                 // Music speed
 

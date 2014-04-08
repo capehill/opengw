@@ -14,9 +14,7 @@ void glDisable2D();
 #define VIRTUAL_SCREEN_WIDTH 800
 #define VIRTUAL_SCREEN_HEIGHT 600
 
-static vector::pen singlePlayerColor(0, 1, 0, .6, 12);
-static vector::pen player1Color(1, .6, .6, .75, 12);
-static vector::pen player2Color(.6, .6, 1, .75, 12);
+static vector::pen defaultFontPen(0, 1, 0, .6, 12);
 
 
 scene::scene()
@@ -175,16 +173,6 @@ void scene::draw(int pass)
         glColor4f(0, 1, 0, .1);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-/*
-        glBegin( GL_QUADS );
-        glVertex2d(-1.0, bottom);
-        glVertex2d(1.0, bottom);
-        glVertex2d(1.0, top);
-        glVertex2d(-1.0, top);
-        glEnd();
-*/
-
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         if (pass == RENDERPASS_PRIMARY)
         {
@@ -192,14 +180,6 @@ void scene::draw(int pass)
             glLineWidth(6);
 
             glColor4f(.1, 1, .1, .4);
-/*
-            glBegin(GL_LINES);
-            glVertex2d(1.0, top+.005);
-            glVertex2d(-1.0, top+.005);
-            glVertex2d(-1.0, bottom-.005);
-            glVertex2d(1.0, bottom-.005);
-            glEnd();
-*/
 
             if (!mTextureMarquee.mLoaded)
                 mTextureMarquee.load("images/marquee.png");
@@ -265,9 +245,10 @@ void scene::draw(int pass)
 		}
         else if (game::mGameMode == game::GAMEMODE_GAMEOVER)
         {
-/*
             drawCredits();
+            drawScores();
 
+/*
             vector::pen pen(1,1,1,.5,3);
             font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, -.2, &pen, "Game Over");
 
@@ -294,20 +275,19 @@ void scene::draw(int pass)
 				{
 					drawCredits();
 
-/*
-                    vector::pen pen(1,1,1,.5,3);
-                    font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, .0, &pen, "Game Over");
-
-		            pen.a=.1;
-		            pen.lineRadius = 8;
-                    font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, .0, &pen, "Game Over");
-*/
-
 					static int flashTimer = 0;
 					++flashTimer;
 
 					if ((flashTimer / 30) & 1)
 					{
+						vector::pen pen(1,1,1,.5,3);
+						font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press Start");
+
+						pen.a=.1;
+						pen.lineRadius = 8;
+						font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press Start");
+
+/*
 						vector::pen pen(1,1,1,.5,3);
 						if (game::mCredits == 1)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 Player Start");
@@ -328,7 +308,9 @@ void scene::draw(int pass)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, or 3 Player Start");
 						else if (game::mCredits == 4)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, 3, or 4 Player Start");
+*/
 					}
+
 				}
 				else
 				{
@@ -395,59 +377,34 @@ void scene::drawCredits()
 
 void scene::drawNumLives()
 {
-    if (game::mNumPlayers == 2)
+    int overflow = 0;
+    int num = game::mPlayers.mPlayer1->getNumLives();
+    if (num > 5)
     {
-        // 2 player display
+        overflow = num;
+        num = 1;
+    }
 
-        vector::pen pen(player1Color, .75, 12);
+    for (int i=0; i<num; i++)
+    {
+		vector::pen pen(defaultFontPen, .75, 12);
         float scale = .017;
 
         game::mPlayers.mPlayer1->getModel()->Identity();
         game::mPlayers.mPlayer1->getModel()->Scale(Point3d(scale, scale*mAspect, 0));
         game::mPlayers.mPlayer1->getModel()->Rotate(0);
-        game::mPlayers.mPlayer1->getModel()->Translate(Point3d(-.9, .9, 0));
+        game::mPlayers.mPlayer1->getModel()->Translate(Point3d(-.12 + (.04*i), .9, 0));
         game::mPlayers.mPlayer1->getModel()->draw(pen);
-
-        pen = vector::pen(player1Color, .75, 3);
-        font::AlphanumericsPrint(font::ALIGN_CENTER, .018, -.85, .9, &pen, "%d", game::m2PlayerNumLives);
-
-        pen.a=.1;
-        pen.lineRadius = 8;
-        font::AlphanumericsPrint(font::ALIGN_CENTER, .018, -.85, .9, &pen, "%d", game::m2PlayerNumLives);
     }
-    else
+
+    if (overflow > 0)
     {
-        // 1 player display
+        vector::pen pen(defaultFontPen, .75, 3);
+        font::AlphanumericsPrint(font::ALIGN_CENTER, .016, -.12-.06, .9, &pen, "x%d", overflow);
 
-        int overflow = 0;
-        int num = game::mPlayers.mPlayer1->getNumLives();
-        if (num > 5)
-        {
-            overflow = num;
-            num = 1;
-        }
-
-        for (int i=0; i<num; i++)
-        {
-		    vector::pen pen(singlePlayerColor, .75, 12);
-            float scale = .017;
-
-            game::mPlayers.mPlayer1->getModel()->Identity();
-            game::mPlayers.mPlayer1->getModel()->Scale(Point3d(scale, scale*mAspect, 0));
-            game::mPlayers.mPlayer1->getModel()->Rotate(0);
-            game::mPlayers.mPlayer1->getModel()->Translate(Point3d(-.12 + (.04*i), .9, 0));
-            game::mPlayers.mPlayer1->getModel()->draw(pen);
-        }
-
-        if (overflow > 0)
-        {
-            vector::pen pen(singlePlayerColor, .75, 3);
-            font::AlphanumericsPrint(font::ALIGN_CENTER, .016, -.12-.06, .9, &pen, "x%d", overflow);
-
-	        pen.a=.1;
-	        pen.lineRadius = 8;
-            font::AlphanumericsPrint(font::ALIGN_CENTER, .016, -.12-.06, .9, &pen, "x%d", overflow);
-        }
+	    pen.a=.1;
+	    pen.lineRadius = 8;
+        font::AlphanumericsPrint(font::ALIGN_CENTER, .016, -.12-.06, .9, &pen, "x%d", overflow);
     }
 }
 
@@ -471,7 +428,7 @@ void scene::drawNumBombs()
 
         for (int i=0; i<num; i++)
         {
-		    vector::pen pen(singlePlayerColor, .75, 12);
+		    vector::pen pen(defaultFontPen, .75, 12);
             float scale = .0014;
 
             mShieldSymbol.Identity();
@@ -483,7 +440,7 @@ void scene::drawNumBombs()
 
         if (overflow > 0)
         {
-            vector::pen pen(singlePlayerColor, .75, 3);
+            vector::pen pen(defaultFontPen, .75, 3);
             font::AlphanumericsPrint(font::ALIGN_CENTER, .016, .12+.06, .9, &pen, "x%d", overflow);
 
 	        pen.a=.1;
@@ -497,52 +454,7 @@ void scene::drawScores()
 {
     BOOL gameover = (game::mGameMode != game::GAMEMODE_PLAYING);
 
-    if (game::mNumPlayers == 2)
-    {
-        // 2 player display
-
-        // Player 1 score display
-        {
-            char format[512];
-            sprintf(format, "%d", game::mPlayers.mPlayer1->mScore);
-            char* s = font::formatStringWithCommas(format);
-
-		    vector::pen pen(player1Color, .75, 3);
-            if (gameover)
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.4, .9, &pen, "%s", s);
-            else
-    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.4, .9, &pen, "%s x%d", s, game::mPlayers.mPlayer1->mMultiplier);
-
-		    pen.a=.2;
-		    pen.lineRadius = 8;
-            if (gameover)
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.4, .9, &pen, "%s", s);
-            else
-    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.4, .9, &pen, "%s x%d", s, game::mPlayers.mPlayer1->mMultiplier);
-        }
-
-        // Player 2 score display
-        if (game::mNumPlayers == 2)
-        {
-            char format[512];
-            sprintf(format, "%d", game::mPlayers.mPlayer2->mScore);
-            char* s = font::formatStringWithCommas(format);
-
-		    vector::pen pen(player2Color, .75, 3);
-            if (gameover)
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .4, .9, &pen, "%s", s);
-            else
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .4, .9, &pen, "%s x%d", s, game::mPlayers.mPlayer1->mMultiplier);
-
-		    pen.a=.2;
-		    pen.lineRadius = 8;
-            if (gameover)
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .4, .9, &pen, "%s", s);
-            else
-    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .4, .9, &pen, "%s x%d", s, game::mPlayers.mPlayer1->mMultiplier);
-        }
-    }
-    else
+    if (game::mNumPlayers == 1)
     {
         // 1 player display
 
@@ -552,7 +464,7 @@ void scene::drawScores()
             sprintf(format, "%d", game::mPlayers.mPlayer1->mScore);
             char* s = font::formatStringWithCommas(format);
 
-		    vector::pen pen(singlePlayerColor, .75, 3);
+            vector::pen pen(defaultFontPen, .75, 3);
             if (gameover)
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score");
             else
@@ -567,21 +479,54 @@ void scene::drawScores()
             font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", game::mPlayers.mPlayer1->mMultiplier);
 		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.94, .82, &pen, s);
         }
+    }
+    else
+    {
+        // Multi player display
 
-/*
-        // Player 2 score display
-        if (game::mNumPlayers == 2)
+        for (int i=0; i<game::mNumPlayers; i++)
         {
-		    vector::pen pen(singlePlayerColor, .75, 3);
-            font::AlphanumericsPrint(font::ALIGN_LEFT, .016, .69, .9, &pen, "Score x%d", game::mPlayers.mPlayer2->mMultiplier);
-		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .69, .82, &pen, "%d", game::mPlayers.mPlayer2->mScore);
+            Point3d pos;
+            player* player;
+            switch(i)
+            {
+                case 0:
+                    player = game::mPlayers.mPlayer1;
+                    pos = Point3d(-.6, .9, 0);
+                    break;
+                case 1:
+                    player = game::mPlayers.mPlayer2;
+                    pos = Point3d(.6, .9, 0);
+                    break;
+                case 2:
+                    player = game::mPlayers.mPlayer3;
+                    pos = Point3d(-.6, -.9, 0);
+                    break;
+                case 3:
+                    player = game::mPlayers.mPlayer4;
+                    pos = Point3d(.6, -.9, 0);
+                    break;
+            }
+
+
+            char format[512];
+            sprintf(format, "%d", player->mScore);
+            char* s = font::formatStringWithCommas(format);
+
+            vector::pen pen(player->getFontPen(), .75, 3);
+            if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
+            else
+    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
 
 		    pen.a=.2;
 		    pen.lineRadius = 8;
-            font::AlphanumericsPrint(font::ALIGN_LEFT, .016, .69, .9, &pen, "Score x%d", game::mPlayers.mPlayer2->mMultiplier);
-		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, .69, .82, &pen, "%d", game::mPlayers.mPlayer2->mScore);
+            if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
+            else
+    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
+
         }
-*/
     }
 }
 
