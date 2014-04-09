@@ -63,9 +63,7 @@ namespace mathutils
                 angle = atan(dy/dx);
         }
 
-        if (angle >= RADIAN) angle-=RADIAN;
-
-        return angle;
+        return wrapRadians(angle);
     }
 
     float diffAngles(float angle1, float angle2)

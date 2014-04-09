@@ -186,7 +186,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        In this function, we save the instance handle in a global variable and
 //        create and display the main program window.
 //
-#define FULLSCREEN
+//#define FULLSCREEN
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
@@ -240,11 +240,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
         OGLSize(LOWORD(lParam), HIWORD(lParam));
         break;
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-        OGLPaint(hdc);
-		EndPaint(hWnd, &ps);
-		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

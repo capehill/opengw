@@ -36,7 +36,7 @@ grid::grid()
     }
 }
 
-#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower. This is also defined in game.cpp!
+//#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower. This is also defined in game.cpp!
 #define ENABLE_GRID // PERFORMANCE: This obviously has a MASSIVE effect on performance
 #define CLUMP_ATTRACTORS // PERFORMANCE: Clump attractors that are close to each other for increased performance, but sacrificing accuracy
 

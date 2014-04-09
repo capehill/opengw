@@ -436,7 +436,7 @@ void game::run()
     mParticles.run();
 }
 
-#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
+//#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
 #define PARTICLE_GLOW // PERFORMANCE: Uncomment to get glowing particles, but it has a performance hit!
 
 void game::draw(int pass)
