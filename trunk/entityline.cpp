@@ -6,8 +6,8 @@ entityLine::entityLine(void)
     mScale = 1;
     mRadius = 1;
 
-    mEdgeBounce = FALSE;
-    mGridBound = FALSE;
+    mEdgeBounce = TRUE;
+    mGridBound = TRUE;
 
     mTimeToLive = 0;
     mSpawnTime = 0;
@@ -28,9 +28,8 @@ entityLine::entityLine(void)
 
 void entityLine::spawnTransition()
 {
-//    entity::spawnTransition();
     this->setState(entity::ENTITY_STATE_RUNNING);
-    mTimeToLive = 50;
+    mTimeToLive = 100;
     run();
 }
 
@@ -44,14 +43,7 @@ void entityLine::runTransition()
 
 void entityLine::run()
 {
-    if (mTimeToLive < 50)
-    {
-        mPen.a *= .95;
-        vector::extendVector(&mModel.mVertexList[0], &mModel.mVertexList[1], .97);
-        float length = mathutils::calculate2dDistance(mModel.mVertexList[0], mModel.mVertexList[1]);
-        if (length < .1)
-            mTimeToLive = 0;
-    }
+    mPen.a *= .97;
 
     if (--mTimeToLive <= 0)
     {
@@ -59,7 +51,7 @@ void entityLine::run()
         this->setState(entity::ENTITY_STATE_DESTROYED);
     }
 
-    mSpeed *= .98;
+    mSpeed *= .985;
 
     entity::run();
 }

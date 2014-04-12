@@ -542,8 +542,8 @@ void entityBlackHole::drawRing()
         r = mRadius;
     }
 
-
-#if 0
+    // Enable if you want the black holes to appear as "holes" in the grid
+#if 1
     if (activated && (mState != entity::ENTITY_STATE_SPAWNING))
     {
         glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
@@ -630,7 +630,7 @@ void entityBlackHole::drawRing()
 void entityBlackHole::feed(int points)
 {
     mPoints += points * 2;
-    mStrength += .05;
+    mStrength += .08;
     mBalanceRate += .2;
     ++mFeedCount;
 }

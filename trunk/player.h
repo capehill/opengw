@@ -77,6 +77,8 @@ protected:
     int mNumBombs;
     int mGeoms;
 
+    bool mJoined;
+
     float mExhaustSpreadIndex;
 
     vector::pen mExhaustPen;

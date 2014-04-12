@@ -193,6 +193,12 @@ void game::run()
                 mBomb.run();
                 mSpawner.run();
 
+                // Brightness
+                if (mBrightness < 1)
+                {
+                    mBrightness += .05;
+                }
+
                 // Music speed
 
                 mMusicSpeedTarget = 1;
@@ -495,13 +501,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_MULTISAMPLE);
+//                glEnable(GL_LINE_SMOOTH);
+//                glEnable(GL_MULTISAMPLE);
 
                 mPlayers.draw();
 
-                glDisable(GL_MULTISAMPLE);
-                glDisable(GL_LINE_SMOOTH);
+//                glDisable(GL_MULTISAMPLE);
+//                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -554,10 +560,10 @@ void game::startGame(int numPlayers)
 {
     mNumPlayers = numPlayers;
 
-    mBrightness = 1;
+    mBrightness = -2; // we fade in the grid on start game
 
     mCamera.center();
-    mCamera.mCurrentZoom = 120;//PDH 120
+    mCamera.mCurrentZoom = 0;//PDH 120
 
     mLevel = 0;
 
@@ -622,6 +628,8 @@ void game::endGame()
     // Kill all players
     mPlayers.mPlayer1->setState(entity::ENTITY_STATE_INACTIVE);
     mPlayers.mPlayer2->setState(entity::ENTITY_STATE_INACTIVE);
+    mPlayers.mPlayer3->setState(entity::ENTITY_STATE_INACTIVE);
+    mPlayers.mPlayer4->setState(entity::ENTITY_STATE_INACTIVE);
 
     // Kill all enemies
     mEnemies.disableAllEnemies();

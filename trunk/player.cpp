@@ -8,7 +8,9 @@ player::player()
 {
     mDrawSheild = FALSE;
 
-    mDestroyTime = 50;
+    mJoined = FALSE; // PDH TODO!!
+
+    mDestroyTime = 75;
 
     mExhaustSpreadIndex = mathutils::randFromTo(0,1);
 
@@ -53,6 +55,13 @@ void player::initPlayerForGame()
     mCurrentWeapon = 0;
 
     mAngle = 0;
+
+    // Set all missiles to inactive
+    for (int i=0; i<mMaxMissiles; i++)
+    {
+        entityPlayerMissile* missile = &missiles[i];
+        missile->setEnabled(false);
+    }
 
     setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
 }
@@ -169,6 +178,7 @@ void player::run()
             //
             // The firing stick is being used
             //
+
             switch (mCurrentWeapon)
             {
                 case 0:
@@ -817,7 +827,7 @@ void player::addKillAtLocation(int points, Point3d pos)
         }
     }
 
-    vector::pen pen = this->mPen;
+    vector::pen pen = this->getFontPen();
 
     if (showMultiplier)
     {

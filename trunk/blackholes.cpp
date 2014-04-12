@@ -9,7 +9,7 @@ blackholes::blackholes()
 
 void blackholes::run()
 {
-    // Suck enemies and the player into the black holes
+    // Suck enemies and particles into the black holes
     for (int i=0; i<NUM_ENEMIES; i++)
     {
         if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
@@ -17,6 +17,9 @@ void blackholes::run()
             entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
             if (blackHole->mActivated)
             {
+/*
+                // I'm not sure it's accurate to suck players into black holes. I'll have to double check.
+                //
                 // Players
                 for (int p=0; p<2; p++)
                 {
@@ -42,7 +45,7 @@ void blackholes::run()
                             float r = 1.0/(distance*distance);
 
                             Point3d gravityVector(r * strength, 0, 0);
-                            Point3d g = mathutils::rotate2dPoint(gravityVector, angle/*+.4*/);
+                            Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
 
                             Point3d speed = player->getDrift();
                             speed.x += g.x;
@@ -51,6 +54,7 @@ void blackholes::run()
                         }
                     }
                 }
+*/
 
                 for (int j=0; j<NUM_ENEMIES; j++)
                 {
@@ -234,7 +238,11 @@ void blackholes::run()
 
 
     // Push missiles away from the black hole
-    // (NOT WORKING)
+    // This doesn't work correctly. Instead of throwing incoming missiles off course it "repels" them
+    // which has the effect of missiles that are directly oncoming being reflected back at their source.
+    // What we want is for them to just be thrown off-course. Look into changing the trajectory of the
+    // missiles instead of setting the drift on them.
+
 /*
     for (int i=0; i<NUM_ENEMIES; i++)
     {
@@ -266,7 +274,6 @@ void blackholes::run()
                         speed.x += g.x;
                         speed.y += g.y;
                         missile->setDrift(speed);
-
                     }
                 }
             }

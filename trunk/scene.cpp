@@ -14,7 +14,7 @@ void glDisable2D();
 #define VIRTUAL_SCREEN_WIDTH 800
 #define VIRTUAL_SCREEN_HEIGHT 600
 
-vector::pen defaultFontPen(0, 1, 0, .6, 3);
+vector::pen defaultFontPen(1, 1, 0, .6, 3);
 
 scene::scene()
 {
