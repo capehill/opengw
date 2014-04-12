@@ -62,7 +62,7 @@ void entityPlayer1::initPlayerForGame()
     }
     else
     {
-        mPen = vector::pen(1, .4, .4, 1, 12);
+        mPen = vector::pen(1, .3, .3, 1, 12);
         mExhaustPen = vector::pen(1, .3, .3, 40, 5);
         mMissilesPen = vector::pen(1, .3, .3, 40, 5);
         mFontPen = vector::pen(1, .3, .3, 40, 5);
@@ -80,7 +80,7 @@ void entityPlayer1::spawnTransition()
 
     if (game::mNumPlayers > 1)
     {
-        mPen = vector::pen(1, .4, .4, 1, 12);
+        mPen = vector::pen(1, .3, .3, 1, 12);
         mExhaustPen = vector::pen(1, .3, .3, 40, 5);
         mMissilesPen = vector::pen(1, .3, .3, 40, 5);
         mFontPen = vector::pen(1, .3, .3, 40, 5);

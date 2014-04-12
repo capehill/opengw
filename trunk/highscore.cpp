@@ -2,7 +2,7 @@
 #include "game.h"
 
 extern scene oglScene;
-
+extern vector::pen defaultFontPen;
 
 static char charList[] =
 {
@@ -192,14 +192,14 @@ void highscore::addHighScore(char* name, int score)
 
 void highscore::drawEnterScore()
 {
-    vector::pen pen(1,1,1,.5,3);
+    vector::pen pen = defaultFontPen;
     font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, .6, &pen, "High Score!");
 	pen.a=.1;
 	pen.lineRadius = 8;
     font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, .6, &pen, "High Score!");
 
 	{
-		pen = vector::pen(1,1,1,.5,3);
+		pen = defaultFontPen;
 
 		char format[512];
 		sprintf(format, "%d", mScore);
@@ -211,7 +211,7 @@ void highscore::drawEnterScore()
 		font::AlphanumericsPrint(font::ALIGN_CENTER, .048, 0, .3, &pen, s);
 	}
 
-    pen = vector::pen(1,1,1,.5,3);
+    pen = defaultFontPen;
     font::AlphanumericsPrint(font::ALIGN_CENTER, .02, 0, .1, &pen, "Please Enter Your Initials");
 	pen.a=.1;
 	pen.lineRadius = 8;
@@ -264,7 +264,7 @@ void highscore::drawEnterScore()
 
 	}
 
-    pen = vector::pen(1,1,1,.5,3);
+    pen = defaultFontPen;
     font::AlphanumericsPrint(font::ALIGN_CENTER, .015, 0, -.6, &pen, "Use Left Stick to Select Letter\nUse Right Stick to Change Position\nPress Bomb Button When Done");
 	pen.a=.1;
 	pen.lineRadius = 8;
@@ -275,7 +275,7 @@ void highscore::drawEnterScore()
 
 void highscore::drawTable()
 {
-    vector::pen pen = vector::pen(1,1,1,.5,3);
+    vector::pen pen = defaultFontPen;
     font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, .5, &pen, "High Scores");
 
 	// Number
@@ -283,7 +283,7 @@ void highscore::drawTable()
 	float y = .35;
 	for (int i=0; i<10; i++)
 	{
-		vector::pen pen = vector::pen(1,1,1,.5,3);
+		vector::pen pen = defaultFontPen;
 		font::AlphanumericsPrint(font::ALIGN_LEFT, .015, x, y, &pen, "%d.", i+1);
 		y-= .07;
 	}
@@ -293,7 +293,7 @@ void highscore::drawTable()
 	y = .35;
 	for (int i=0; i<10; i++)
 	{
-		vector::pen pen = vector::pen(1,1,1,.5,3);
+		vector::pen pen = defaultFontPen;
 		font::AlphanumericsPrint(font::ALIGN_CENTER, .015, x, y, &pen, "%s", mEntries[i].name);
 		y-= .07;
 	}
@@ -307,7 +307,7 @@ void highscore::drawTable()
         sprintf(format, "%d", mEntries[i].score);
         char* s = font::formatStringWithCommas(format);
 
-		vector::pen pen = vector::pen(1,1,1,.5,3);
+		vector::pen pen = defaultFontPen;
 		font::AlphanumericsPrint(font::ALIGN_LEFT, .015, x, y, &pen, "%s", s);
 		y-= .07;
 	}

@@ -9,21 +9,41 @@
 #include "game.h"
 
 
-// Static initializers
+// The Grid
 // GW is 33w x 22h
 const int grid::resolution_x = ((33*4)+1);
 const int grid::resolution_y = ((22*4)+1);
 
-
 #define gridxy(x,y) (mGrid[(x)+(y)*resolution_x])
 
+
+// Stuff for our OpenGL grid arrays
+
+typedef struct
+{
+	GLfloat x, y, z;
+}Vertex3f;
+
+typedef struct
+{
+	GLfloat r, g, b, a;
+}Color4f;
+
+static Vertex3f*        gridVertexArrayX;
+static Vertex3f*        gridVertexArrayY;
+static Color4f*         gridColorArrayX;
+static Color4f*         gridColorArrayY;
+static unsigned int     numGridLinesX;
+static unsigned int     numGridLinesY;
 
 grid::grid()
 {
     brightness = 1;
-    mGrid = new gridPoint[resolution_x*resolution_y];
+    mGrid = new gridPoint[resolution_x * resolution_y];
     q=12; // 12
     damping = 1.5; // 1.5
+
+    // Create our array of grid points
     int x,y;
     for(y=0;y<resolution_y;++y)
     {
@@ -34,6 +54,135 @@ grid::grid()
             gridxy(x,y).vel=Point3d(0,0,0);
         }
     }
+
+
+    numGridLinesX = 0;
+    numGridLinesY = 0;
+
+    // Horizontal line count
+    for (int y=0; y<resolution_y; ++y)
+    {
+        for (int x=0; x<resolution_x; ++x)
+        {
+            ++numGridLinesX;
+        }
+    }
+    // Vertical line count
+    for (int x=0; x<resolution_x; ++x)
+    {
+        for (int y=0; y<resolution_y; ++y)
+        {
+            ++numGridLinesY;
+        }
+    }
+
+    // Create our OpenGL vertex and color arrays
+    gridVertexArrayX = new Vertex3f[numGridLinesX*2];
+    gridVertexArrayY = new Vertex3f[numGridLinesY*2];
+    gridColorArrayX = new Color4f[numGridLinesX*2];
+    gridColorArrayY = new Color4f[numGridLinesY*2];
+
+    // Init the grid line colors up front so it only has to happen once
+
+#ifdef GRID_GLOW
+    vector::pen darkColor(0.2f, 0.2f, 1.0f, (0.15f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
+    vector::pen lightColor(0.2f, 0.2f, 1.0f, (0.4f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
+#else
+    vector::pen darkColor(0.2f, 0.2f, 1.0f, 0.12f * brightness, 0);
+    vector::pen lightColor(.2f, 0.2f, 1.0f, 0.3f * brightness, 0);
+#endif
+
+    unsigned int i=0;
+
+    // Horizontal lines
+    for (y=0; y<resolution_y; ++y)
+    {
+        for (x=0; x<resolution_x-1; ++x)
+        {
+            if (y%4==0)
+            {
+                gridColorArrayX[i].r = lightColor.r;
+                gridColorArrayX[i].g = lightColor.g;
+                gridColorArrayX[i].b = lightColor.b;
+                gridColorArrayX[i].a = lightColor.a;
+
+                i++;
+
+                gridColorArrayX[i].r = lightColor.r;
+                gridColorArrayX[i].g = lightColor.g;
+                gridColorArrayX[i].b = lightColor.b;
+                gridColorArrayX[i].a = lightColor.a;
+
+                i++;
+            }
+            else
+            {
+                gridColorArrayX[i].r = darkColor.r;
+                gridColorArrayX[i].g = darkColor.g;
+                gridColorArrayX[i].b = darkColor.b;
+                gridColorArrayX[i].a = darkColor.a;
+
+                i++;
+
+                gridColorArrayX[i].r = darkColor.r;
+                gridColorArrayX[i].g = darkColor.g;
+                gridColorArrayX[i].b = darkColor.b;
+                gridColorArrayX[i].a = darkColor.a;
+
+                i++;
+            }
+        }
+    }
+
+    i=0;
+
+    // Vertical lines
+    for (x=0; x<resolution_x; ++x)
+    {
+        for (y=0; y<resolution_y-1; ++y)
+        {
+            if (x%4==0)
+            {
+                gridColorArrayY[i].r = lightColor.r;
+                gridColorArrayY[i].g = lightColor.g;
+                gridColorArrayY[i].b = lightColor.b;
+                gridColorArrayY[i].a = lightColor.a;
+
+                i++;
+
+                gridColorArrayY[i].r = lightColor.r;
+                gridColorArrayY[i].g = lightColor.g;
+                gridColorArrayY[i].b = lightColor.b;
+                gridColorArrayY[i].a = lightColor.a;
+
+                i++;
+            }
+            else
+            {
+                gridColorArrayY[i].r = darkColor.r;
+                gridColorArrayY[i].g = darkColor.g;
+                gridColorArrayY[i].b = darkColor.b;
+                gridColorArrayY[i].a = darkColor.a;
+
+                i++;
+
+                gridColorArrayY[i].r = darkColor.r;
+                gridColorArrayY[i].g = darkColor.g;
+                gridColorArrayY[i].b = darkColor.b;
+                gridColorArrayY[i].a = darkColor.a;
+
+                i++;
+            }
+        }
+    }
+}
+
+grid::~grid()
+{
+    delete gridVertexArrayX;
+    delete gridVertexArrayY;
+    delete gridColorArrayX;
+    delete gridColorArrayY;
 }
 
 //#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower. This is also defined in game.cpp!
@@ -52,48 +201,6 @@ void grid::run()
 
     int x,y;
 
-#if 0
-    // My attempt at turning the loop inside out.
-    // Performance was MUCH MUCH MUCH worse this way
-    int xstart = 1;
-    int ystart = 1;
-    int xend = resolution_x-2;
-    int yend = resolution_y-2;
-
-    for(y=ystart; y<=yend; ++y)
-    {
-        for(x=xstart; x<=xend; ++x)
-        {
-            for (int a=0; a<game::mAttractors.mNumAttractors; a++)
-            {
-                attractor::Attractor att = game::mAttractors.mAttractors[a];
-                if (att.enabled)
-                {
-                    Point3d gpoint = gridxy(x,y).pos;
-                    Point3d apoint = att.pos;
-
-                    float distance = mathutils::calculate2dDistance(gpoint, apoint);
-
-                    if ((distance < att.radius) && distance > 0)
-                    {
-                        distance = (distance*distance);
-                        if (distance < 1) distance += .1;
-
-                        float angle = mathutils::calculate2dAngle(gpoint, apoint);
-                        float strength = att.strength;
-
-                        Point3d gravityVector(-distance * strength, 0, 0);
-                        Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
-
-                        gridxy(x,y).vel.x += g.x * .005;
-                        gridxy(x,y).vel.y += g.y * .005;
-                    }
-                }
-            }
-        }
-    }
-#endif
-
     // PERFORMANCE: Too many attractors will KILL performance so we
     // go through the current active list and create a smaller list
     // by clumping together any attractors that are near each other
@@ -103,7 +210,7 @@ void grid::run()
     // run, but the less accurate the grid effect will be.
     // 
 #ifdef CLUMP_ATTRACTORS
-    const float clumpDistance = 10;
+    const float clumpDistance = 8;
     attractor attractorList;
     for (int a=0; a<game::mAttractors.mNumAttractors; a++)
     {
@@ -306,58 +413,76 @@ void grid::draw()
 
 #ifdef ENABLE_GRID
 
-    // PERFORMANCE: This function also slows things down quite a bit. LOTS of lines to be drawn!
+    glLineWidth(5);
 
-#ifdef GRID_GLOW
-    vector::pen darkColor(0.2f, 0.2f, 1.0f, (0.15f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
-    vector::pen lightColor(0.2f, 0.2f, 1.0f, (0.4f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
-#else
-    vector::pen darkColor(0.2f, 0.2f, 1.0f, 0.12f * brightness, 0);
-    vector::pen lightColor(.2f, 0.2f, 1.0f, 0.3f * brightness, 0);
-#endif
+    unsigned int idxVertex = 0;
 
     // Horizontal lines
-    for (int y=0; y<resolution_y; ++y)
+    int x,y;
+    for (y=0; y<resolution_y; ++y)
     {
-        if (y%4==0) glColor4f(lightColor.r, lightColor.g, lightColor.b, lightColor.a);
-        else glColor4f(darkColor.r, darkColor.g, darkColor.b, darkColor.a);
-
-        glBegin(GL_LINE_STRIP);
-        for (int x=0; x<resolution_x-1; ++x)
+        for (x=0; x<resolution_x-1; ++x)
         {
-            Point3d p1 = gridxy(x,y).pos;
-            Point3d p2 = gridxy(x+1,y).pos;
+            Point3d from = gridxy(x,y).pos;
+            Point3d to = gridxy(x+1,y).pos;
 
-            glVertex3d(p1.x, p1.y, p1.z);
-            glVertex3d(p2.x, p2.y, p2.z);
+            gridVertexArrayX[idxVertex].x = from.x;
+            gridVertexArrayX[idxVertex].y = from.y;
+            gridVertexArrayX[idxVertex].z = 0;
+            ++idxVertex;
+
+            gridVertexArrayX[idxVertex].x = to.x;
+            gridVertexArrayX[idxVertex].y = to.y;
+            gridVertexArrayX[idxVertex].z = 0;
+            ++idxVertex;
         }
-        glEnd();
     }
+
+    idxVertex = 0;
 
     // Vertical lines
-    for (int x=0; x<resolution_x; ++x)
+    for (x=0; x<resolution_x; ++x)
     {
-        if (x%4==0) glColor4f(lightColor.r, lightColor.g, lightColor.b, lightColor.a);
-        else glColor4f(darkColor.r, darkColor.g, darkColor.b, darkColor.a);
-
-        glBegin(GL_LINE_STRIP);
-        for (int y=0; y<resolution_y-1; ++y)
+        for (y=0; y<resolution_y-1; ++y)
         {
-            Point3d p1 = gridxy(x,y).pos;
-            Point3d p2 = gridxy(x,y+1).pos;
+            Point3d from = gridxy(x,y).pos;
+            Point3d to = gridxy(x,y+1).pos;
 
-            glVertex3d(p1.x, p1.y, p1.z);
-            glVertex3d(p2.x, p2.y, p2.z);
+            gridVertexArrayY[idxVertex].x = from.x;
+            gridVertexArrayY[idxVertex].y = from.y;
+            gridVertexArrayY[idxVertex].z = 0;
+            ++idxVertex;
+
+            gridVertexArrayY[idxVertex].x = to.x;
+            gridVertexArrayY[idxVertex].y = to.y;
+            gridVertexArrayY[idxVertex].z = 0;
+            ++idxVertex;
         }
-        glEnd();
     }
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+    // Draw horizontal lines array
+	glVertexPointer(3, GL_FLOAT, 0, gridVertexArrayX);
+	glColorPointer(4, GL_FLOAT, 0, gridColorArrayX);
+    glDrawArrays(GL_LINES, 0, numGridLinesX*2);
+
+    // Draw vertical lines array
+	glVertexPointer(3, GL_FLOAT, 0, gridVertexArrayY);
+	glColorPointer(4, GL_FLOAT, 0, gridColorArrayY);
+    glDrawArrays(GL_LINES, 0, numGridLinesY*2);
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 #endif
 
     // Grid outline
-    glColor4f(1.0f, 1.0f, 1.0f, 0.7f * brightness); // RGBA
 
-    glLineWidth(7);
+    glColor4f(1,1,1,1); // RGBA
+
+    glLineWidth(4);
 
     glBegin(GL_LINE_LOOP);
 
@@ -367,6 +492,27 @@ void grid::draw()
     glVertex3f(0, grid::resolution_y-1, 0 );
 
     glEnd();
+
+    // If the brightness has been lowered, cover the grid with a semi transparent scrim
+    // since all our grid colors are locked.
+
+    if (brightness < .99)
+    {
+        glColor4f(0, 0, 0, 1-brightness);
+
+        glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+
+        glBegin(GL_QUADS);
+
+        glVertex3f(-10, -10, 0 );
+        glVertex3f(grid::resolution_x+10, -10, 0 );
+        glVertex3f(grid::resolution_x+10, grid::resolution_y+10, 0 );
+        glVertex3f(-10, grid::resolution_y+10, 0 );
+
+        glEnd();
+
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    }
 
 }
 

@@ -233,18 +233,6 @@ void game::run()
 				}
 
                 mSound.setTrackSpeed(SOUNDID_MUSICLOOP, mMusicSpeed);
-
-                // Sound cutoff
-
-                if (mSoundCutoff < mSoundCutoffTarget)
-				{
-                    mSoundCutoff += .005;
-					if (mSoundCutoff > mMusicSpeedTarget)
-						mSoundCutoff = mMusicSpeedTarget;
-				}
-
-                mSound.setCutoffFreq(mSoundCutoff);
-
             }
             break;
         case GAMEMODE_HIGHSCORES:
@@ -269,8 +257,6 @@ void game::run()
             {
                 mBrightness *= .98;
             }
-
-            mSound.setCutoffFreq(1);
 
             ++mGameOverTimer;
             if (mGameOverTimer > 180)
@@ -509,13 +495,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-//                glEnable(GL_LINE_SMOOTH);
-//                glEnable(GL_MULTISAMPLE);
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
 
                 mPlayers.draw();
 
-//                glDisable(GL_MULTISAMPLE);
-//                glDisable(GL_LINE_SMOOTH);
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -571,7 +557,7 @@ void game::startGame(int numPlayers)
     mBrightness = 1;
 
     mCamera.center();
-    mCamera.mCurrentZoom = 120;
+    mCamera.mCurrentZoom = 120;//PDH 120
 
     mLevel = 0;
 
@@ -614,9 +600,6 @@ void game::startGame(int numPlayers)
 
     mMusicSpeedTarget = 1;
     mMusicSpeed = 1;
-
-    mSoundCutoffTarget = 1;
-    mSoundCutoff = 1;
 
     mSound.stopTrack(SOUNDID_MENU_MUSICLOOP);
     mSound.playTrack(SOUNDID_MUSICLOOP);
@@ -666,8 +649,6 @@ void game::showMessageAtLocation(char* message, const Point3d& pos, const vector
 
 void game::startBomb()
 {
-    mSoundCutoff = .001;
-    mSoundCutoffTarget = 1;
 }
 
 void game::runPointDisplays()

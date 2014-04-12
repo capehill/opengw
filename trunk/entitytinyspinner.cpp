@@ -54,8 +54,8 @@ void entityTinySpinner::run()
 
         // Run circling animation
 
-        mAnimationIndex += .1;
-        Point3d offset(4,0,0);
+        mAnimationIndex += .12;
+        Point3d offset(5,0,0);
         offset = mathutils::rotate2dPoint(offset, mAnimationIndex);
         mVirtualPos = mPos + offset;
         mAngle = mAnimationIndex*2;

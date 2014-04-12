@@ -151,9 +151,6 @@ private:
     float mMusicSpeed;
     float mMusicSpeedTarget;
 
-    float mSoundCutoff;
-    float mSoundCutoffTarget;
-
     int mGameOverTimer;
     int mWeaponChangeTimer;
 

@@ -18,10 +18,10 @@ entityPlayer3::entityPlayer3()
     mSpawnTime = 35;
     mSheildTimer = PLAYER_SHEILD_TIME;
 
-    mPen = vector::pen(1, 1, .2, 1, 12);
-    mExhaustPen = vector::pen(1, 1, .3, 40, 5);
-    mMissilesPen = vector::pen(1, 1, .3, 40, 5);
-    mFontPen = vector::pen(1, 1, .3, 40, 5);
+    mPen = vector::pen(1, .6, .2, 1, 12);
+    mExhaustPen = vector::pen(1, .6, .2, 40, 5);
+    mMissilesPen = vector::pen(1, .6, .2, 40, 5);
+    mFontPen = vector::pen(1, .6, .2, 40, 5);
 
     int i=0;
 

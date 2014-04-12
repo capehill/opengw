@@ -1,19 +1,13 @@
 #include "sound.h"
 #include "game.h"
-#include "filter.h"
 
 
 #define SAMPLE_SIZE 512
 #define NUM_TRACKS  200
 
 sound::TRACK* sound::mTracks;
-float sound::mCutoffFreq = 1;
 float* sound::mLeftSamples;
 float* sound::mRightSamples;
-float* sound::mLeftLowpassSamples;
-float* sound::mRightLowpassSamples;
-float* sound::mLeftBandpassSamples;
-float* sound::mRightBandpassSamples;
 
 
 sound::sound()
@@ -33,11 +27,6 @@ sound::sound()
 
     mLeftSamples = new float [SAMPLE_SIZE*4];
     mRightSamples = new float [SAMPLE_SIZE*4];
-
-    mLeftLowpassSamples = new float [SAMPLE_SIZE*4];
-    mRightLowpassSamples = new float [SAMPLE_SIZE*4];
-    mLeftBandpassSamples = new float [SAMPLE_SIZE*4];
-    mRightBandpassSamples = new float [SAMPLE_SIZE*4];
 }
 
 sound::~sound()
@@ -58,12 +47,6 @@ sound::~sound()
     delete mLeftSamples;
     delete mRightSamples;
 
-    delete mLeftLowpassSamples;
-    delete mRightLowpassSamples;
-
-    delete mLeftBandpassSamples;
-    delete mRightBandpassSamples;
-
     SDL_UnlockAudio();
 
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
@@ -78,12 +61,6 @@ void sound::bufferCallback(void *unused, Uint8 *stream, int len)
 
     memset(mLeftSamples, 0, len * sizeof(float));
     memset(mRightSamples, 0, len * sizeof(float));
-
-    memset(mLeftLowpassSamples, 0, len * sizeof(float));
-    memset(mRightLowpassSamples, 0, len * sizeof(float));
-
-    memset(mLeftBandpassSamples, 0, len * sizeof(float));
-    memset(mRightBandpassSamples, 0, len * sizeof(float));
 
     len /= 2;
 
@@ -156,15 +133,6 @@ void sound::bufferCallback(void *unused, Uint8 *stream, int len)
         }
     }
 
-    filter::bandpass(mLeftSamples, mLeftBandpassSamples, mCutoffFreq, len);
-    filter::bandpass(mRightSamples, mRightBandpassSamples, mCutoffFreq, len);
-
-    filter::lowpass(mLeftSamples, mLeftLowpassSamples, mCutoffFreq, len);
-    filter::lowpass(mRightSamples, mRightLowpassSamples, mCutoffFreq, len);
-
-    filter::mix(mLeftLowpassSamples, mLeftBandpassSamples, mLeftSamples, len);
-    filter::mix(mRightLowpassSamples, mRightBandpassSamples, mRightSamples, len);
-
     // Fill the output buffer
     for (int i=0, b=0; i<len/2; i++)
     {
@@ -173,7 +141,6 @@ void sound::bufferCallback(void *unused, Uint8 *stream, int len)
         buf[b++] = left;
         buf[b++] = right;
     }
-
 }
 
 void sound::loadTrack(char *file, int track, float volume, bool loop/*=false*/)
@@ -225,7 +192,6 @@ void sound::loadTrack(char *file, int track, float volume, bool loop/*=false*/)
         OutputDebugString(s);
     }
 
-    /* Put the sound data in the slot (it starts playing immediately) */
     if (mTracks[track].data)
     {
         delete mTracks[track].data;
@@ -304,24 +270,11 @@ void sound::setTrackSpeed(int track, double speed)
     SDL_UnlockAudio();
 }
 
-void sound::setCutoffFreq(float cutoffFreq)
-{
-    // Effects all tracks
-    SDL_LockAudio();
-    mCutoffFreq = cutoffFreq;
-    if (mCutoffFreq < 0.001) mCutoffFreq = 0.001;
-    else if (mCutoffFreq > 1) mCutoffFreq = 1;
-    SDL_UnlockAudio();
-}
-
 bool sound::isTrackPlaying(int track)
 {
-    bool playing;
-
     SDL_LockAudio();
-    playing = mTracks[track].playing;
+    bool playing = mTracks[track].playing;
     SDL_UnlockAudio();
-
     return playing;
 }
 

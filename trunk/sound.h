@@ -22,7 +22,6 @@ public:
     void stopSound();
 
     void setTrackSpeed(int track, double speed);
-    void setCutoffFreq(float cutoffFreq);
 
 private:
 
@@ -40,16 +39,8 @@ private:
 
     static TRACK* mTracks;
 
-    static float mCutoffFreq;
-
     static float* mLeftSamples;
     static float* mRightSamples;
-
-    static float* mLeftLowpassSamples;
-    static float* mRightLowpassSamples;
-
-    static float* mLeftBandpassSamples;
-    static float* mRightBandpassSamples;
 };
 
 

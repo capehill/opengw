@@ -18,6 +18,7 @@ public:
     }GridPoint;
 
     grid();
+    ~grid();
 
     void run();
     void draw();

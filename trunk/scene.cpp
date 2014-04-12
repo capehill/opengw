@@ -14,8 +14,7 @@ void glDisable2D();
 #define VIRTUAL_SCREEN_WIDTH 800
 #define VIRTUAL_SCREEN_HEIGHT 600
 
-static vector::pen defaultFontPen(0, 1, 0, .6, 12);
-
+vector::pen defaultFontPen(0, 1, 0, .6, 3);
 
 scene::scene()
 {
@@ -251,7 +250,7 @@ void scene::draw(int pass)
             drawScores();
 
 /*
-            vector::pen pen(1,1,1,.5,3);
+            vector::pen pen = defaultFontPen;
             font::AlphanumericsPrint(font::ALIGN_CENTER, .04, 0, -.2, &pen, "Game Over");
 
 		    pen.a=.1;
@@ -282,7 +281,7 @@ void scene::draw(int pass)
 
 					if ((flashTimer / 30) & 1)
 					{
-						vector::pen pen(1,1,1,.5,3);
+						vector::pen pen = defaultFontPen;
 						font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press Start");
 
 						pen.a=.1;
@@ -318,7 +317,7 @@ void scene::draw(int pass)
 				{
 					drawCredits();
 
-					vector::pen pen(1,1,1,.5,3);
+					vector::pen pen = defaultFontPen;
 					font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Insert Coins");
 
 					pen.a=.1;
@@ -347,12 +346,7 @@ void scene::drawCredits()
     if (game::mFreeplay)
     {
 /*
-        vector::pen pen;
-        pen.r=1;
-        pen.g=1;
-        pen.b=1;
-        pen.a=.75;
-        pen.lineRadius = 3;
+        vector::pen pen = defaultFontPen;
         font::AlphanumericsPrint(font::ALIGN_CENTER, .01, 0, -.9, &pen, "FREE PLAY");
 
         pen.a=.2;
@@ -363,12 +357,7 @@ void scene::drawCredits()
     else
     {
         // Support for coin-op
-        vector::pen pen;
-        pen.r=1;
-        pen.g=1;
-        pen.b=1;
-        pen.a=.75;
-        pen.lineRadius = 3;
+        vector::pen pen = defaultFontPen;
         font::AlphanumericsPrint(font::ALIGN_CENTER, .015, 0, -.9, &pen, "Credits %d", game::mCredits);
 
         pen.a=.2;
@@ -389,7 +378,7 @@ void scene::drawNumLives()
 
     for (int i=0; i<num; i++)
     {
-		vector::pen pen(defaultFontPen, .75, 12);
+		vector::pen pen(defaultFontPen, .75, 10);
         float scale = .017;
 
         game::mPlayers.mPlayer1->getModel()->Identity();
@@ -401,7 +390,7 @@ void scene::drawNumLives()
 
     if (overflow > 0)
     {
-        vector::pen pen(defaultFontPen, .75, 3);
+        vector::pen pen = defaultFontPen;
         font::AlphanumericsPrint(font::ALIGN_CENTER, .016, -.12-.06, .9, &pen, "x%d", overflow);
 
 	    pen.a=.1;
@@ -430,7 +419,7 @@ void scene::drawNumBombs()
 
         for (int i=0; i<num; i++)
         {
-		    vector::pen pen(defaultFontPen, .75, 12);
+		    vector::pen pen(defaultFontPen, .75, 10);
             float scale = .0014;
 
             mShieldSymbol.Identity();
@@ -442,7 +431,7 @@ void scene::drawNumBombs()
 
         if (overflow > 0)
         {
-            vector::pen pen(defaultFontPen, .75, 3);
+            vector::pen pen = defaultFontPen;
             font::AlphanumericsPrint(font::ALIGN_CENTER, .016, .12+.06, .9, &pen, "x%d", overflow);
 
 	        pen.a=.1;
@@ -466,14 +455,14 @@ void scene::drawScores()
             sprintf(format, "%d", game::mPlayers.mPlayer1->mScore);
             char* s = font::formatStringWithCommas(format);
 
-            vector::pen pen(defaultFontPen, .75, 3);
+            vector::pen pen = defaultFontPen;
             if (gameover)
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score");
             else
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", game::mPlayers.mPlayer1->mMultiplier);
 		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.94, .82, &pen, s);
 
-		    pen.a=.2;
+		    pen.a=.1;
 		    pen.lineRadius = 8;
             if (gameover)
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score");
@@ -521,7 +510,7 @@ void scene::drawScores()
             else
     		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
 
-		    pen.a=.2;
+		    pen.a=.1;
 		    pen.lineRadius = 8;
             if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
 		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);

@@ -96,6 +96,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>.\SDL\lib\x86;.\GLEW\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -126,7 +127,6 @@
     <ClCompile Include="entitytinyspinner.cpp" />
     <ClCompile Include="entitywanderer.cpp" />
     <ClCompile Include="entityweaver.cpp" />
-    <ClCompile Include="filter.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="grid.cpp" />
@@ -182,7 +182,6 @@
     <ClInclude Include="entitytinyspinner.h" />
     <ClInclude Include="entitywanderer.h" />
     <ClInclude Include="entityweaver.h" />
-    <ClInclude Include="filter.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="grid.h" />
