@@ -8,7 +8,7 @@ player::player()
 {
     mDrawSheild = FALSE;
 
-    mJoined = FALSE; // PDH TODO!!
+    mJoined = FALSE;
 
     mDestroyTime = 75;
 
@@ -64,6 +64,13 @@ void player::initPlayerForGame()
     }
 
     setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+
+    mJoined = TRUE;
+}
+
+void player::deinitPlayerForGame()
+{
+    mJoined = TRUE;
 }
 
 void player::run()
@@ -71,7 +78,7 @@ void player::run()
     if (getEnabled())
     {
         // Read the trigger
-        if (game::mNumPlayers == 1)
+        if (theGame.numPlayers() == 1)
         {
             bool trigger = game::mControls.getTriggerButton(mPlayerAssignment);
             if (trigger)
@@ -848,14 +855,14 @@ void player::addKillAtLocation(int points, Point3d pos)
 
 int player::getNumLives()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         return mNumLives;
     else return game::m2PlayerNumLives;
 }
 
 int player::getNumBombs()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         return mNumBombs;
     else return game::m2PlayerNumBombs;
 }
@@ -867,14 +874,14 @@ int player::getGeoms()
 
 void player::addLife()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         ++mNumLives;
     else ++game::m2PlayerNumLives;
 }
 
 void player::takeLife()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         --mNumLives;
     else --game::m2PlayerNumLives;
 
@@ -887,27 +894,27 @@ void player::takeLife()
 
 void player::addBomb()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         ++mNumBombs;
     // No bombs on 2 player game
 }
 
 void player::takeBomb()
 {
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
         --mNumBombs;
     // No bombs on 2 player game
 }
 
 void player::addGeom(int value)
 {
-    mGeoms += value;
+//    mGeoms += value;
 //    mMultiplier += 1;
 }
 
 void player::clearGeoms()
 {
-    mGeoms = 0;
+//    mGeoms = 0;
 }
 
 void player::addPointsNoMultiplier(int points)

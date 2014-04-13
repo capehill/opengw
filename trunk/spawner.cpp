@@ -49,22 +49,22 @@ void spawner::run(void)
     }
 
     int numPlayersActive = 0;
-    if (game::mNumPlayers >= 1)
+    if (game::mPlayers.mPlayer1->mJoined)
     {
         if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (game::mNumPlayers >= 2)
+    if (game::mPlayers.mPlayer2->mJoined)
     {
         if (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (game::mNumPlayers >= 3)
+    if (game::mPlayers.mPlayer3->mJoined)
     {
         if (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (game::mNumPlayers >= 4)
+    if (game::mPlayers.mPlayer4->mJoined)
     {
         if (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
@@ -77,8 +77,8 @@ void spawner::run(void)
     static int player3SpawnTimer = 0;
     static int player4SpawnTimer = 0;
 
-    // Monitor Player1 and respawn as needed
-    for (int i = 0; i<game::mNumPlayers; i++)
+    // Monitor players and respawn as needed
+    for (int i = 0; i<4; i++)
     {
         player* player;
         int* timer;
@@ -102,9 +102,9 @@ void spawner::run(void)
                 break;
         }
 
-        if (player->getState() == entity::ENTITY_STATE_INACTIVE)
+        if (player->mJoined && (player->getState() == entity::ENTITY_STATE_INACTIVE))
         {
-            if (game::mNumPlayers == 1)
+            if (theGame.numPlayers() == 1)
             {
                 mSpawnWaitTimer = 50;
             }
@@ -121,7 +121,7 @@ void spawner::run(void)
                 }
                 else
                 {
-                    if (game::mNumPlayers == 1)
+                    if (theGame.numPlayers() == 1)
                     {
 	    			    game::mGameMode = game::GAMEMODE_GAMEOVER_TRANSITION;
                     }
@@ -373,22 +373,41 @@ void spawner::runWaves()
         {
             // Pick a player to attack
             Point3d playerPos = game::mPlayers.mPlayer1->getPos();
-            int playerNum = ceil(game::mNumPlayers * mathutils::frandFrom0To1());
+            int playerNum = ceil(4 * mathutils::frandFrom0To1());
+            bool selectedPlayer = false;
             switch (playerNum)
             {
                 case 0:
-                    playerPos = game::mPlayers.mPlayer1->getPos();
+                    if (game::mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING))
+                    {
+                        playerPos = game::mPlayers.mPlayer1->getPos();
+                        selectedPlayer = true;
+                    }
                     break;
                 case 1:
-                    playerPos = game::mPlayers.mPlayer2->getPos();
+                    if (game::mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING))
+                    {
+                        playerPos = game::mPlayers.mPlayer2->getPos();
+                        selectedPlayer = true;
+                    }
                     break;
                 case 2:
-                    playerPos = game::mPlayers.mPlayer3->getPos();
+                    if (game::mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING))
+                    {
+                        playerPos = game::mPlayers.mPlayer3->getPos();
+                        selectedPlayer = true;
+                    }
                     break;
                 case 3:
-                    playerPos = game::mPlayers.mPlayer4->getPos();
+                    if (game::mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING))
+                    {
+                        playerPos = game::mPlayers.mPlayer4->getPos();
+                        selectedPlayer = true;
+                    }
                     break;
             }
+
+            if (!selectedPlayer) return; // TODO COME UP WITH A WAY TO RANDOMLY SELECT FROM THE AVAILABLE PLAYERS. THIS IS STUPID.
 
             do
             {

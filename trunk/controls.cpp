@@ -2,9 +2,19 @@
 #include "mathutils.h"
 #include "scene.h"
 
+// XBOX JOYSTICK VALUES
+
 #define AXIS_MAX 32768
 
 const float CLAMPVALUE = .3;
+
+#define XBOX_BUTTON_A   0
+#define XBOX_BUTTON_B   1
+#define XBOX_BUTTON_X   2
+#define XBOX_BUTTON_Y   3
+
+// XBOX JOYSTICK VALUES
+
 
 controls::controls()
 {
@@ -27,9 +37,11 @@ controls::controls()
         // If only one joystick is connected, what the hell?
         // Let the one joystick control all 4 players :-)
         mControllers[0] = SDL_JoystickOpen(0);
+/*
         mControllers[1] = mControllers[0];
         mControllers[2] = mControllers[0];
         mControllers[3] = mControllers[0];
+*/
     }
     if (mNumJoysticks>=2)
     {
@@ -68,24 +80,10 @@ bool controls::getTriggerButton(int player)
     return readKeyboardTrigger(player) || readXBoxControllerTrigger(player);
 }
 
-bool controls::getStart1Button()
+bool controls::getStartButton(int player)
 {
-    return readKeyboardStart1();
-}
-
-bool controls::getStart2Button()
-{
-    return readKeyboardStart2();
-}
-
-bool controls::getStart3Button()
-{
-    return readKeyboardStart3();
-}
-
-bool controls::getStart4Button()
-{
-    return readKeyboardStart4();
+    if (player == 0) return readXBoxStart(player); // TEMP HACK
+    return readKeyboardStart(player) || readXBoxStart(player);
 }
 
 //
@@ -134,24 +132,23 @@ bool controls::readKeyboardTrigger(int player)
     return (::GetAsyncKeyState(VK_SPACE) & 0x8000);
 }
 
-bool controls::readKeyboardStart1()
+bool controls::readKeyboardStart(int player)
 {
-    return (::GetAsyncKeyState('1') & 0x8000);
-}
-
-bool controls::readKeyboardStart2()
-{
-    return (::GetAsyncKeyState('2') & 0x8000);
-}
-
-bool controls::readKeyboardStart3()
-{
-    return (::GetAsyncKeyState('3') & 0x8000);
-}
-
-bool controls::readKeyboardStart4()
-{
-    return (::GetAsyncKeyState('4') & 0x8000);
+    switch(player)
+    {
+        case 0:
+            return (::GetAsyncKeyState('1') & 0x8000);
+            break;
+        case 1:
+            return (::GetAsyncKeyState('2') & 0x8000);
+            break;
+        case 2:
+            return (::GetAsyncKeyState('3') & 0x8000);
+            break;
+        case 3:
+            return (::GetAsyncKeyState('4') & 0x8000);
+            break;
+    }
 }
 
 
@@ -161,6 +158,8 @@ bool controls::readKeyboardStart4()
 
 Point3d controls::readXBoxControllerLeftStick(int player)
 {
+    if (!mControllers[player]) return Point3d(0,0,0);
+
     SDL_Event event;
     SDL_PollEvent(&event);
 
@@ -183,6 +182,8 @@ Point3d controls::readXBoxControllerLeftStick(int player)
 
 Point3d controls::readXBoxControllerRightStick(int player)
 {
+    if (!mControllers[player]) return Point3d(0,0,0);
+
     SDL_Event event;
     SDL_PollEvent(&event);
 
@@ -205,6 +206,8 @@ Point3d controls::readXBoxControllerRightStick(int player)
 
 bool controls::readXBoxControllerTrigger(int player)
 {
+    if (!mControllers[player]) return false;
+
     SDL_Event event;
     SDL_PollEvent(&event);
 
@@ -216,5 +219,15 @@ bool controls::readXBoxControllerTrigger(int player)
     }
 
     return false;
+}
+
+bool controls::readXBoxStart(int player)
+{
+    if (!mControllers[player]) return false;
+
+    SDL_Event event;
+    SDL_PollEvent(&event);
+
+    return SDL_JoystickGetButton(mControllers[player], XBOX_BUTTON_A);
 }
 

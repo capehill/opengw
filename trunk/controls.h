@@ -15,10 +15,7 @@ public:
     Point3d getLeftStick(int player);
     Point3d getRightStick(int player);
     bool getTriggerButton(int player);
-    bool getStart1Button();
-    bool getStart2Button();
-    bool getStart3Button();
-    bool getStart4Button();
+    bool getStartButton(int player);
 
 private:
 
@@ -26,15 +23,13 @@ private:
     Point3d readKeyboardLeftStick(int player);
     Point3d readKeyboardRightStick(int player);
     bool readKeyboardTrigger(int player);
-    bool readKeyboardStart1();
-    bool readKeyboardStart2();
-    bool readKeyboardStart3();
-    bool readKeyboardStart4();
+    bool readKeyboardStart(int player);
 
     // XBox controller
     Point3d readXBoxControllerLeftStick(int player);
     Point3d readXBoxControllerRightStick(int player);
     bool readXBoxControllerTrigger(int player);
+    bool readXBoxStart(int player);
 
     SDL_Joystick* mControllers[4];
 

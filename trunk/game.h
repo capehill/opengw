@@ -105,6 +105,8 @@ public:
 
     void startBomb();
 
+    int numPlayers();
+
     static sound mSound;
     static grid mGrid;
     static particle mParticles;
@@ -126,7 +128,6 @@ public:
     static BOOL mFreeplay;
 
     static int mCredits;
-    static int mNumPlayers;
     static int mLevel;
 
     static int m2PlayerNumLives;

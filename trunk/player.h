@@ -11,6 +11,7 @@ public:
     ~player();
 
     virtual void initPlayerForGame();
+    virtual void deinitPlayerForGame();
 
     virtual void run();
     virtual void spawn();
@@ -27,6 +28,8 @@ public:
     int mMultiplier;
 
     int mPlayerAssignment;
+
+    bool mJoined;
 
     void addKillAtLocation(int points, Point3d pos);
 
@@ -76,8 +79,6 @@ protected:
     int mNumLives;
     int mNumBombs;
     int mGeoms;
-
-    bool mJoined;
 
     float mExhaustSpreadIndex;
 

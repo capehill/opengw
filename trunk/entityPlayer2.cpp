@@ -69,7 +69,7 @@ void entityPlayer2::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    if (game::mNumPlayers == 2)
+    if (theGame.numPlayers() == 2)
     {
         mPos.x = (theGame.mGrid.extentX() / 2) + 9;
         mPos.y = (theGame.mGrid.extentY() / 2) + 9;

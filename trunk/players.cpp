@@ -95,7 +95,7 @@ void players::run()
                             enemy->incGenId();
 
                             // Destroy all the other enemies
-                            if ((game::mNumPlayers == 1) || (game::mNumPlayers == 2 && game::m2PlayerNumLives <= 1))
+                            if (theGame.numPlayers() == 1)
                             {
                                 for (int i=0; i<NUM_ENEMIES; i++)
                                 {
@@ -133,7 +133,7 @@ void players::draw()
 player* players::getPlayerClosestToPosition(const Point3d& point)
 {
     // The enemies use this function to determine which player to chase (mostly in the case of a non-single player game) :-)
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
     {
         return mPlayer1;
     }

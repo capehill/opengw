@@ -50,7 +50,7 @@ void entityPlayer1::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
     {
         mPen = vector::pen(1, 1, 1, 1, 12);
         mExhaustPen = vector::pen(defaultFontPen, 40, 5);
@@ -79,7 +79,7 @@ void entityPlayer1::spawnTransition()
 {
     player::spawnTransition();
 
-    if (game::mNumPlayers > 1)
+    if (theGame.numPlayers() > 1)
     {
         mPen = vector::pen(1, .3, .3, 1, 12);
         mExhaustPen = vector::pen(1, .3, .3, 40, 5);

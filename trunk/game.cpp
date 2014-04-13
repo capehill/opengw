@@ -26,7 +26,6 @@ game::GameMode game::mGameMode;
 game::PointDisplay* game::mPointDisplays;
 BOOL game::mFreeplay = TRUE;
 int game::mCredits = 0;
-int game::mNumPlayers = 1;
 int game::mLevel = 0;
 int game::m2PlayerNumLives = 0;
 int game::m2PlayerNumBombs = 0;
@@ -163,21 +162,20 @@ void game::run()
             break;
         case GAMEMODE_CREDITED:
             {
-                // IT'S STUPID TO HAVE A START BUTTON FOR EACH NUMBER OF PLAYERS
-                // I'D RATHER GO WITH A "JOIN" STAGE OF STARTING THE GAME
-                if (mControls.getStart1Button())
+                // TODO - ADD SELECTION SCREEN FOR SINGLE/MULTIPLAYER GAME
+                if (mControls.getStartButton(0))
                 {
                     startGame(1);
                 }
-                else if (mControls.getStart2Button())
+                else if (mControls.getStartButton(1))
                 {
                     startGame(2);
                 }
-                else if (mControls.getStart3Button())
+                else if (mControls.getStartButton(2))
                 {
                     startGame(3);
                 }
-                else if (mControls.getStart4Button())
+                else if (mControls.getStartButton(3))
                 {
                     startGame(4);
                 }
@@ -185,6 +183,33 @@ void game::run()
             break;
         case GAMEMODE_PLAYING:
             {
+                // TODO - ADD SELECTION SCREEN FOR SINGLE/MULTIPLAYER GAME
+                // Check for players jumping into the game
+
+                if ((numPlayers() > 1) && (m2PlayerNumLives > 0))
+                {
+                    if (mControls.getStartButton(0) && !mPlayers.mPlayer1->mJoined)
+                    {
+                        mPlayers.mPlayer1->takeLife();
+                        mPlayers.mPlayer1->initPlayerForGame();
+                    }
+                    if (mControls.getStartButton(1) && !mPlayers.mPlayer2->mJoined)
+                    {
+                        mPlayers.mPlayer2->takeLife();
+                        mPlayers.mPlayer2->initPlayerForGame();
+                    }
+                    if (mControls.getStartButton(2) && !mPlayers.mPlayer3->mJoined)
+                    {
+                        mPlayers.mPlayer3->takeLife();
+                        mPlayers.mPlayer3->initPlayerForGame();
+                    }
+                    if (mControls.getStartButton(3) && !mPlayers.mPlayer4->mJoined)
+                    {
+                        mPlayers.mPlayer4->takeLife();
+                        mPlayers.mPlayer4->initPlayerForGame();
+                    }
+                }
+
                 mCamera.followPlayer();
                 mStars.run();
                 mBlackHoles.run();
@@ -204,25 +229,21 @@ void game::run()
                 mMusicSpeedTarget = 1;
 
                 // Slow the music down when someone is respawning
-                if (this->mNumPlayers >= 1)
+                if (this->mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    if (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED)
-                        mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = .5;
                 }
-                if (this->mNumPlayers >= 2)
+                if (this->mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    if (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED)
-                        mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = .5;
                 }
-                if (this->mNumPlayers >= 3)
+                if (this->mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    if (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED)
-                        mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = .5;
                 }
-                if (this->mNumPlayers >= 4)
+                if (this->mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    if (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED)
-                        mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = .5;
                 }
 
                 if (mMusicSpeed < mMusicSpeedTarget)
@@ -267,9 +288,13 @@ void game::run()
             ++mGameOverTimer;
             if (mGameOverTimer > 180)
             {
-    			if (game::mNumPlayers == 1)
+/*
+                // TURNING OFF HIGH SCORES FOR NOW UNTIL I FIGURE OUT A WAY TO DO THEM WITH MULTIPLAYER
+
+    			if (numPlayers() == 1)
 					game::mGameMode = game::GAMEMODE_HIGHSCORES_CHECK;
                 else // TODO - MULTIPLAYER HIGH SCORES?????
+*/
                     mGameMode = GAMEMODE_ATTRACT;
             }
             break;
@@ -290,6 +315,12 @@ void game::run()
 	}
     else if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED)
     {
+        static int explosionTimer = 0;
+
+        ++explosionTimer;
+        if (explosionTimer > 1000)
+            explosionTimer = 0;
+
         mCamera.center();
 
         // Attractors to wander around the fireworks display
@@ -308,7 +339,7 @@ void game::run()
                 attractor::Attractor* att = game::mAttractors.getAttractor();
                 if (att)
                 {
-                    att->strength = -40;
+                    att->strength = (explosionTimer > 980) ? 1000 : -40;
                     att->zStrength = 0;
                     att->radius = 40;
                     att->pos = pos;
@@ -558,8 +589,6 @@ void game::draw(int pass)
 
 void game::startGame(int numPlayers)
 {
-    mNumPlayers = numPlayers;
-
     mBrightness = -2; // we fade in the grid on start game
 
     mCamera.center();
@@ -571,29 +600,43 @@ void game::startGame(int numPlayers)
 
     mSpawner.init();
 
-    // Fire up the players
+    this->mPlayers.mPlayer1->mJoined = false;
+    this->mPlayers.mPlayer2->mJoined = false;
+    this->mPlayers.mPlayer3->mJoined = false;
+    this->mPlayers.mPlayer4->mJoined = false;
 
-    if (mNumPlayers >= 1)
+    // TEMP CODE - REPLACE THIS WITH SOME SORT OF "JOIN" MENU
+    if (numPlayers >= 1)
+        this->mPlayers.mPlayer1->mJoined = true;
+    if (numPlayers >= 2)
+        this->mPlayers.mPlayer2->mJoined = true;
+    if (numPlayers >= 3)
+        this->mPlayers.mPlayer3->mJoined = true;
+    if (numPlayers >= 4)
+        this->mPlayers.mPlayer4->mJoined = true;
+
+    // Fire up the players
+    if (this->mPlayers.mPlayer1->mJoined)
     {
         this->mPlayers.mPlayer1->initPlayerForGame();
     }
-    if (mNumPlayers >= 2)
+    if (this->mPlayers.mPlayer2->mJoined)
     {
         this->mPlayers.mPlayer2->initPlayerForGame();
     }
-    if (mNumPlayers >= 3)
+    if (this->mPlayers.mPlayer3->mJoined)
     {
         this->mPlayers.mPlayer3->initPlayerForGame();
     }
-    if (mNumPlayers >= 4)
+    if (this->mPlayers.mPlayer4->mJoined)
     {
         this->mPlayers.mPlayer4->initPlayerForGame();
     }
 
-    if (mNumPlayers > 1)
+    if (numPlayers > 1)
     {
         // Shared lives and bombs
-        m2PlayerNumLives = 5;
+        m2PlayerNumLives = 10;
         m2PlayerNumBombs = 0;
     }
 
@@ -630,6 +673,11 @@ void game::endGame()
     mPlayers.mPlayer2->setState(entity::ENTITY_STATE_INACTIVE);
     mPlayers.mPlayer3->setState(entity::ENTITY_STATE_INACTIVE);
     mPlayers.mPlayer4->setState(entity::ENTITY_STATE_INACTIVE);
+
+    mPlayers.mPlayer1->deinitPlayerForGame();
+    mPlayers.mPlayer2->deinitPlayerForGame();
+    mPlayers.mPlayer3->deinitPlayerForGame();
+    mPlayers.mPlayer4->deinitPlayerForGame();
 
     // Kill all enemies
     mEnemies.disableAllEnemies();
@@ -702,6 +750,30 @@ void game::clearPointDisplays()
     {
         mPointDisplays[i].enabled = FALSE;
     }
+}
+
+int game::numPlayers()
+{
+    int numPlayers = 0;
+
+    if (mPlayers.mPlayer1->mJoined)
+    {
+        ++numPlayers;
+    }
+    if (mPlayers.mPlayer2->mJoined)
+    {
+        ++numPlayers;
+    }
+    if (mPlayers.mPlayer3->mJoined)
+    {
+        ++numPlayers;
+    }
+    if (mPlayers.mPlayer4->mJoined)
+    {
+        ++numPlayers;
+    }
+
+    return numPlayers;
 }
 
 

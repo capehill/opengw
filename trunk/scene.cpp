@@ -263,7 +263,8 @@ void scene::draw(int pass)
 			if (++mAttractModeTimer > (mShowHighScores ? 200 : 1000))
 			{
 				mAttractModeTimer = 0;
-				mShowHighScores = !mShowHighScores;
+                // DISABLING HIGH SCORES FOR NOW UNTIL I FIGURE OUT HOW TO GET THEM TO WORK WITH MULTIPLAYER
+				//mShowHighScores = !mShowHighScores;
 			}
 
 			if (mShowHighScores)
@@ -401,9 +402,9 @@ void scene::drawNumLives()
 
 void scene::drawNumBombs()
 {
-    if (game::mNumPlayers == 2)
+    if (theGame.numPlayers() > 1)
     {
-        // No bombs on 2 player game
+        // No bombs on multiplayer player game
     }
     else
     {
@@ -445,7 +446,7 @@ void scene::drawScores()
 {
     BOOL gameover = (game::mGameMode != game::GAMEMODE_PLAYING);
 
-    if (game::mNumPlayers == 1)
+    if (theGame.numPlayers() == 1)
     {
         // 1 player display
 
@@ -475,7 +476,7 @@ void scene::drawScores()
     {
         // Multi player display
 
-        for (int i=0; i<game::mNumPlayers; i++)
+        for (int i=0; i<theGame.numPlayers(); i++)
         {
             Point3d pos;
             player* player;
@@ -499,6 +500,7 @@ void scene::drawScores()
                     break;
             }
 
+            if (!player->mJoined) continue;
 
             char format[512];
             sprintf(format, "%d", player->mScore);
