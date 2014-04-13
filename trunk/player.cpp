@@ -820,7 +820,7 @@ void player::addKillAtLocation(int points, Point3d pos)
     {
         // Increment the multiplier and display a message
         mKillCounter = 0;
-//        if (mMultiplier < 10)
+        if (mMultiplier < 10)
         {
             ++mMultiplier;
             showMultiplier = true;

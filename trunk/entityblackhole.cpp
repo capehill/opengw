@@ -535,7 +535,6 @@ void entityBlackHole::drawRing()
     {
         r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
         r *= mStrength + (mBalance*.1);
-		r *= .8;
     }
     else
     {

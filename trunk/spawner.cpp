@@ -148,7 +148,7 @@ void spawner::run(void)
         //
         int index = getSpawnIndex();
 
-        if (++mSpawnCheckTimer > 100)
+        if ((++mSpawnCheckTimer > 100) || (index > 10))
         {
             mSpawnCheckTimer = 0;
 

@@ -70,63 +70,16 @@ void blackholes::run()
                             if (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_BLACKHOLE)
                             {
                                 // It's another black hole. Keep it at the proper distance
+
                                 entityBlackHole* blackHole2 = static_cast<entityBlackHole*>(enemy);
 //                                if (blackHole2->mActivated)
                                 {
                                     float totalRadius = blackHole->getRadius()+blackHole2->getRadius();
 
-                                    if (distance < totalRadius)
+                                    if (distance < (totalRadius*2))
                                     {
-/*
-                                        if ((totalRadius - distance) > 2)
-                                        {
-                                            // Combine them
-                                            if (blackHole2->mActivated)
-                                            {
-                                                Point3d midpoint((blackHole->getPos().x + blackHole2->getPos().x)/2, (blackHole->getPos().y + blackHole2->getPos().y)/2, 0);
-                                                blackHole->setPos(midpoint);
-                                                blackHole->mStrength += blackHole2->mStrength / 2;
+                                        // Push them away from each other if they get too close
 
-                                                blackHole2->setState(entity::ENTITY_STATE_DESTROY_TRANSITION);
-                                                game::mSound.playTrack(SOUNDID_GRAVITYWELLABSORBED);
-
-                                                float angle = mathutils::calculate2dAngle(blackHole->getPos(), blackHole2->getPos());
-                                                Point3d vector(-1,0,0);
-                                                vector = mathutils::rotate2dPoint(vector, angle);
-                                                blackHole->setDrift(blackHole->getDrift() + vector * .2);
-                                                blackHole->mBalance = 2;
-
-                                            }
-                                            else
-                                            {
-                                                blackHole2->hit(blackHole);
-                                            }
-                                        }
-                                        else
-*/
-                                        {
-                                            // Activate it and nudge each away from each other
-                                            if (!blackHole2->mActivated)
-                                                blackHole2->hit(blackHole);
-
-                                            float angle1 = mathutils::calculate2dAngle(blackHole2->getPos(), blackHole->getPos());
-                                            float angle2 = mathutils::calculate2dAngle(blackHole->getPos(), blackHole2->getPos());
-
-                                            float overlap = totalRadius - distance;
-
-                                            Point3d vector1(overlap/2,0,0);
-                                            Point3d vector2(overlap/2,0,0);
-
-                                            vector1 = mathutils::rotate2dPoint(vector1, angle1);
-                                            vector2 = mathutils::rotate2dPoint(vector2, angle2);
-
-                                            blackHole->setPos(blackHole->getPos() + vector1);
-                                            blackHole2->setPos(blackHole2->getPos() + vector2);
-
-                                        }
-                                    }
-                                    else
-                                    {
                                         float strength = 10;
                                         if (distance < blackHole->getRadius())
                                         {
@@ -135,14 +88,14 @@ void blackholes::run()
 
                                         float r = 1.0/(distance*distance);
 
-                                        // Add a slight curving vector to the gravity
-                                        Point3d gravityVector(r * strength, 0, 0);
+                                        Point3d gravityVector(r * -strength, 0, 0);
                                         Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
 
                                         Point3d speed = enemy->getDrift();
                                         speed.x += g.x;
                                         speed.y += g.y;
                                         enemy->setDrift(speed);
+
                                     }
                                 }
 
@@ -151,7 +104,7 @@ void blackholes::run()
                                 || (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_GEOM_MEDIUM)
                                 || (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_GEOM_LARGE))
                             {
-                                // Geoms not effected
+                                // Geoms not effected by black hole gravity
                             }
                             else
                             {
