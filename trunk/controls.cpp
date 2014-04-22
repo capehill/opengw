@@ -82,7 +82,6 @@ bool controls::getTriggerButton(int player)
 
 bool controls::getStartButton(int player)
 {
-    if (player == 0) return readXBoxStart(player); // TEMP HACK
     return readKeyboardStart(player) || readXBoxStart(player);
 }
 
