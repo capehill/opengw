@@ -111,7 +111,6 @@ void entityBlackHole::run()
         if (att)
         {
             att->strength = -25 * dir;
-            att->zStrength = 0;
             att->radius = 10;
 
             att->pos = mPos;
@@ -221,7 +220,6 @@ void entityBlackHole::destroyTransition()
     if (att)
     {
         att->strength = 20;
-        att->zStrength = 0;
         att->radius = 30;
         att->pos = mPos;
         att->enabled = TRUE;
@@ -352,7 +350,6 @@ void entityBlackHole::hit(entity* aEntity)
             if (att)
             {
                 att->strength = 20;
-                att->zStrength = 0;
                 att->radius = 20;
                 att->pos = mPos;
                 att->enabled = TRUE;
@@ -401,12 +398,12 @@ void entityBlackHole::hit(entity* aEntity)
                 float speed = 30;
                 float spread = 0;
                 int num = 1;
-                int timeToLive = 100;
+                int timeToLive = mathutils::frandFrom0To1() * 200;
                 vector::pen pen = mPen;
-                pen.r = mathutils::frandFrom0To1() + .5;
-                pen.g = mathutils::frandFrom0To1() + .5;
-                pen.b = mathutils::frandFrom0To1() + .5;
-                pen.a = .2;
+                pen.r = 1;//mathutils::frandFrom0To1() + .5;
+                pen.g = 1;//mathutils::frandFrom0To1() + .5;
+                pen.b = 1;//mathutils::frandFrom0To1() + .5;
+                pen.a = .5;
                 pen.lineRadius=5;
                 game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, FALSE, TRUE, .95);
             }
@@ -428,7 +425,6 @@ void entityBlackHole::hit(entity* aEntity)
         if (att)
         {
             att->strength = 20;
-            att->zStrength = 0;
             att->radius = 20;
             att->pos = mPos;
             att->enabled = TRUE;

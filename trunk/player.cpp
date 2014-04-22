@@ -138,11 +138,11 @@ void player::run()
             Point3d exhaustAngle = currentAngle + mathutils::DegreesToRads(180);
             Point3d exhaustOffset;
 
-            float speed = .5;
+            float speed = .8; // .5
             int num = 1;
             int timeToLive = 200;
             vector::pen pen = this->getExhaustPen();
-            pen.a = 99999;
+            pen.a = 20;
 
             // Main stream
             {
@@ -252,7 +252,6 @@ void player::run()
         if (att)
         {
             att->strength = 100;
-            att->zStrength = 0;
             att->radius = 3.5;
             att->pos = mPos;
             att->enabled = TRUE;
@@ -363,7 +362,6 @@ void player::spawn()
     if (att)
     {
         att->strength = -20;
-        att->zStrength = 0;
         att->radius = 15;
         att->pos = mPos;
         att->enabled = TRUE;

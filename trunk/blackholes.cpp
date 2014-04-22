@@ -126,7 +126,6 @@ void blackholes::run()
                                     if (att)
                                     {
                                         att->strength = 1.5;
-                                        att->zStrength = 0;
                                         att->radius = 30;
                                         att->pos = blackHole->getPos();
                                         att->enabled = TRUE;

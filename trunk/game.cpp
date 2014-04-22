@@ -1,4 +1,5 @@
 #include "game.h"
+#include "menuSelectGameType.h"
 
 // Statics
 sound game::mSound;
@@ -23,6 +24,7 @@ extern scene oglScene;
 
 int game::mSkillLevel;
 game::GameMode game::mGameMode;
+game::GameType game::mGameType;
 game::PointDisplay* game::mPointDisplays;
 BOOL game::mFreeplay = TRUE;
 int game::mCredits = 0;
@@ -109,7 +111,7 @@ game::game()
         {
             // Pick a random direction
             const float variation = 1.5;
-            heading + mathutils::frandFrom0To1() * (2*PI);
+            heading += mathutils::frandFrom0To1() * (2*PI);
         }
 
         Point3d speedVector = Point3d(1,0,0);
@@ -157,29 +159,79 @@ void game::run()
                 if (mCredits > 0)
                 {
                     mGameMode = GAMEMODE_CREDITED;
+                    mDebounce = true;
                 }
             }
             break;
         case GAMEMODE_CREDITED:
             {
-                // TODO - ADD SELECTION SCREEN FOR SINGLE/MULTIPLAYER GAME
-                if (mControls.getStartButton(0))
+                if (mControls.getStartButton(0)
+                    || mControls.getStartButton(1)
+                    || mControls.getStartButton(2)
+                    || mControls.getStartButton(3))
                 {
-                    startGame(1);
                 }
-                else if (mControls.getStartButton(1))
+                else
                 {
-                    startGame(2);
+                    mDebounce = false;
                 }
-                else if (mControls.getStartButton(2))
+                if (!mDebounce)
                 {
-                    startGame(3);
-                }
-                else if (mControls.getStartButton(3))
-                {
-                    startGame(4);
+                    if (mControls.getStartButton(0)
+                        || mControls.getStartButton(1)
+                        || mControls.getStartButton(2)
+                        || mControls.getStartButton(3))
+                    {
+                        // Go to game type selection screen
+                        menuSelectGameType::init();
+                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                        mDebounce = true;
+                    }
                 }
             }
+            break;
+        case GAMEMODE_CHOOSE_GAMETYPE:
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
+                if (mControls.getStartButton(0)
+                    || mControls.getStartButton(1)
+                    || mControls.getStartButton(2)
+                    || mControls.getStartButton(3))
+                {
+                }
+                else
+                {
+                    mDebounce = false;
+                }
+                if (!mDebounce)
+                {
+/*
+                    if (mControls.getStartButton(0))
+                    {
+                        startGame(1, GAMETYPE_SINGLEPLAYER);
+                    }
+                    else if (mControls.getStartButton(1))
+                    {
+                        startGame(2, GAMETYPE_MULTIPLAYER_COOP);
+                    }
+                    else if (mControls.getStartButton(2))
+                    {
+                        startGame(3, GAMETYPE_MULTIPLAYER_COOP);
+                    }
+                    else if (mControls.getStartButton(3))
+                    {
+                        startGame(4, GAMETYPE_MULTIPLAYER_COOP);
+                    }
+*/
+                }
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
+                // TODO FIX ME
             break;
         case GAMEMODE_PLAYING:
             {
@@ -313,7 +365,7 @@ void game::run()
 	if ((game::mGameMode == game::GAMEMODE_HIGHSCORES_CHECK) || (game::mGameMode == game::GAMEMODE_HIGHSCORES))
 	{
 	}
-    else if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED)
+    else if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED || mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
     {
         static int explosionTimer = 0;
 
@@ -335,16 +387,22 @@ void game::run()
             
             Point3d pos = mAttractModeBlackHoles[i]->getPos();
 
+            attractor::Attractor* att = game::mAttractors.getAttractor();
+            if (att)
             {
-                attractor::Attractor* att = game::mAttractors.getAttractor();
-                if (att)
+                att->strength = (explosionTimer > 980) ? 1000 : -40;
+                att->radius = 40;
+                att->pos = pos;
+                att->enabled = TRUE;
+                att->attractsParticles = TRUE;
+
+                if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
                 {
-                    att->strength = (explosionTimer > 980) ? 1000 : -40;
-                    att->zStrength = 0;
-                    att->radius = 40;
-                    att->pos = pos;
-                    att->enabled = TRUE;
-                    att->attractsParticles = TRUE;
+                    static float breathValue = 0;
+                    att->strength = 200;//sin(breathValue) * 10;
+                    breathValue += .002;
+
+                    menuSelectGameType::run();
                 }
             }
 
@@ -418,40 +476,43 @@ void game::run()
 
         }
 
-        // Fireworks display
-        static int fw = 99999;
-        ++fw;
-        if (fw >= 5)
+        if (mGameMode != GAMEMODE_CHOOSE_GAMETYPE)
         {
-            fw= 0;
-            static float colorTimer=0;
-            colorTimer += .08;
-
-            Point3d pos(mathutils::frandFrom0To1() * sizex, mathutils::frandFrom0To1() * sizey);
-
+            // Fireworks display
+            static int fw = 99999;
+            ++fw;
+            if (fw >= 5)
             {
-                Point3d angle(0, 0, 0);
-                float speed = mathutils::frandFrom0To1() * 4;
-                float spread = (2*PI);
-                int num = 100;
-                int timeToLive = 99999;
-                vector::pen pen;
+                fw= 0;
+                static float colorTimer=0;
+                colorTimer += .08;
 
-                pen.r = get_sin(colorTimer+((2*PI)/1));
-                pen.g = get_sin(colorTimer+((2*PI)/2));
-                pen.b = get_sin(colorTimer+((2*PI)/3));
+                Point3d pos(mathutils::frandFrom0To1() * sizex, mathutils::frandFrom0To1() * sizey);
 
-                if (pen.r < 0) pen.r = 0;
-                if (pen.g < 0) pen.g = 0;
-                if (pen.b < 0) pen.b = 0;
+                {
+                    Point3d angle(0, 0, 0);
+                    float speed = mathutils::frandFrom0To1() * 4;
+                    float spread = (2*PI);
+                    int num = 100;
+                    int timeToLive = 99999;
+                    vector::pen pen;
 
-                pen.r += .4;
-                pen.g += .4;
-                pen.b += .4;
+                    pen.r = get_sin(colorTimer+((2*PI)/1));
+                    pen.g = get_sin(colorTimer+((2*PI)/2));
+                    pen.b = get_sin(colorTimer+((2*PI)/3));
 
-                pen.a = 100;
-                pen.lineRadius=4;
-                mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, FALSE, .98, TRUE);
+                    if (pen.r < 0) pen.r = 0;
+                    if (pen.g < 0) pen.g = 0;
+                    if (pen.b < 0) pen.b = 0;
+
+                    pen.r += .4;
+                    pen.g += .4;
+                    pen.b += .4;
+
+                    pen.a = 100;
+                    pen.lineRadius=4;
+                    mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, FALSE, .98, TRUE);
+                }
             }
         }
     }
@@ -488,7 +549,7 @@ void game::draw(int pass)
         {
             //glEnable(GL_LINE_SMOOTH);
             //glEnable(GL_MULTISAMPLE);
-            glLineWidth(4);
+            glLineWidth(2);
 
             mParticles.draw();
 
@@ -545,6 +606,13 @@ void game::draw(int pass)
                 mPlayers.draw();
             }
         }
+        else if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
+        {
+            // TODO - MOVE THIS TO ANOTHER FILE
+            // TODO - MOVE THIS TO ANOTHER FILE
+            // TODO - MOVE THIS TO ANOTHER FILE
+            menuSelectGameType::draw();
+        }
 
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
@@ -587,8 +655,10 @@ void game::draw(int pass)
 	}
 }
 
-void game::startGame(int numPlayers)
+void game::startGame(int numPlayers, GameType gameType)
 {
+    mGameType = gameType;
+
     mBrightness = -2; // we fade in the grid on start game
 
     mCamera.center();

@@ -153,6 +153,9 @@
     <ClCompile Include="entityPlayer4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="menuSelectGameType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attractor.h">
@@ -306,6 +309,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="entityPlayer4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menuSelectGameType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

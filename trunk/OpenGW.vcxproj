@@ -130,6 +130,7 @@
     <ClCompile Include="font.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="grid.cpp" />
+    <ClCompile Include="menuSelectGameType.cpp" />
     <ClCompile Include="OpenGW.cpp" />
     <ClCompile Include="highscore.cpp" />
     <ClCompile Include="lodepng.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="font.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="grid.h" />
+    <ClInclude Include="menuSelectGameType.h" />
     <ClInclude Include="OpenGW.h" />
     <ClInclude Include="highscore.h" />
     <ClInclude Include="lodepng.h" />

@@ -134,7 +134,6 @@ void entityPlayerMissile::run()
                 if (att)
                 {
                     att->strength = 10;
-                    att->zStrength = 0;
                     att->radius = 5;
                     att->pos = mPos;
                     att->enabled = TRUE;
@@ -147,7 +146,6 @@ void entityPlayerMissile::run()
                 if (att)
                 {
                     att->strength = 20;
-                    att->zStrength = 0;
                     att->radius = 5;
                     att->pos = mPos;
                     att->enabled = TRUE;
@@ -160,7 +158,6 @@ void entityPlayerMissile::run()
                 if (att)
                 {
 					att->strength = 70;
-					att->zStrength = 0;
 					att->radius = 7;
 					att->pos = mPos;
 					att->enabled = TRUE;

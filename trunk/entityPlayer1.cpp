@@ -19,6 +19,15 @@ entityPlayer1::entityPlayer1()
     mSpawnTime = 35;
     mSheildTimer = PLAYER_SHEILD_TIME;
 
+    mPen = vector::pen(1, 1, 1, 1, 12);
+    mExhaustPen = vector::pen(defaultFontPen, 40, 5);
+    mMissilesPen = vector::pen(defaultFontPen, 40, 5);
+    mFontPen = vector::pen(defaultFontPen, 40, 5);
+
+    mPos.x = theGame.mGrid.extentX() / 2;
+    mPos.y = theGame.mGrid.extentY() / 2;
+    mPos.z = 0;
+
     int i=0;
 
     mModel.mNumVertex = 8;
@@ -50,12 +59,12 @@ void entityPlayer1::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    if (theGame.numPlayers() == 1)
+    if ((theGame.numPlayers() == 1) || (theGame.mGameMode != game::GAMEMODE_PLAYING))
     {
         mPen = vector::pen(1, 1, 1, 1, 12);
-        mExhaustPen = vector::pen(defaultFontPen, 40, 5);
-        mMissilesPen = vector::pen(defaultFontPen, 40, 5);
-        mFontPen = vector::pen(defaultFontPen, 40, 5);
+        mExhaustPen = vector::pen(1, .95, .2, 1, 5);
+        mMissilesPen = vector::pen(1, .95, .2, 1, 5);
+        mFontPen = vector::pen(defaultFontPen, 1, 5);
 
         mPos.x = theGame.mGrid.extentX() / 2;
         mPos.y = theGame.mGrid.extentY() / 2;
@@ -64,9 +73,9 @@ void entityPlayer1::initPlayerForGame()
     else
     {
         mPen = vector::pen(1, .3, .3, 1, 12);
-        mExhaustPen = vector::pen(1, .3, .3, 40, 5);
-        mMissilesPen = vector::pen(1, .3, .3, 40, 5);
-        mFontPen = vector::pen(1, .3, .3, 40, 5);
+        mExhaustPen = vector::pen(1, .3, .3, 1, 5);
+        mMissilesPen = vector::pen(1, .3, .3, 1, 5);
+        mFontPen = vector::pen(1, .3, .3, 1, 5);
 
         mPos.x = (theGame.mGrid.extentX() / 2) - 9;
         mPos.y = (theGame.mGrid.extentY() / 2) + 9;
@@ -82,8 +91,8 @@ void entityPlayer1::spawnTransition()
     if (theGame.numPlayers() > 1)
     {
         mPen = vector::pen(1, .3, .3, 1, 12);
-        mExhaustPen = vector::pen(1, .3, .3, 40, 5);
-        mMissilesPen = vector::pen(1, .3, .3, 40, 5);
+        mExhaustPen = vector::pen(1, .3, .3, 1, 5);
+        mMissilesPen = vector::pen(1, .3, .3, 1, 5);
         mFontPen = vector::pen(1, .3, .3, 40, 5);
 
         mPos.x = (theGame.mGrid.extentX() / 2) - 9;

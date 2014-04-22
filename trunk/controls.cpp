@@ -149,6 +149,7 @@ bool controls::readKeyboardStart(int player)
             return (::GetAsyncKeyState('4') & 0x8000);
             break;
     }
+    return false;
 }
 
 

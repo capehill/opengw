@@ -85,6 +85,7 @@ public:
     {
         GAMEMODE_ATTRACT=0,
         GAMEMODE_CREDITED,
+        GAMEMODE_CHOOSE_GAMETYPE,
         GAMEMODE_PLAYING,
 		GAMEMODE_HIGHSCORES_CHECK,
         GAMEMODE_HIGHSCORES,
@@ -92,13 +93,20 @@ public:
         GAMEMODE_GAMEOVER
     }GameMode;
 
+    typedef enum
+    {
+        GAMETYPE_SINGLEPLAYER=0,
+        GAMETYPE_MULTIPLAYER_COOP,
+        GAMETYPE_MULTIPLAYER_VS
+    }GameType;
+
     game();
     ~game();
 
     void run();
     void draw(int pass);
 
-    void startGame(int numPlayers);
+    void startGame(int numPlayers, GameType gameType);
     void endGame();
 
     static void showMessageAtLocation(char* message, const Point3d& pos, const vector::pen& pen);
@@ -124,6 +132,8 @@ public:
     static int mSkillLevel;
 
     static GameMode mGameMode;
+
+    static GameType mGameType;
 
     static BOOL mFreeplay;
 
@@ -156,6 +166,8 @@ private:
     int mWeaponChangeTimer;
 
     float mBrightness;
+
+    bool mDebounce;
 
     entity* mAttractModeBlackHoles[4];
 };

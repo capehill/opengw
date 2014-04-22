@@ -235,7 +235,7 @@ void scene::draw(int pass)
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_MULTISAMPLE);
 
-		if (game::mGameMode != game::GAMEMODE_HIGHSCORES)
+		if ((game::mGameMode != game::GAMEMODE_HIGHSCORES) && (game::mGameMode != game::GAMEMODE_CHOOSE_GAMETYPE))
 			drawScores();
 
         // Game over mode
@@ -326,6 +326,15 @@ void scene::draw(int pass)
 					font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Insert Coins");
 				}
 			}
+        }
+        else if (game::mGameMode == game::GAMEMODE_CHOOSE_GAMETYPE)
+        {
+		    vector::pen pen = defaultFontPen;
+		    font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, 0, &pen, "Choose Game Type And Players");
+
+		    pen.a=.1;
+		    pen.lineRadius = 8;
+		    font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, 0, &pen, "Choose Game Type And Players");
         }
         else // RUNNING
         {

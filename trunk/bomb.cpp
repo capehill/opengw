@@ -46,7 +46,6 @@ void bomb::run()
                 if (att)
                 {
                     att->strength = 5;
-                    att->zStrength = 0;
                     att->radius = mRings[i].radius;
 
                     att->pos = mRings[i].pos;

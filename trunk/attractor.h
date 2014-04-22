@@ -18,7 +18,6 @@ public:
     {
         Point3d pos;
         float strength;
-        float zStrength;
         float radius;
         bool enabled;
         bool attractsParticles;

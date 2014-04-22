@@ -120,8 +120,6 @@ void particle::draw()
 {
     if (mParticles)
     {
-        glLineWidth(mParticles[0].color.lineRadius);
-
         glBegin(GL_LINES);
 
         for (int i=0; i<mNumParticles; i++)
@@ -148,10 +146,6 @@ void particle::draw()
                 {
                     Point3d from = particle->posStream[p];
                     Point3d to = particle->posStream[p+1];
-
-                    vector::pen pen = particle->color;
-                    pen.lineRadius *= pen.a;
-
                     glVertex3d(from.x, from.y, 0);
                     glVertex3d(to.x, to.y, 0);
                 }
