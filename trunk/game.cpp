@@ -192,47 +192,7 @@ void game::run()
             }
             break;
         case GAMEMODE_CHOOSE_GAMETYPE:
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
-                if (mControls.getStartButton(0)
-                    || mControls.getStartButton(1)
-                    || mControls.getStartButton(2)
-                    || mControls.getStartButton(3))
-                {
-                }
-                else
-                {
-                    mDebounce = false;
-                }
-                if (!mDebounce)
-                {
-/*
-                    if (mControls.getStartButton(0))
-                    {
-                        startGame(1, GAMETYPE_SINGLEPLAYER);
-                    }
-                    else if (mControls.getStartButton(1))
-                    {
-                        startGame(2, GAMETYPE_MULTIPLAYER_COOP);
-                    }
-                    else if (mControls.getStartButton(2))
-                    {
-                        startGame(3, GAMETYPE_MULTIPLAYER_COOP);
-                    }
-                    else if (mControls.getStartButton(3))
-                    {
-                        startGame(4, GAMETYPE_MULTIPLAYER_COOP);
-                    }
-*/
-                }
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
-                // TODO FIX ME
+            // Handled in menuSelectGameType.cpp
             break;
         case GAMEMODE_PLAYING:
             {
@@ -522,8 +482,6 @@ void game::run()
 
     mAttractors.unlock();
 
-//    mGrid.run();
-
     mParticles.run();
 }
 
@@ -602,13 +560,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-//                glEnable(GL_LINE_SMOOTH);
-//                glEnable(GL_MULTISAMPLE);
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
 
                 mPlayers.draw();
 
-//                glDisable(GL_MULTISAMPLE);
-//                glDisable(GL_LINE_SMOOTH);
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
@@ -617,22 +575,19 @@ void game::draw(int pass)
         }
         else if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
         {
-            // TODO - MOVE THIS TO ANOTHER FILE
-            // TODO - MOVE THIS TO ANOTHER FILE
-            // TODO - MOVE THIS TO ANOTHER FILE
             menuSelectGameType::draw();
         }
 
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-//            glEnable(GL_POINT_SMOOTH);
-//            glEnable(GL_MULTISAMPLE);
+            glEnable(GL_POINT_SMOOTH);
+            glEnable(GL_MULTISAMPLE);
 
             mStars.draw();
 
-//            glDisable(GL_MULTISAMPLE);
-//            glDisable(GL_POINT_SMOOTH);
+            glDisable(GL_MULTISAMPLE);
+            glDisable(GL_POINT_SMOOTH);
         }
 
         // Bombs
@@ -647,13 +602,13 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-//                glEnable(GL_LINE_SMOOTH);
-//                glEnable(GL_MULTISAMPLE);
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
 
                 drawPointDisplays();
 
-//                glDisable(GL_MULTISAMPLE);
-//                glDisable(GL_LINE_SMOOTH);
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
             }
             else
             {
