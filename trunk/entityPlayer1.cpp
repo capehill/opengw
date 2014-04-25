@@ -72,10 +72,10 @@ void entityPlayer1::initPlayerForGame()
     }
     else
     {
-        mPen = vector::pen(1, .3, .3, 1, 12);
-        mExhaustPen = vector::pen(1, .3, .3, 1, 5);
-        mMissilesPen = vector::pen(1, .3, .3, 1, 5);
-        mFontPen = vector::pen(1, .3, .3, 1, 5);
+        mPen = vector::pen(1, .4, .4, 1, 12);
+        mExhaustPen = vector::pen(1, .4, .4, 1, 5);
+        mMissilesPen = vector::pen(1, .4, .4, 1, 5);
+        mFontPen = vector::pen(1, .4, .4, 1, 5);
 
         mPos.x = (theGame.mGrid.extentX() / 2) - 9;
         mPos.y = (theGame.mGrid.extentY() / 2) + 9;
@@ -90,10 +90,10 @@ void entityPlayer1::spawnTransition()
 
     if (theGame.numPlayers() > 1)
     {
-        mPen = vector::pen(1, .3, .3, 1, 12);
-        mExhaustPen = vector::pen(1, .3, .3, 1, 5);
-        mMissilesPen = vector::pen(1, .3, .3, 1, 5);
-        mFontPen = vector::pen(1, .3, .3, 40, 5);
+        mPen = vector::pen(1, .4, .4, 1, 12);
+        mExhaustPen = vector::pen(1, .4, .4, 1, 5);
+        mMissilesPen = vector::pen(1, .4, .4, 1, 5);
+        mFontPen = vector::pen(1, .4, .4, 40, 5);
 
         mPos.x = (theGame.mGrid.extentX() / 2) - 9;
         mPos.y = (theGame.mGrid.extentY() / 2) + 9;

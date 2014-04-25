@@ -16,6 +16,8 @@ public:
 
     virtual void draw();
 
+    virtual entity* hitTest(const Point3d& pos, float radius);
+
 private:
     Point3d mVirtualPos;
     float mAnimationIndex;

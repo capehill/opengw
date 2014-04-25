@@ -2,7 +2,7 @@
 #include "camera.h"
 
 static const int zoomedIn = 50; // 50
-static const int zoomedOut = 66; // 66
+static const int zoomedOut = 72; // 66
 
 camera::camera()
 {
@@ -120,7 +120,7 @@ void camera::followPlayer()
 
     static const float hypotenuse = sqrt((float)(theGame.mGrid.extentX()*theGame.mGrid.extentX()) + (theGame.mGrid.extentY()*theGame.mGrid.extentY()));
 
-    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*2) / hypotenuse);
+    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*3) / hypotenuse);
 
     if (mTargetZoom < zoomedIn)
         mTargetZoom = zoomedIn;
@@ -138,7 +138,7 @@ void camera::followPlayer()
 
 void camera::run()
 {
-    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 120.0f;
+    mCurrentZoom += (mTargetZoom - mCurrentZoom) / 30.0f;
 
     mCurrentPos.x += (mTargetPos.x - mCurrentPos.x) / 30.0f;
     mCurrentPos.y += (mTargetPos.y - mCurrentPos.y) / 30.0f;

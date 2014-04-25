@@ -509,25 +509,40 @@ void scene::drawScores()
                     break;
             }
 
-            if (!player->mJoined) continue;
+            if (player->mJoined)
+            {
+                char format[512];
+                sprintf(format, "%d", player->mScore);
+                char* s = font::formatStringWithCommas(format);
 
-            char format[512];
-            sprintf(format, "%d", player->mScore);
-            char* s = font::formatStringWithCommas(format);
+                vector::pen pen(player->getFontPen(), .75, 3);
+                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
+                else
+    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
 
-            vector::pen pen(player->getFontPen(), .75, 3);
-            if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
+		        pen.a=.1;
+		        pen.lineRadius = 8;
+                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
+                else
+    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
+            }
             else
-    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
+            {
+                vector::pen pen(player->getFontPen(), .75, 3);
+                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
+                else
+    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
 
-		    pen.a=.1;
-		    pen.lineRadius = 8;
-            if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
-		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s", s);
-            else
-    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "%s x%d", s, player->mMultiplier);
-
+		        pen.a=.1;
+		        pen.lineRadius = 8;
+                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
+		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
+                else
+    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
+            }
         }
     }
 }

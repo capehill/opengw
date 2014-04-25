@@ -3,7 +3,6 @@
 
 // Statics
 sound game::mSound;
-grid game::mGrid;
 particle game::mParticles;
 camera game::mCamera;
 attractor game::mAttractors;
@@ -15,6 +14,7 @@ blackholes game::mBlackHoles;
 spawner game::mSpawner;
 bomb game::mBomb;
 highscore game::mHighscore;
+grid game::mGrid;
 
 
 #define NUM_POINT_DISPLAYS 40
@@ -144,7 +144,8 @@ void game::run()
         mCredits = 4;
     }
 
-    mAttractors.clearAll();
+    mAttractors.lock();
+//    mAttractors.clearAll();
 
     // Run the camera
     mCamera.run();
@@ -360,8 +361,6 @@ void game::run()
         }
 	}
 
-    mGrid.run();
-
 	if ((game::mGameMode == game::GAMEMODE_HIGHSCORES_CHECK) || (game::mGameMode == game::GAMEMODE_HIGHSCORES))
 	{
 	}
@@ -374,6 +373,12 @@ void game::run()
             explosionTimer = 0;
 
         mCamera.center();
+
+        // Run the game selection menu
+        if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
+        {
+            menuSelectGameType::run();
+        }
 
         // Attractors to wander around the fireworks display
 
@@ -401,8 +406,6 @@ void game::run()
                     static float breathValue = 0;
                     att->strength = 200;//sin(breathValue) * 10;
                     breathValue += .002;
-
-                    menuSelectGameType::run();
                 }
             }
 
@@ -493,7 +496,7 @@ void game::run()
                     Point3d angle(0, 0, 0);
                     float speed = mathutils::frandFrom0To1() * 4;
                     float spread = (2*PI);
-                    int num = 100;
+                    int num = 50;
                     int timeToLive = 99999;
                     vector::pen pen;
 
@@ -505,9 +508,9 @@ void game::run()
                     if (pen.g < 0) pen.g = 0;
                     if (pen.b < 0) pen.b = 0;
 
-                    pen.r += .4;
-                    pen.g += .4;
-                    pen.b += .4;
+                    pen.r += .2;
+                    pen.g += .2;
+                    pen.b += .2;
 
                     pen.a = 100;
                     pen.lineRadius=4;
@@ -517,6 +520,10 @@ void game::run()
         }
     }
 
+    mAttractors.unlock();
+
+//    mGrid.run();
+
     mParticles.run();
 }
 
@@ -525,7 +532,8 @@ void game::run()
 
 void game::draw(int pass)
 {
-    mGrid.brightness = mBrightness;
+    // DON'T DRAW UNTIL THE GRID HAS FINISHED RUNNING
+//    mGrid.waitForRunComplete();
 
     // The camera
     {
@@ -541,6 +549,7 @@ void game::draw(int pass)
             )
         {
             glLineWidth(5);
+            mGrid.brightness = mBrightness;
             mGrid.draw();
         }
 
@@ -549,7 +558,7 @@ void game::draw(int pass)
         {
             //glEnable(GL_LINE_SMOOTH);
             //glEnable(GL_MULTISAMPLE);
-            glLineWidth(2);
+            glLineWidth(4);
 
             mParticles.draw();
 
@@ -653,6 +662,9 @@ void game::draw(int pass)
         }
 
 	}
+
+    mGrid.run();
+
 }
 
 void game::startGame(int numPlayers, GameType gameType)
@@ -669,7 +681,7 @@ void game::startGame(int numPlayers, GameType gameType)
     mSkillLevel = 0;
 
     mSpawner.init();
-
+/*
     this->mPlayers.mPlayer1->mJoined = false;
     this->mPlayers.mPlayer2->mJoined = false;
     this->mPlayers.mPlayer3->mJoined = false;
@@ -684,7 +696,7 @@ void game::startGame(int numPlayers, GameType gameType)
         this->mPlayers.mPlayer3->mJoined = true;
     if (numPlayers >= 4)
         this->mPlayers.mPlayer4->mJoined = true;
-
+*/
     // Fire up the players
     if (this->mPlayers.mPlayer1->mJoined)
     {

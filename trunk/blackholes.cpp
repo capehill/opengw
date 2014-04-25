@@ -134,7 +134,7 @@ void blackholes::run()
                                 }
                                 else
                                 {
-                                    float strength = 8;
+                                    float strength = 16;
                                     if (distance < blackHole->getRadius())
                                     {
                                         distance = blackHole->getRadius();
@@ -160,7 +160,7 @@ void blackholes::run()
     }
 
     // Kill any particles that fly into the black hole
-
+/*
     for (int i=0; i<NUM_ENEMIES; i++)
     {
         if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
@@ -182,50 +182,6 @@ void blackholes::run()
                                 particle->timeToLive = 0;
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
-
-
-    // Push missiles away from the black hole
-    // This doesn't work correctly. Instead of throwing incoming missiles off course it "repels" them
-    // which has the effect of missiles that are directly oncoming being reflected back at their source.
-    // What we want is for them to just be thrown off-course. Look into changing the trajectory of the
-    // missiles instead of setting the drift on them.
-
-/*
-    for (int i=0; i<NUM_ENEMIES; i++)
-    {
-        if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
-        {
-            entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
-            if (blackHole->mActivated)
-            {
-                for (int i=0; i<game::mPlayers.mPlayer1->mMaxMissiles; i++)
-                {
-                    entityPlayerMissile* missile = &game::mPlayers.mPlayer1->missiles[i];
-                    if (missile->getState() == entity::ENTITY_STATE_RUNNING)
-                    {
-                        float angle = mathutils::calculate2dAngle(missile->getPos(), blackHole->getPos());
-                        float distance = mathutils::calculate2dDistance(missile->getPos(), blackHole->getPos());
-
-                        float strength = -10;
-                        if (distance < blackHole->getRadius())
-                        {
-                            distance = blackHole->getRadius();
-                        }
-
-                        float r = 1.0/(distance*distance);
-
-                        Point3d gravityVector(r * strength, 0, 0);
-                        Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
-
-                        Point3d speed = missile->getDrift();
-                        speed.x += g.x;
-                        speed.y += g.y;
-                        missile->setDrift(speed);
                     }
                 }
             }

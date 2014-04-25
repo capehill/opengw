@@ -119,6 +119,33 @@ void entityBlackHole::run()
         }
     }
 
+    // Generate random particles to fly around the black hole
+    if (mActivated)
+    {
+        float r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
+        r *= mStrength + (mBalance*.1);
+        for (int i=0; i<360; i++)
+        {
+            if (mathutils::frandFrom0To1() * 100 < 4)
+            {
+                float ang = mathutils::DegreesToRads(i);
+                Point3d pos = mPos;
+                Point3d angle(0,ang+.4,0);
+
+                float speed = 1;
+                float spread = 0;
+                int num = 1;
+                int timeToLive = 1000;
+                vector::pen pen = mPen;
+                pen.r = 1;//mathutils::frandFrom0To1() + .5;
+                pen.g = 1;//mathutils::frandFrom0To1() + .5;
+                pen.b = 1;//mathutils::frandFrom0To1() + .5;
+                pen.a = .5;
+                pen.lineRadius=5;
+                game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, FALSE, TRUE, .95);
+            }
+        }
+    }
 
     // Seek the player
 
@@ -341,7 +368,7 @@ void entityBlackHole::hit(entity* aEntity)
                     mHumLoopSoundId = game::mSound.playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
             }
 
-            mBalance = 2;
+            mBalance = 1.6;
             mBalanceRate = 0;
 
 /*
@@ -408,8 +435,6 @@ void entityBlackHole::hit(entity* aEntity)
                 game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, FALSE, TRUE, .95);
             }
         }
-
-
 
         mBalance -= .2;
     }

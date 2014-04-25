@@ -59,6 +59,13 @@ void entityTinySpinner::run()
         offset = mathutils::rotate2dPoint(offset, mAnimationIndex);
         mVirtualPos = mPos + offset;
         mAngle = mAnimationIndex*2;
+
+        if (mVirtualPos.x < 0) mVirtualPos.x = 0;
+        else if (mVirtualPos.x > theGame.mGrid.extentX()-1) mVirtualPos.x = theGame.mGrid.extentX()-1;
+
+        if (mVirtualPos.y < 0) mVirtualPos.y = 0;
+        else if (mVirtualPos.y > theGame.mGrid.extentY()-1) mVirtualPos.y = theGame.mGrid.extentY()-1;
+
     }
     entity::run();
 }
@@ -88,7 +95,6 @@ void entityTinySpinner::spawn()
     }
 }
 
-
 void entityTinySpinner::destroyTransition()
 {
     entity::destroyTransition();
@@ -99,6 +105,18 @@ void entityTinySpinner::destroy()
     entity::destroy();
 }
 
+entity* entityTinySpinner::hitTest(const Point3d& pos, float radius)
+{
+    Point3d ourPos = mVirtualPos;
+
+    float distance = mathutils::calculate2dDistance(pos, ourPos);
+    float resultRadius = radius + getRadius();
+    if (distance < resultRadius)
+    {
+        return this;
+    }
+    return NULL;
+}
 
 
 

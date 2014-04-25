@@ -40,7 +40,6 @@ entityPlayerMissile::entityPlayerMissile()
 void entityPlayerMissile::run()
 {
     mLastPos = mPos;
-//    entity::run();
 
     {
         // Check for black holes that may effect us
@@ -188,13 +187,13 @@ void entityPlayerMissile::destroyTransition()
     // Throw out some particles
     Point3d pos(this->mPos);
     Point3d angle(0,0,0);
-    float speed = 1;
+    float speed = 2;
     float spread = 2*PI;
-    int num = 6;
-    int timeToLive = 100;
+    int num = 20;
+    int timeToLive = 200;
     vector::pen pen = mPen;
     pen.lineRadius=5;
-    pen.a = .8;
+    pen.a = 1;
     game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive);
 }
 

@@ -12,7 +12,6 @@ namespace vector
     // but I never got it looking as good as the buffer blur approach.
     void drawVector(const Point3d& from, const Point3d& to, const pen& penStyle)
     {
-/*
         float lineWidth = penStyle.lineRadius * thicknessConstant;
 
         float angle = mathutils::calculate2dAngle(from, to);
@@ -126,7 +125,6 @@ namespace vector
         glVertex3f(p8.x, p8.y, 0);
 
         glEnd();
-*/
     }
 
 

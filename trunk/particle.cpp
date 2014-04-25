@@ -120,8 +120,6 @@ void particle::draw()
 {
     if (mParticles)
     {
-        glBegin(GL_LINES);
-
         for (int i=0; i<mNumParticles; i++)
         {
             if (mParticles[i].timeToLive > 0)
@@ -140,19 +138,33 @@ void particle::draw()
                     continue;
                 }
 
+                float width = speedNormal * 8;
+                if (width > 5) width = 5;
+
                 glColor4f(particle->color.r, particle->color.g, particle->color.b, a); // RGBA
+                glLineWidth(width);
+
+                // This is SO inefficient
+                // I really should be doing all the particles in one GL_LINES block but the
+                // width of the lines needs to change per-particle, and you can't do a call to
+                // glLineWidth() inside a GL_LINES block :-(
+
+                glBegin(GL_LINES);
 
                 for (int p=0; p<NUM_POS_STREAM_ITEMS-1; p++)
                 {
                     Point3d from = particle->posStream[p];
                     Point3d to = particle->posStream[p+1];
+
                     glVertex3d(from.x, from.y, 0);
                     glVertex3d(to.x, to.y, 0);
                 }
+
+        	    glEnd();
+
             }
         }
 
-	    glEnd();
 
     }
 

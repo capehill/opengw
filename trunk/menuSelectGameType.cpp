@@ -19,6 +19,11 @@ void menuSelectGameType::init()
     mpPlayer2Amount = 0;
     mpPlayer3Amount = 0;
     mpPlayer4Amount = 0;
+
+    theGame.mPlayers.mPlayer1->mJoined = false;
+    theGame.mPlayers.mPlayer2->mJoined = false;
+    theGame.mPlayers.mPlayer3->mJoined = false;
+    theGame.mPlayers.mPlayer4->mJoined = false;
 }
 
 void menuSelectGameType::run()
@@ -31,18 +36,37 @@ void menuSelectGameType::run()
         {
             if (theGame.mControls.getStartButton(0))
             {
+                theGame.mPlayers.mPlayer1->mJoined = true;
                 theGame.startGame(1, game::GAMETYPE_SINGLEPLAYER);
             }
         }
         else
         {
+            if (theGame.mControls.getStartButton(0)) theGame.mPlayers.mPlayer1->mJoined = true;
+            if (theGame.mControls.getStartButton(1)) theGame.mPlayers.mPlayer2->mJoined = true;
+            if (theGame.mControls.getStartButton(2)) theGame.mPlayers.mPlayer3->mJoined = true;
+            if (theGame.mControls.getStartButton(3)) theGame.mPlayers.mPlayer4->mJoined = true;
+
+            if (theGame.mControls.getTriggerButton(0)
+                || theGame.mControls.getTriggerButton(1)
+                || theGame.mControls.getTriggerButton(2)
+                || theGame.mControls.getTriggerButton(3))
+            {
+                theGame.startGame(theGame.numPlayers(), game::GAMETYPE_MULTIPLAYER_COOP);
+            }
+
+/*
             if (theGame.mControls.getStartButton(0)
                 || theGame.mControls.getStartButton(1)
                 || theGame.mControls.getStartButton(2)
                 || theGame.mControls.getStartButton(3))
             {
-                theGame.startGame(4, game::GAMETYPE_MULTIPLAYER_COOP);
+                //theGame.startGame(4, game::GAMETYPE_MULTIPLAYER_COOP);
+
+                if (theGame.mControls.getStartButton(0))
+
             }
+*/
 
     /*
             if (theGame.mControls.getStartButton(0))
@@ -143,38 +167,43 @@ void menuSelectGameType::run()
     }
     else if (selection == 1)
     {
-        if (mpPlayer1Amount < 1)
+        float player1Target = theGame.mPlayers.mPlayer1->mJoined ? 1 : 0;
+        float player2Target = theGame.mPlayers.mPlayer2->mJoined ? 1 : 0;
+        float player3Target = theGame.mPlayers.mPlayer3->mJoined ? 1 : 0;
+        float player4Target = theGame.mPlayers.mPlayer4->mJoined ? 1 : 0;
+
+        if (mpPlayer1Amount < player1Target)
         {
             mpPlayer1Amount += amountIncrease;
         }
-        else if (mpPlayer1Amount > 1)
+        else if (mpPlayer1Amount > player1Target)
         {
             mpPlayer1Amount *= amountDampener;
         }
 
-        if (mpPlayer2Amount < 1)
+        if (mpPlayer2Amount < player2Target)
         {
             mpPlayer2Amount += amountIncrease;
         }
-        else if (mpPlayer2Amount > 1)
+        else if (mpPlayer2Amount > player2Target)
         {
             mpPlayer2Amount *= amountDampener;
         }
 
-        if (mpPlayer3Amount < 1)
+        if (mpPlayer3Amount < player3Target)
         {
             mpPlayer3Amount += amountIncrease;
         }
-        else if (mpPlayer3Amount > 1)
+        else if (mpPlayer3Amount > player3Target)
         {
             mpPlayer3Amount *= amountDampener;
         }
 
-        if (mpPlayer4Amount < 1)
+        if (mpPlayer4Amount < player4Target)
         {
             mpPlayer4Amount += amountIncrease;
         }
-        else if (mpPlayer4Amount > 1)
+        else if (mpPlayer4Amount > player4Target)
         {
             mpPlayer4Amount *= amountDampener;
         }
@@ -229,6 +258,7 @@ void menuSelectGameType::draw()
 
     {
         vector::pen pen = vector::pen(1, .3, .3, 1, 12); // HACK - find a better way to get this color :-(
+        if (!theGame.mPlayers.mPlayer1->mJoined) pen.a *= .25;
         glBegin(GL_LINES);
         theGame.mPlayers.mPlayer1->getModel()->Identity();
         theGame.mPlayers.mPlayer1->getModel()->Scale(4);
@@ -243,6 +273,7 @@ void menuSelectGameType::draw()
 
     {
         vector::pen pen = theGame.mPlayers.mPlayer2->getPen();
+        if (!theGame.mPlayers.mPlayer2->mJoined) pen.a *= .25;
         glBegin(GL_LINES);
         theGame.mPlayers.mPlayer2->getModel()->Identity();
         theGame.mPlayers.mPlayer2->getModel()->Scale(.25);
@@ -258,6 +289,7 @@ void menuSelectGameType::draw()
 
     {
         vector::pen pen = theGame.mPlayers.mPlayer3->getPen();
+        if (!theGame.mPlayers.mPlayer3->mJoined) pen.a *= .25;
         glBegin(GL_LINES);
         theGame.mPlayers.mPlayer3->getModel()->Identity();
         theGame.mPlayers.mPlayer3->getModel()->Scale(.25);
@@ -272,6 +304,7 @@ void menuSelectGameType::draw()
 
     {
         vector::pen pen = theGame.mPlayers.mPlayer4->getPen();
+        if (!theGame.mPlayers.mPlayer4->mJoined) pen.a *= .25;
         glBegin(GL_LINES);
         theGame.mPlayers.mPlayer4->getModel()->Identity();
         theGame.mPlayers.mPlayer4->getModel()->Scale(.25);

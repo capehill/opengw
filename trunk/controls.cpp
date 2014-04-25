@@ -34,9 +34,10 @@ controls::controls()
 
     if (mNumJoysticks>=1)
     {
+        mControllers[0] = SDL_JoystickOpen(0);
+
         // If only one joystick is connected, what the hell?
         // Let the one joystick control all 4 players :-)
-        mControllers[0] = SDL_JoystickOpen(0);
 /*
         mControllers[1] = mControllers[0];
         mControllers[2] = mControllers[0];

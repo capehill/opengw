@@ -2,21 +2,38 @@
 #include "attractor.h"
 #include "mathutils.h"
 
+bool attractor::mLocked = false;
+
 attractor::attractor()
 {
     mNumAttractors = 50; // PERFORMANCE: If you set this too high things will start to slow down in grid::run()!!
+
+    lock();
 
     mAttractors = new Attractor[mNumAttractors];
     if (mAttractors)
     {
         clearAll();
     }
+
+    unlock();
 }
 
 attractor::~attractor()
 {
     if (mAttractors)
         delete mAttractors;
+}
+
+void attractor::lock()
+{
+    while (mLocked){ Sleep(1); };
+    mLocked = true;
+}
+
+void attractor::unlock()
+{
+    mLocked = false;
 }
 
 attractor::Attractor* attractor::getAttractor()
