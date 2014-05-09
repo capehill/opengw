@@ -72,87 +72,86 @@ static int runThread(void *ptr)
         };
         mRunFlag = false;
 
-        game::mAttractors.lock();
+        // Apply attractors
+        for (int a=0; a<game::mAttractors.mNumAttractors; a++)
         {
-            // Apply attractors
-            for (int a=0; a<game::mAttractors.mNumAttractors; a++)
+            attractor::Attractor att = game::mAttractors.mAttractors[a];
+            if (att.enabled)
             {
-                attractor::Attractor att = game::mAttractors.mAttractors[a];
-                if (att.enabled)
+                // Evaluate every point on the grid for this attractor
+                int xstart = 1;
+                int ystart = 1;
+                int xend = grid::resolution_x-2;
+                int yend = grid::resolution_y-2;
+
+                for(y=ystart; y<=yend; ++y)
                 {
-                    // Evaluate every point on the grid for this attractor
-                    int xstart = 1;
-                    int ystart = 1;
-                    int xend = grid::resolution_x-2;
-                    int yend = grid::resolution_y-2;
-
-                    for(y=ystart; y<=yend; ++y)
+                    for(x=xstart; x<=xend; ++x)
                     {
-                        for(x=xstart; x<=xend; ++x)
+                        Point3d gpoint = gridxy(x,y).pos;
+                        Point3d apoint = att.pos;
+
+                        float distance = mathutils::calculate2dDistance(gpoint, apoint);
+
+                        if ((distance < att.radius) && distance > 0)
                         {
-                            Point3d gpoint = gridxy(x,y).pos;
-                            Point3d apoint = att.pos;
+                            distance = (distance*distance); // Simulate gravity with distance squared
 
-                            float distance = mathutils::calculate2dDistance(gpoint, apoint);
+                            float angle = mathutils::calculate2dAngle(gpoint, apoint);
+                            float strength = att.strength;
 
-                            if ((distance < att.radius) && distance > 0)
-                            {
-                                distance = (distance*distance); // Simulate gravity with distance squared
+                            Point3d gravityVector(-distance * strength, 0, 0);
+                            Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
 
-                                float angle = mathutils::calculate2dAngle(gpoint, apoint);
-                                float strength = att.strength;
-
-                                Point3d gravityVector(-distance * strength, 0, 0);
-                                Point3d g = mathutils::rotate2dPoint(gravityVector, angle);
-
-                                gridxy(x,y).vel.x += g.x * .005;
-                                gridxy(x,y).vel.y += g.y * .005;
-                            }
-
+                            gridxy(x,y).vel.x += g.x * .005;
+                            gridxy(x,y).vel.y += g.y * .005;
                         }
+
                     }
-
-                    // Now that we've processed this attractor we can clear it out
-                    game::mAttractors.mAttractors[a].enabled = false;
-
                 }
+
+                // Now that we've processed this attractor we can clear it out
+                game::mAttractors.mAttractors[a].enabled = false;
+
             }
         }
-        game::mAttractors.unlock();
 
         // Run the grid
-        float accel_c = -q * dt;
-        float damping_multiplier = exp(-dt * damping);
-        for(y=1; y<grid::resolution_y-1; ++y)
+        for (int pass=0; pass < 2; pass++)
         {
-            for(x=1; x<grid::resolution_x-1; ++x)
+            float accel_c = -q * dt;
+            float damping_multiplier = exp(-dt * damping);
+            for(y=1; y<grid::resolution_y-1; ++y)
             {
-                // Weigh against neighbors
-                Point3d p1 = gridxy(x-1,y).pos;
-                Point3d p2 = gridxy(x+1,y).pos;
-                Point3d p3 = gridxy(x,y-1).pos;
-                Point3d p4 = gridxy(x,y+1).pos;
+                for(x=1; x<grid::resolution_x-1; ++x)
+                {
+                    // Weigh against neighbors
+                    Point3d p1 = gridxy(x-1,y).pos;
+                    Point3d p2 = gridxy(x+1,y).pos;
+                    Point3d p3 = gridxy(x,y-1).pos;
+                    Point3d p4 = gridxy(x,y+1).pos;
 
-                // Average the point
-                // avg_pos = (p1+p2+p3+p4) * .25;
-                Point3d avg_pos;
-                avg_pos.x = (p1.x + p2.x + p3.x + p4.x) / 4;
-                avg_pos.y = (p1.y + p2.y + p3.y + p4.y) / 4;
+                    // Average the point
+                    // avg_pos = (p1+p2+p3+p4) * .25;
+                    Point3d avg_pos;
+                    avg_pos.x = (p1.x + p2.x + p3.x + p4.x) / 4;
+                    avg_pos.y = (p1.y + p2.y + p3.y + p4.y) / 4;
 
-                gridxy(x,y).vel += (gridxy(x,y).pos - avg_pos) * accel_c;
-                gridxy(x,y).vel *= damping_multiplier;
-                gridxy(x,y).pos += gridxy(x,y).vel * dt;
+                    gridxy(x,y).vel += (gridxy(x,y).pos - avg_pos) * accel_c;
+                    gridxy(x,y).vel *= damping_multiplier;
+                    gridxy(x,y).pos += gridxy(x,y).vel * dt;
 
-                // Keep the points in bounds
-                if (gridxy(x,y).pos.x < 0)
-                    gridxy(x,y).pos.x = 0;
-                else if (gridxy(x,y).pos.x > grid::resolution_x-1)
-                    gridxy(x,y).pos.x = grid::resolution_x-1;
-                if (gridxy(x,y).pos.y < 0)
-                    gridxy(x,y).pos.y = 0;
-                else if (gridxy(x,y).pos.y > grid::resolution_y-1)
-                    gridxy(x,y).pos.y = grid::resolution_y-1;
+                    // Keep the points in bounds
+                    if (gridxy(x,y).pos.x < 0)
+                        gridxy(x,y).pos.x = 0;
+                    else if (gridxy(x,y).pos.x > grid::resolution_x-1)
+                        gridxy(x,y).pos.x = grid::resolution_x-1;
+                    if (gridxy(x,y).pos.y < 0)
+                        gridxy(x,y).pos.y = 0;
+                    else if (gridxy(x,y).pos.y > grid::resolution_y-1)
+                        gridxy(x,y).pos.y = grid::resolution_y-1;
 
+                }
             }
         }
     };
@@ -213,8 +212,8 @@ grid::grid()
     vector::pen darkColor(0.2f, 0.2f, 1.0f, (0.15f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
     vector::pen lightColor(0.2f, 0.2f, 1.0f, (0.4f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
 #else
-    vector::pen darkColor(0.2f, 0.2f, 1.0f, 0.12f * brightness, 0);
-    vector::pen lightColor(.2f, 0.2f, 1.0f, 0.3f * brightness, 0);
+    vector::pen darkColor(0.2f, 0.2f, 1.0f, 0.15f * brightness, 0);
+    vector::pen lightColor(.2f, 0.2f, 1.0f, 0.4f * brightness, 0);
 #endif
 
     unsigned int i=0;

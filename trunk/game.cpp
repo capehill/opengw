@@ -144,9 +144,6 @@ void game::run()
         mCredits = 4;
     }
 
-    mAttractors.lock();
-//    mAttractors.clearAll();
-
     // Run the camera
     mCamera.run();
 
@@ -480,8 +477,6 @@ void game::run()
         }
     }
 
-    mAttractors.unlock();
-
     mParticles.run();
 }
 
@@ -490,9 +485,6 @@ void game::run()
 
 void game::draw(int pass)
 {
-    // DON'T DRAW UNTIL THE GRID HAS FINISHED RUNNING
-//    mGrid.waitForRunComplete();
-
     // The camera
     {
         glTranslatef(-mCamera.mCurrentPos.x, -mCamera.mCurrentPos.y, -mCamera.mCurrentPos.z);
@@ -618,6 +610,7 @@ void game::draw(int pass)
 
 	}
 
+    // Weird place to put this but it seems to be most effective here (?)
     mGrid.run();
 
 }

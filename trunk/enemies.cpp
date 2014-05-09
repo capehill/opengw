@@ -225,6 +225,21 @@ void enemies::run()
         {
             case entity::ENTITY_STATE_SPAWN_TRANSITION:
                 mEnemies[i]->spawnTransition();
+                {
+                    // NOT SURE I LIKE THIS SINCE IT'S NOT ACCURATE TO THE ORIGINAL GAME
+                    // Add a little "poof" to the grid whereever an enemy spawns
+/*
+                    attractor::Attractor* att = game::mAttractors.getAttractor();
+                    if (att)
+                    {
+                        att->strength = 5;
+                        att->radius = 15;
+                        att->pos = mEnemies[i]->getPos();
+                        att->enabled = TRUE;
+                        att->attractsParticles = TRUE;
+                    }
+*/
+                }
                 break;
             case entity::ENTITY_STATE_SPAWNING:
                 mEnemies[i]->spawn();

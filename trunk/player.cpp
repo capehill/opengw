@@ -10,7 +10,7 @@ player::player()
 
     mJoined = FALSE;
 
-    mDestroyTime = 75;
+    mDestroyTime = 40;
 
     mExhaustSpreadIndex = mathutils::randFromTo(0,1);
 
@@ -361,8 +361,8 @@ void player::spawn()
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
     {
-        att->strength = -20;
-        att->radius = 15;
+        att->strength = -50;
+        att->radius = 10;
         att->pos = mPos;
         att->enabled = TRUE;
         att->attractsParticles = TRUE;

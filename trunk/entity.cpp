@@ -23,9 +23,9 @@ entity::entity()
     : mType(ENTITY_TYPE_UNDEF)
 {
     setState(ENTITY_STATE_INACTIVE);
-    mSpawnTime = 50;
+    mSpawnTime = 30;
     mDestroyTime = 0;
-    mIndicateTime = 100;
+    mIndicateTime = 75;
     mStateTimer = 0;
     mAggression = 1;
     mEdgeBounce = FALSE;
@@ -86,7 +86,7 @@ void entity::draw()
 
     if (this->getState() == entity::ENTITY_STATE_INDICATING)
     {
-        if (((int)(mStateTimer/10)) & 1)
+        if (((int)(mStateTimer/5)) & 1)
         {
             vector::pen pen = mPen;
             mModel.draw(pen);

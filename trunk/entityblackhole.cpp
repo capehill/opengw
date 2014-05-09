@@ -246,8 +246,8 @@ void entityBlackHole::destroyTransition()
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
     {
-        att->strength = 20;
-        att->radius = 30;
+        att->strength = 100;
+        att->radius = 50;
         att->pos = mPos;
         att->enabled = TRUE;
         att->attractsParticles = FALSE;

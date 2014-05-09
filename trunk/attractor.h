@@ -28,12 +28,6 @@ public:
 
     Attractor* mAttractors;
     int mNumAttractors;
-
-    static void lock();
-    static void unlock();
-
-private:
-    static bool mLocked;
 };
 
 #endif // ATTRACTOR_H
