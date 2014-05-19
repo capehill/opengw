@@ -51,7 +51,6 @@ void entityWeaver::run()
 {
     if (this->getEnabled())
     {
-
         // Check for missiles around us
         for (int i=0; i<entityPlayer1::mMaxMissiles; i++)
         {

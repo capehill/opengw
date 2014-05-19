@@ -84,7 +84,7 @@ void entityWanderer::run()
         mSpeed *= .98;
 
         // Change direction when we hit the grid edges
-		if (game::mGrid.hitTest(mPos, getRadius()))
+		if (game::mGrid.hitTest(mPos, getRadius()*2))
         {
             mCurrentHeading = mathutils::frandFrom0To1() * (2*PI);
         }

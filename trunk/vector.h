@@ -16,6 +16,14 @@ namespace vector
           float lineRadius;
     };
 
+    class vector
+    {
+        public:
+          vector() {;}
+          vector(const Point3d& p1, const Point3d& p2) { from = p1; to = p2; }
+          Point3d from, to;
+    };
+
     void drawVector(const Point3d& from, const Point3d& to, const pen& penStyle);
     void extendVector(Point3d* from, Point3d* to, double amount);
 };

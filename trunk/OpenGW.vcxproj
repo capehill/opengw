@@ -122,6 +122,7 @@
     <ClCompile Include="entityPlayer4.cpp" />
     <ClCompile Include="entityplayermissile.cpp" />
     <ClCompile Include="entityproton.cpp" />
+    <ClCompile Include="entityrepulsor.cpp" />
     <ClCompile Include="entitysnake.cpp" />
     <ClCompile Include="entityspinner.cpp" />
     <ClCompile Include="entitytinyspinner.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="entityPlayer4.h" />
     <ClInclude Include="entityplayermissile.h" />
     <ClInclude Include="entityproton.h" />
+    <ClInclude Include="entityrepulsor.h" />
     <ClInclude Include="entitysnake.h" />
     <ClInclude Include="entityspinner.h" />
     <ClInclude Include="entitytinyspinner.h" />

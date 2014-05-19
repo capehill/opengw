@@ -145,15 +145,6 @@ public:
             mModel.draw(pen);
 
         }
-
-        // Restore stuff
-//        mModel.Identity();
-//        mModel.Rotate(mAngle);
-//        mModel.Scale(scale);
-//        mModel.Translate(trans);
-
-        // Draw it normally too
-//        mModel.draw(pen);
     }
 
     void run()
@@ -266,13 +257,6 @@ entitySnake::entitySnake()
     mModel.mVertexList[i++] = Point3d(-.71, 1.0575);
     mModel.mVertexList[i++] = Point3d(-.4, 1.404);
 
-/*
-    // FIX THIS
-    for (i=0; i<mModel.mNumVertex; i++)
-    {
-        mModel.mVertexList[i].y -= 1.4;
-    }
-*/
     i = 0;
 
     mModel.mNumEdges = 15;
@@ -469,9 +453,6 @@ entity* entitySnake::hitTest(const Point3d& pos, float radius)
 
 void entitySnake::draw()
 {
-//    entity::draw();
-
-
     if (this->getState() == entity::ENTITY_STATE_INDICATING)
     {
         if (((int)(mStateTimer/10)) & 1)

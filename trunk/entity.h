@@ -30,6 +30,8 @@ public:
         ENTITY_TYPE_SNAKE,
         ENTITY_TYPE_SNAKE_SEGMENT,
         ENTITY_TYPE_BLACKHOLE,
+        ENTITY_TYPE_REPULSOR,
+        ENTITY_TYPE_REPULSOR_SHIELD,
         ENTITY_TYPE_PROTON,
         ENTITY_TYPE_GEOM_SMALL,
         ENTITY_TYPE_GEOM_MEDIUM,
@@ -97,6 +99,8 @@ public:
     const float getAggression() const { return mAggression; }
 
     void setEdgeBounce(BOOL bounce) { mEdgeBounce = bounce; }
+
+    void setGridBound(BOOL gridBound) { mGridBound = gridBound; }
 
     virtual void runTransition();
     virtual void run();

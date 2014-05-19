@@ -196,7 +196,11 @@ void spawner::run(void)
 
         // Slowly allow more and more simulatanious waves
         int numAllowedWaveEntities = 10 - index;
-        if (numAllowedWaveEntities <= 0) numAllowedWaveEntities = 1;
+        if (numAllowedWaveEntities <= 0)
+        {
+            numAllowedWaveEntities = 1;
+            mWaveEntity = entity::ENTITY_TYPE_UNDEF;
+        }
 
         // Start a wave
         if (numWaveEntities < numAllowedWaveEntities)
@@ -209,7 +213,7 @@ void spawner::run(void)
                 {
 //                    mWaveStartTimer = 100;
 
-                    switch ((int)(mathutils::frandFrom0To1() * 17))
+                    switch ((int)(mathutils::frandFrom0To1() * 18))
                     {
                         default:
                         case 0:
@@ -268,6 +272,11 @@ void spawner::run(void)
                             mWaveType = WAVETYPE_RUSH;
                             mWaveEntityCounter = (index >= 10) ? (mathutils::frandFrom0To1() * 6) : (mathutils::frandFrom0To1() * 4);
                             break;
+                        case 17:
+                            mWaveEntity = entity::ENTITY_TYPE_REPULSOR;
+                            mWaveType = WAVETYPE_RUSH;
+                            mWaveEntityCounter = (index >= 10) ? (mathutils::frandFrom0To1() * 4) : 1;
+                            break;
                         case 9:
                             if (index >= 8)
                             {
@@ -297,6 +306,7 @@ void spawner::run(void)
     }
 
     // Run the mayfly sound loop
+    // This is a dumb place for this to live
     if (game::mEnemies.getNumActiveEnemiesOfType(entity::ENTITY_TYPE_MAYFLY) > 0)
     {
         if (!game::mSound.isTrackPlaying(SOUNDID_MAYFLIES))
@@ -307,7 +317,6 @@ void spawner::run(void)
         if (game::mSound.isTrackPlaying(SOUNDID_MAYFLIES))
             game::mSound.stopTrack(SOUNDID_MAYFLIES);
     }
-
 }
 
 void spawner::transition()

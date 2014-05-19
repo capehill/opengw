@@ -35,23 +35,25 @@ void bomb::run()
     {
         if (mRings[i].timeToLive > 0)
         {
-            --mRings[i].timeToLive;
             mRings[i].radius += mRings[i].speed;
             mRings[i].thickness += .03;
+            --mRings[i].timeToLive;
+
+            if (mRings[i].radius > 100)
+            {
+                mRings[i].timeToLive = 0;
+            }
 
             // Push the grid out
-            if (mRings[i].radius < 40)
+            attractor::Attractor* att = game::mAttractors.getAttractor();
+            if (att)
             {
-                attractor::Attractor* att = game::mAttractors.getAttractor();
-                if (att)
-                {
-                    att->strength = 5;
-                    att->radius = mRings[i].radius;
+                att->strength = 200;
+                att->radius = mRings[i].radius;
 
-                    att->pos = mRings[i].pos;
-                    att->enabled = TRUE;
-                    att->attractsParticles = TRUE;
-                }
+                att->pos = mRings[i].pos;
+                att->enabled = TRUE;
+                att->attractsParticles = TRUE;
             }
 
             // Look for any enemies within the blast radius and destroy them

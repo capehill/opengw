@@ -9,14 +9,8 @@ class entityLine :
 public:
     entityLine(void);
 
-    virtual void runTransition();
     virtual void run();
     virtual void spawnTransition();
-    virtual void spawn();
-    virtual void destroyTransition();
-    virtual void destroy();
-
-    virtual void draw();
 
     void addEndpoints(const Point3d& from, const Point3d& to);
 

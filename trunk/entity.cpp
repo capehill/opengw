@@ -12,6 +12,7 @@
 #include "entitymayfly.h"
 #include "entitysnake.h"
 #include "entityblackhole.h"
+#include "entityrepulsor.h"
 #include "entityProton.h"
 #include "entityGeom.h"
 #include "entityGeomSmall.h"
@@ -60,6 +61,8 @@ entity* entity::createEntity(EntityType _entity)
             return new entitySnake();
         case ENTITY_TYPE_BLACKHOLE:
             return new entityBlackHole();
+        case ENTITY_TYPE_REPULSOR:
+            return new entityRepulsor();
         case ENTITY_TYPE_PROTON:
             return new entityProton();
         case ENTITY_TYPE_GEOM_SMALL:

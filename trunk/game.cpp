@@ -65,6 +65,11 @@ game::game()
     mSound.loadTrack("sounds/gravitywellalert.wav", SOUNDID_GRAVITYWELLALERT, .5, false);
     mSound.loadTrack("sounds/gravitywellexplode.wav", SOUNDID_GRAVITYWELLEXPLODE, .5, false);
 
+    mSound.loadTrack("sounds/repulsor.wav", SOUNDID_REPULSORA, .4, true);
+    mSound.loadTrack("sounds/repulsor.wav", SOUNDID_REPULSORB, .4, true);
+    mSound.loadTrack("sounds/repulsor.wav", SOUNDID_REPULSORC, .4, true);
+    mSound.loadTrack("sounds/repulsor.wav", SOUNDID_REPULSORD, .4, true);
+
     mSound.loadTrack("sounds/gravitywellhumloop.wav", SOUNDID_GRAVITYWELL_HUMLOOPA, .3, true);
     mSound.loadTrack("sounds/gravitywellhumloop.wav", SOUNDID_GRAVITYWELL_HUMLOOPB, .3, true);
     mSound.loadTrack("sounds/gravitywellhumloop.wav", SOUNDID_GRAVITYWELL_HUMLOOPC, .3, true);

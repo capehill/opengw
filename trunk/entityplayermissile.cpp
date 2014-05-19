@@ -1,6 +1,7 @@
 #include "entityplayermissile.h"
 #include "game.h"
 #include "entityblackhole.h"
+#include "entityrepulsor.h"
 
 
 entityPlayerMissile::entityPlayerMissile()
@@ -41,59 +42,70 @@ void entityPlayerMissile::run()
 {
     mLastPos = mPos;
 
+    // Check for repulsors that may effect us
+    for (int i=0; i<NUM_ENEMIES; i++)
     {
-        // Check for black holes that may effect us
-        bool warped = false;
-        for (int i=0; i<NUM_ENEMIES; i++)
+        if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_REPULSOR) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
         {
-            if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
+            entityRepulsor* repulsor = static_cast<entityRepulsor*>(game::mEnemies.mEnemies[i]);
+            if (repulsor)
             {
-                entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
-                if (blackHole->mActivated)
+                repulsor->repelEntity(this);
+            }
+        }
+    }
+
+    // Check for black holes that may effect us
+    bool warped = false;
+    for (int i=0; i<NUM_ENEMIES; i++)
+    {
+        if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
+        {
+            entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
+            if (blackHole->mActivated)
+            {
+                float distance = mathutils::calculate2dDistance(mPos, blackHole->getPos());
+                if (distance < 20)
                 {
-                    float distance = mathutils::calculate2dDistance(mPos, blackHole->getPos());
-                    if (distance < 20)
+	                Point3d v2 = blackHole->getPos();
+	                Point3d v1 = mPos;
+
+	                float angle = mathutils::wrapRadians(mathutils::calculate2dAngle(v1, v2));
+                    float heading = mathutils::wrapRadians(getAngle() + mathutils::DegreesToRads(90));
+
+	                float targetingAngle = mathutils::diffAngles(angle, heading);
+	                float targetingOffset = fabs(targetingAngle);
+
+                    if (targetingOffset < 0.8)
                     {
-	                    Point3d v2 = blackHole->getPos();
-	                    Point3d v1 = mPos;
-
-	                    float angle = mathutils::wrapRadians(mathutils::calculate2dAngle(v1, v2));
-                        float heading = mathutils::wrapRadians(getAngle() + mathutils::DegreesToRads(90));
-
-	                    float targetingAngle = mathutils::diffAngles(angle, heading);
-	                    float targetingOffset = fabs(targetingAngle);
-
-                        if (targetingOffset < 0.8)
-                        {
-                            mRotationRate += targetingAngle * .1;
-                            warped = true;
-                        }
+                        mRotationRate += targetingAngle * .1;
+                        warped = true;
                     }
                 }
             }
         }
-
-        mRotationRate *= .5;
-
-        if (warped)
-        {
-            Point3d vector(mVelocity,0,0);
-            mSpeed = mathutils::rotate2dPoint(vector, mAngle + mathutils::DegreesToRads(90));
-        }
-
-        mPos += mSpeed;
-        mPos += mDrift;
-        mAngle -= mRotationRate;
-        mAngle = fmodf(mAngle, 2.0f*PI);
-
-        // Update the model's matrix
-        mModel.Identity();
-        mModel.Scale(mScale);
-        mModel.Rotate(mAngle);
-        mModel.Translate(mPos);
-
-        mDrift *= .95;
     }
+
+    mRotationRate *= .5;
+
+    if (warped)
+    {
+        Point3d vector(mVelocity,0,0);
+        mSpeed = mathutils::rotate2dPoint(vector, mAngle + mathutils::DegreesToRads(90));
+    }
+
+    mPos += mSpeed;
+    mPos += mDrift;
+    mAngle -= mRotationRate;
+    mAngle = fmodf(mAngle, 2.0f*PI);
+
+    // Update the model's matrix
+    mModel.Identity();
+    mModel.Scale(mScale);
+    mModel.Rotate(mAngle);
+    mModel.Translate(mPos);
+
+    mDrift *= .95;
 
     if (this->getEnabled())
     {

@@ -24,6 +24,9 @@ static int idxSnakeEnd;
 static int idxBlackHoleStart;
 static int idxBlackHoleEnd;
 
+static int idxRepulsorStart;
+static int idxRepulsorEnd;
+
 static int idxMayflyStart;
 static int idxMayflyEnd;
 
@@ -127,6 +130,18 @@ enemies::enemies()
         }
 
 		idxBlackHoleEnd = entity-1;
+    }
+    // Repulsors
+    {
+		idxRepulsorStart = entity;
+
+        int num = 4;
+        for (int i=0; i<num; i++)
+        {
+            mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_REPULSOR);
+        }
+
+		idxRepulsorEnd = entity-1;
     }
     // Mayflies
     {
@@ -414,6 +429,10 @@ int enemies::getNumActiveEnemiesOfType(const entity::EntityType& type)
 			idxStart = idxBlackHoleStart;
 			idxEnd = idxBlackHoleEnd;
 			break;
+		case entity::ENTITY_TYPE_REPULSOR:
+			idxStart = idxRepulsorStart;
+			idxEnd = idxRepulsorEnd;
+			break;
 		case entity::ENTITY_TYPE_MAYFLY:
 			idxStart = idxMayflyStart;
 			idxEnd = idxMayflyEnd;
@@ -482,6 +501,10 @@ entity* enemies::getUnusedEnemyOfType(const entity::EntityType& type)
 		case entity::ENTITY_TYPE_BLACKHOLE:
 			idxStart = idxBlackHoleStart;
 			idxEnd = idxBlackHoleEnd;
+			break;
+		case entity::ENTITY_TYPE_REPULSOR:
+			idxStart = idxRepulsorStart;
+			idxEnd = idxRepulsorEnd;
 			break;
 		case entity::ENTITY_TYPE_MAYFLY:
 			idxStart = idxMayflyStart;

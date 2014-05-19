@@ -33,14 +33,6 @@ void entityLine::spawnTransition()
     run();
 }
 
-void entityLine::spawn()
-{
-}
-
-void entityLine::runTransition()
-{
-}
-
 void entityLine::run()
 {
     mPen.a *= .97;
@@ -54,20 +46,6 @@ void entityLine::run()
     mSpeed *= .985;
 
     entity::run();
-}
-
-void entityLine::destroyTransition()
-{
-}
-
-void entityLine::destroy()
-{
-    entity::destroy();
-}
-
-void entityLine::draw()
-{
-    entity::draw();
 }
 
 void entityLine::addEndpoints(const Point3d& from, const Point3d& to)

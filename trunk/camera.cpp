@@ -1,7 +1,7 @@
 #include "game.h"
 #include "camera.h"
 
-static const int zoomedIn = 50; // 50
+static const int zoomedIn = 46; // 50
 static const int zoomedOut = 72; // 66
 
 camera::camera()
