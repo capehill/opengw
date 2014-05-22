@@ -332,7 +332,13 @@ void game::run()
 
         ++explosionTimer;
         if (explosionTimer > 1000)
+        {
             explosionTimer = 0;
+        }
+        if (explosionTimer == 980)
+        {
+            game::mSound.playTrack(SOUNDID_GRAVITYWELLEXPLODE);
+        }
 
         mCamera.center();
 
@@ -716,6 +722,7 @@ void game::endGame()
 
     // Kill all enemies
     mEnemies.disableAllEnemies();
+    mEnemies.disableAllLines();
 
     // Kill all attractors
     mAttractors.clearAll();

@@ -3,7 +3,8 @@
 
 #include "entity.h"
 
-const int NUM_WAVELIST = 2000;
+const int NUM_WAVEITEMTRACKERS = 200; // Should be set to the maximum number of entities that can spawn during a way
+const int NUM_WAVEDATA = 200; // The maximum number of simultanious waves
 
 class spawner
 {
@@ -18,9 +19,18 @@ public:
 
     typedef struct
     {
+        entity* e;
+        int genId;
+    } WAVEITEMTRACKER;
+
+    typedef struct
+    {
+        WAVETYPE mWaveType;
         entity::EntityType entityType;
-        int numWanted;
-    }ENTITYITEM;
+        int spawnCount;
+        int timer;
+        WAVEITEMTRACKER mItemTrackers[NUM_WAVEITEMTRACKERS];
+    }WAVEDATA;
 
     spawner(void);
 
@@ -29,7 +39,7 @@ public:
 
     int getSpawnIndex() const;
 
-    void clearWaveListEntities();
+//    void clearWaveListEntities();
 
 private:
     void transition();
@@ -37,9 +47,15 @@ private:
     void spawnEntities(entity::EntityType type, int numWanted);
     void runWaves();
 
-    void addToWaveList(entity* e);
-    int numWaveListEntities();
-    void runWaveListEntities();
+//    void addToWaveList(entity* e);
+//    int numWaveListEntities();
+//    void runWaveListEntities();
+
+    void clearWaveData();
+    void newWave(WAVETYPE mWaveType, entity::EntityType entityType, int spawnCount);
+    WAVEDATA* getUnusedWaveData();
+    int numWaveData();
+    void addEntityToWaveTracker(WAVEDATA* wd, entity* e);
 
     float mSpawnIndex;
     int mLastSpawnIndex;
@@ -48,12 +64,13 @@ private:
 
     int mSpawnWaitTimer;
 
-    int mWaveIntervalTimer;
-    int mWaveStartTimer;
-    int mWaveEntityCounter;
-    WAVETYPE mWaveType;
-    entity::EntityType mWaveEntity;
+//    int mWaveIntervalTimer;
+//    int mWaveStartTimer;
+//    int mWaveEntityCounter;
+//    WAVETYPE mWaveType;
+//    entity::EntityType mWaveEntity;
 
+/*
     typedef struct
     {
         entity* e;
@@ -61,6 +78,9 @@ private:
     } WaveListItem;
 
     WaveListItem mWaveList[NUM_WAVELIST];
+*/
+    int mWaveStartTimer;
+    WAVEDATA mWaveData[NUM_WAVEDATA];
 };
 
 #endif

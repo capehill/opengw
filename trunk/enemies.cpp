@@ -63,7 +63,7 @@ enemies::enemies()
     {
 		idxGruntStart = entity;
 
-        int num = 100;
+        int num = 200;
         for (int i=0; i<num; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_GRUNT);
@@ -612,3 +612,13 @@ void enemies::disableAllEnemies()
         mEnemies[i]->incGenId();
     }
 }
+
+void enemies::disableAllLines()
+{
+    for (int i=0; i<NUM_LINES; i++)
+    {
+        mLines[i]->setState(entity::ENTITY_STATE_INACTIVE);
+        mLines[i]->incGenId();
+    }
+}
+

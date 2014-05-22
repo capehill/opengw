@@ -461,7 +461,7 @@ void entitySnake::draw()
             mModel.draw(pen);
         }
     }
-    else if (this->getEnabled())
+    else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION))
     {
         vector::pen pen = mPen;
 
@@ -505,7 +505,6 @@ void entitySnake::draw()
 
         mModel.draw(pen);
     }
-
 
     if (getState() == ENTITY_STATE_SPAWNING)
     {

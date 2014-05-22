@@ -24,7 +24,7 @@ entity::entity()
     : mType(ENTITY_TYPE_UNDEF)
 {
     setState(ENTITY_STATE_INACTIVE);
-    mSpawnTime = 30;
+    mSpawnTime = 60;
     mDestroyTime = 0;
     mIndicateTime = 75;
     mStateTimer = 0;
@@ -95,7 +95,7 @@ void entity::draw()
             mModel.draw(pen);
         }
     }
-    else if (this->getEnabled())
+    else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION))
     {
         vector::pen pen = mPen;
 
@@ -289,7 +289,7 @@ void entity::indicating()
 
 void entity::hit(entity* aEntity)
 {
-    bool createGeoms = false;
+//    bool createGeoms = false;
 
     if (aEntity)
     {
@@ -308,7 +308,7 @@ void entity::hit(entity* aEntity)
                 else if (missile->mPlayerSource == 3)
                     game::mPlayers.mPlayer4->addKillAtLocation(mScoreValue, getPos());
 
-                createGeoms = true;
+//                createGeoms = true;
             }
 
             game::mSound.playTrack(SOUNDID_ENEMYHIT);
@@ -324,8 +324,8 @@ void entity::hit(entity* aEntity)
     }
     else
     {
-        // It must be a bomb
-        createGeoms = true;
+        // It must be either a bomb or the player getting destroyed
+//        createGeoms = true;
     }
 
     setState(ENTITY_STATE_DESTROY_TRANSITION);

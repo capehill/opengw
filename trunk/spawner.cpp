@@ -7,7 +7,7 @@
 
 spawner::spawner(void)
 {
-    clearWaveListEntities();
+//    clearWaveListEntities();
 }
 
 void spawner::init()
@@ -16,16 +16,10 @@ void spawner::init()
     mLastSpawnIndex = 0;
 
     mSpawnCheckTimer = 100;
-
     mSpawnWaitTimer = 50;
-
-    mWaveIntervalTimer = 0;
     mWaveStartTimer = 0;
-    mWaveEntityCounter = 0;
-    mWaveEntity = entity::ENTITY_TYPE_UNDEF;
-    mWaveType = WAVETYPE_SWARM;
 
-    clearWaveListEntities();
+    clearWaveData();
     transition();
 }
 
@@ -116,7 +110,6 @@ void spawner::run(void)
                 player->takeLife();
                 if (player->getNumLives() > 0)
                 {
-                    clearWaveListEntities();
                     player->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
                 }
                 else
@@ -141,7 +134,12 @@ void spawner::run(void)
 
     if (mSpawnWaitTimer > 0) --mSpawnWaitTimer;
 
-    if ((mSpawnWaitTimer == 0) && numPlayersActive)
+    if (!numPlayersActive)
+    {
+        mWaveStartTimer = 0;
+    }
+
+    if ((mSpawnWaitTimer <= 0) && numPlayersActive)
     {
         //
         // Randomly spawn enemies here and there
@@ -183,24 +181,69 @@ void spawner::run(void)
             // Black holes
             if (index >= 4)
             {
-                if (mathutils::frandFrom0To1() * 100 < 10)
+                if (mathutils::frandFrom0To1() * 100 < 2)
                 {
                     spawnEntities(entity::ENTITY_TYPE_BLACKHOLE, 1);
                 }
             }
         }
 
+        if ((++mWaveStartTimer >= 20) && (numWaveData() == 0))
+        {
+            mWaveStartTimer = 0;
+
+            switch ((int)(mathutils::frandFrom0To1() * 12))
+            {
+                case 0:
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_GRUNT, 200);
+                    break;
+                case 1:
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_WEAVER, 24);
+                    break;
+                case 2:
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, 16);
+                    break;
+                case 3:
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, 16);
+                    break;
+                case 4:
+//                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, mathutils::frandFrom0To1() * 4);
+                    break;
+                case 5:
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, 100);
+                    break;
+                case 6:
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_GRUNT, 40);
+                    break;
+                case 7:
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_WEAVER, 40);
+                    break;
+                case 8:
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SNAKE, 16);
+                    break;
+                case 9:
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SPINNER, 16);
+                    break;
+                case 10:
+//                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_BLACKHOLE, mathutils::frandFrom0To1() * 4);
+                    break;
+                case 11:
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_REPULSOR, mathutils::frandFrom0To1() * 4);
+                    break;
+            }
+        }
+
+        runWaves();
+
+
+/*
         // Limit the number of waves that can happen at a time
         runWaveListEntities();
         int numWaveEntities = numWaveListEntities();
 
         // Slowly allow more and more simulatanious waves
         int numAllowedWaveEntities = 10 - index;
-        if (numAllowedWaveEntities <= 0)
-        {
-            numAllowedWaveEntities = 1;
-            mWaveEntity = entity::ENTITY_TYPE_UNDEF;
-        }
+        if (numAllowedWaveEntities <= 0) numAllowedWaveEntities = 1;
 
         // Start a wave
         if (numWaveEntities < numAllowedWaveEntities)
@@ -299,6 +342,7 @@ void spawner::run(void)
                 runWaves();
             }
         }
+*/
     }
     else
     {
@@ -319,16 +363,15 @@ void spawner::run(void)
     }
 }
 
+// Gets called every time we go from one spawn index to another
+// Not currently used
 void spawner::transition()
 {
 //    TCHAR s[256];
 //    wsprintf(s, L"New spawnIndex = %d\n", getSpawnIndex());
 //    OutputDebugString(s);
-
 //    int index = getSpawnIndex();
-
 }
-
 
 void spawner::spawnEntities(entity::EntityType type, int numWanted)
 {
@@ -370,152 +413,74 @@ void spawner::spawnEntities(entity::EntityType type, int numWanted)
 
 void spawner::runWaves()
 {
-    if (mWaveEntity != entity::ENTITY_TYPE_UNDEF)
+    for (int i=0; i<NUM_WAVEDATA; i++)
     {
-        const float margin = 2;
-        const float leftEdge = margin;
-        const float bottomEdge = margin;
-        const float rightEdge = (theGame.mGrid.extentX()-1)-margin;
-        const float topEdge = (theGame.mGrid.extentY()-1)-margin;
-
-        if (mWaveType == WAVETYPE_RUSH)
+        WAVEDATA* wd = &mWaveData[i];
+        if (wd->mWaveType != WAVETYPE_UNUSED)
         {
-            // Pick a player to attack
-            Point3d playerPos = game::mPlayers.mPlayer1->getPos();
-            int playerNum = ceil(4 * mathutils::frandFrom0To1());
-            bool selectedPlayer = false;
-            switch (playerNum)
-            {
-                case 0:
-                    if (game::mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING))
-                    {
-                        playerPos = game::mPlayers.mPlayer1->getPos();
-                        selectedPlayer = true;
-                    }
-                    break;
-                case 1:
-                    if (game::mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING))
-                    {
-                        playerPos = game::mPlayers.mPlayer2->getPos();
-                        selectedPlayer = true;
-                    }
-                    break;
-                case 2:
-                    if (game::mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING))
-                    {
-                        playerPos = game::mPlayers.mPlayer3->getPos();
-                        selectedPlayer = true;
-                    }
-                    break;
-                case 3:
-                    if (game::mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING))
-                    {
-                        playerPos = game::mPlayers.mPlayer4->getPos();
-                        selectedPlayer = true;
-                    }
-                    break;
-            }
+            static const float margin = 2;
+            static const float leftEdge = margin;
+            static const float bottomEdge = margin;
+            static const float rightEdge = (theGame.mGrid.extentX()-1)-margin;
+            static const float topEdge = (theGame.mGrid.extentY()-1)-margin;
 
-            if (!selectedPlayer) return; // TODO COME UP WITH A WAY TO RANDOMLY SELECT FROM THE AVAILABLE PLAYERS. THIS IS STUPID.
-
-            do
+            if (wd->mWaveType == WAVETYPE_RUSH)
             {
-                entity* enemy = game::mEnemies.getUnusedEnemyOfType(mWaveEntity);
-                if (enemy)
+                // Pick a player to attack
+                Point3d playerPos = game::mPlayers.mPlayer1->getPos();
+/*
+                int playerNum = ceil(4 * mathutils::frandFrom0To1());
+                bool selectedPlayer = false;
+                switch (playerNum)
                 {
-                    addToWaveList(enemy);
-
-                    float rx = (mathutils::frandFrom0To1() * 4)-2;
-                    float ry = (mathutils::frandFrom0To1() * 4)-2;
-
-                    Point3d spawnPoint(mWaveEntity == entity::ENTITY_TYPE_BLACKHOLE ? 60 : 30, 0, 0);
-                    spawnPoint = mathutils::rotate2dPoint(spawnPoint, mathutils::frandFrom0To1() * (2*PI));
-                    spawnPoint.x += playerPos.x + rx;
-                    spawnPoint.y += playerPos.y + ry;
-
-                    // Keep it on the grid
-	                Point3d hitPoint;
-	                if (game::mGrid.hitTest(spawnPoint, enemy->getRadius(), &hitPoint))
-	                {
-		                spawnPoint = hitPoint;
-                    }
-
-                    enemy->setPos(spawnPoint);
-                    enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+                    case 0:
+                        if (game::mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING))
+                        {
+                            playerPos = game::mPlayers.mPlayer1->getPos();
+                            selectedPlayer = true;
+                        }
+                        break;
+                    case 1:
+                        if (game::mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING))
+                        {
+                            playerPos = game::mPlayers.mPlayer2->getPos();
+                            selectedPlayer = true;
+                        }
+                        break;
+                    case 2:
+                        if (game::mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING))
+                        {
+                            playerPos = game::mPlayers.mPlayer3->getPos();
+                            selectedPlayer = true;
+                        }
+                        break;
+                    case 3:
+                        if (game::mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING))
+                        {
+                            playerPos = game::mPlayers.mPlayer4->getPos();
+                            selectedPlayer = true;
+                        }
+                        break;
                 }
 
-                // Decrease the counter even if we didn't find an available entity
-                --mWaveEntityCounter;
-                if (mWaveEntityCounter <= 0)
+                if (!selectedPlayer) return; // TODO COME UP WITH A WAY TO RANDOMLY SELECT FROM THE AVAILABLE PLAYERS. THIS IS STUPID.
+*/
+                // Keep cranking out enemies until the spawn counter reaches 0
+                while (wd->spawnCount-- > 0)
                 {
-                    // End the wave
-                    mWaveEntity = entity::ENTITY_TYPE_UNDEF;
-                }
-            }
-            while (mWaveEntityCounter > 0);
-
-        }
-        else
-        {
-            static int corner = 0;
-
-            for (int i=0; i<4; i++)
-            {
-                if (mWaveEntityCounter > 0)
-                {
-                    entity* enemy = game::mEnemies.getUnusedEnemyOfType(mWaveEntity);
+                    entity* enemy = game::mEnemies.getUnusedEnemyOfType(wd->entityType);
                     if (enemy)
                     {
-                        addToWaveList(enemy);
+                        // Add the enemy to our tracking list
+                        addEntityToWaveTracker(wd, enemy);
 
-                        float rx = (mathutils::frandFrom0To1() * 10)-5;
-                        float ry = (mathutils::frandFrom0To1() * 10)-5;
+                        float rx = (mathutils::frandFrom0To1() * 4)-2;
+                        float ry = (mathutils::frandFrom0To1() * 4)-2;
 
-                        Point3d spawnPoint;
-                        switch (corner%4)
-                        {
-                            case 0:
-                                spawnPoint = Point3d(leftEdge+rx, topEdge+ry);
-                                break;
-                            case 1:
-                                spawnPoint = Point3d(rightEdge+rx, topEdge+ry);
-                                break;
-                            case 2:
-                                spawnPoint = Point3d(rightEdge+rx, bottomEdge+ry);
-                                break;
-                            case 3:
-                                spawnPoint = Point3d(leftEdge+rx, bottomEdge+ry);
-                                break;
-                        }
-
-                        {
-                            float radius = enemy->getRadius();
-
-                            if (mWaveEntity == entity::ENTITY_TYPE_BLACKHOLE)
-                                radius = 20;
-
-                            const float leftEdge = radius;
-                            const float bottomEdge = radius;
-                            const float rightEdge = (theGame.mGrid.extentX() - radius)-1;
-                            const float topEdge = (theGame.mGrid.extentY() - radius)-1;
-
-                            if (spawnPoint.x < leftEdge)
-                            {
-                                spawnPoint.x = leftEdge;
-                            }
-                            else if (spawnPoint.x > rightEdge)
-                            {
-                                spawnPoint.x = rightEdge;
-                            }
-                            if (spawnPoint.y < bottomEdge)
-                            {
-                                spawnPoint.y = bottomEdge;
-                            }
-                            else if (spawnPoint.y > topEdge)
-                            {
-                                spawnPoint.y = topEdge;
-                            }
-                        }
+                        Point3d spawnPoint(wd->entityType == entity::ENTITY_TYPE_BLACKHOLE ? 80 : 40, 0, 0);
+                        spawnPoint = mathutils::rotate2dPoint(spawnPoint, mathutils::frandFrom0To1() * (2*PI));
+                        spawnPoint.x += playerPos.x + rx;
+                        spawnPoint.y += playerPos.y + ry;
 
                         // Keep it on the grid
 	                    Point3d hitPoint;
@@ -527,67 +492,192 @@ void spawner::runWaves()
                         enemy->setPos(spawnPoint);
                         enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
                     }
+                };
 
-                    // Decrease the counter even if we didn't find an available entity
-                    --mWaveEntityCounter;
-                    if (mWaveEntityCounter <= 0)
+            }
+            else
+            {
+                if (wd->timer == 0)
+                {
+                    static int corner = 0;
+
+                    for (int n=0; n<4; n++)
                     {
-                        // End the wave
-                        mWaveEntity = entity::ENTITY_TYPE_UNDEF;
+                        // Keep cranking out enemies until the spawn counter reaches 0
+                        if (wd->spawnCount-- > 0)
+                        {
+                            entity* enemy = game::mEnemies.getUnusedEnemyOfType(wd->entityType);
+                            if (enemy)
+                            {
+                                // Add the enemy to our tracking list
+                                addEntityToWaveTracker(wd, enemy);
+
+                                float rx = (mathutils::frandFrom0To1() * 10)-5;
+                                float ry = (mathutils::frandFrom0To1() * 10)-5;
+
+                                Point3d spawnPoint;
+                                switch (corner%4)
+                                {
+                                    case 0:
+                                        spawnPoint = Point3d(leftEdge+rx, topEdge+ry);
+                                        break;
+                                    case 1:
+                                        spawnPoint = Point3d(rightEdge+rx, topEdge+ry);
+                                        break;
+                                    case 2:
+                                        spawnPoint = Point3d(rightEdge+rx, bottomEdge+ry);
+                                        break;
+                                    case 3:
+                                        spawnPoint = Point3d(leftEdge+rx, bottomEdge+ry);
+                                        break;
+                                }
+
+                                {
+                                    float radius = enemy->getRadius();
+
+                                    if (wd->entityType == entity::ENTITY_TYPE_BLACKHOLE)
+                                        radius = 20;
+
+                                    const float leftEdge = radius;
+                                    const float bottomEdge = radius;
+                                    const float rightEdge = (theGame.mGrid.extentX() - radius)-1;
+                                    const float topEdge = (theGame.mGrid.extentY() - radius)-1;
+
+                                    if (spawnPoint.x < leftEdge)
+                                    {
+                                        spawnPoint.x = leftEdge;
+                                    }
+                                    else if (spawnPoint.x > rightEdge)
+                                    {
+                                        spawnPoint.x = rightEdge;
+                                    }
+                                    if (spawnPoint.y < bottomEdge)
+                                    {
+                                        spawnPoint.y = bottomEdge;
+                                    }
+                                    else if (spawnPoint.y > topEdge)
+                                    {
+                                        spawnPoint.y = topEdge;
+                                    }
+                                }
+
+                                // Keep it on the grid
+	                            Point3d hitPoint;
+	                            if (game::mGrid.hitTest(spawnPoint, enemy->getRadius(), &hitPoint))
+	                            {
+		                            spawnPoint = hitPoint;
+                                }
+
+                                enemy->setPos(spawnPoint);
+                                enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+                            }
+                        }
+
+                        ++corner;
                     }
                 }
 
-                ++corner;
+                ++wd->timer;
+
+                if (wd->timer > 10)
+                {
+                    wd->timer = 0;
+                }
+
+            }
+        }
+
+        if (wd->spawnCount <= 0)
+        {
+            // Keep tracking previously spawned entities so we know when the wave is completed
+            bool running = false;
+            for (int n=0; n<NUM_WAVEITEMTRACKERS; n++)
+            {
+                if (wd->mItemTrackers[n].e && (wd->mItemTrackers[n].e->getGenId() == wd->mItemTrackers[n].genId))
+                {
+                    running = true;
+                    break;
+                }
+            }
+            if (!running)
+            {
+                // No more entities from this wave exist - end the wave
+                wd->mWaveType = WAVETYPE_UNUSED;
             }
         }
     }
 }
 
-void spawner::addToWaveList(entity* e)
+void spawner::clearWaveData()
 {
-    for (int i=0; i<NUM_WAVELIST; i++)
+    for (int i=0; i<NUM_WAVEDATA; i++)
     {
-        if (mWaveList[i].e == NULL)
+        WAVEDATA* wd = &mWaveData[i];
+
+        wd->mWaveType = WAVETYPE_UNUSED;
+
+        for (int n=0; n<NUM_WAVEITEMTRACKERS; n++)
         {
-            mWaveList[i].e = e;
-            mWaveList[i].genId = e->getGenId();
-            return;
+            wd->mItemTrackers[n].e = NULL;
+            wd->mItemTrackers[n].genId = -1;
         }
     }
 }
 
-int spawner::numWaveListEntities()
+void spawner::newWave(WAVETYPE mWaveType, entity::EntityType entityType, int spawnCount)
 {
-    int count = 0;
-    for (int i=0; i<NUM_WAVELIST; i++)
+    WAVEDATA* wd = getUnusedWaveData();
+    if (wd)
     {
-        if (mWaveList[i].e && (mWaveList[i].e->getGenId() == mWaveList[i].genId))
-        {
-            ++count;
-        }
-    }
-    return count;
-}
+        wd->mWaveType = mWaveType;
+        wd->entityType = entityType;
+        wd->spawnCount = spawnCount;
+        wd->timer = 0;
 
-void spawner::runWaveListEntities()
-{
-    for (int i=0; i<NUM_WAVELIST; i++)
-    {
-        if (mWaveList[i].e && (mWaveList[i].e->getGenId() != mWaveList[i].genId))
+        for (int n=0; n<NUM_WAVEITEMTRACKERS; n++)
         {
-            mWaveList[i].e = NULL;
-            mWaveList[i].genId = -1;
+            wd->mItemTrackers[n].e = NULL;
+            wd->mItemTrackers[n].genId = -1;
         }
     }
 }
 
-void spawner::clearWaveListEntities()
+spawner::WAVEDATA* spawner::getUnusedWaveData()
 {
-    for (int i=0; i<NUM_WAVELIST; i++)
+    for (int i=0; i<NUM_WAVEDATA; i++)
     {
-        mWaveList[i].e = NULL;
-        mWaveList[i].genId = -1;
+        if (mWaveData[i].mWaveType == WAVETYPE_UNUSED)
+        {
+            return &mWaveData[i];
+        }
     }
+    return NULL;
 }
 
+int spawner::numWaveData()
+{
+    int num = 0;
 
+    for (int i=0; i<NUM_WAVEDATA; i++)
+    {
+        if (mWaveData[i].mWaveType != WAVETYPE_UNUSED)
+        {
+            ++num;
+        }
+    }
+
+    return num;
+}
+
+void spawner::addEntityToWaveTracker(WAVEDATA* wd, entity* e)
+{
+    for (int i=0; i<NUM_WAVEITEMTRACKERS; i++)
+    {
+        if (wd->mItemTrackers[i].e == NULL)
+        {
+            wd->mItemTrackers[i].e = e;
+            wd->mItemTrackers[i].genId = e->getGenId();
+            break;
+        }
+    }
+}

@@ -32,6 +32,7 @@ public:
     entity* hitTestEnemiesAtPosition(const Point3d& point, float radius, bool includeSpawning=false);
 
     void disableAllEnemies();
+    void disableAllLines();
 
     entityLine* getUnusedLine();
     void explodeEntity(entity& e);
