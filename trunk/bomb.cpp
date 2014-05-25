@@ -148,12 +148,25 @@ void bomb::startBomb(Point3d pos, float radius, float thickness, float speed, in
         Point3d angle(0,0,0);
         float spread = 2*PI;
         int num = 100;
-        int timeToLive = 100;//ring->timeToLive;
+        int timeToLive = ring->timeToLive;
         pen.lineRadius=5;
         pen.a = .3;
         game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, FALSE, FALSE, 1, TRUE);
 
     }
 }
+
+bool bomb::isBombing()
+{
+    for (int i=0; i<mNumRings; i++)
+    {
+        if (mRings[i].timeToLive > 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 

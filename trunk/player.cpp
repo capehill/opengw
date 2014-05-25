@@ -89,7 +89,7 @@ void player::run()
                     takeBomb();
                     mBombInterimTimer = 50;
 
-                    game::mBomb.startBomb(mPos, 1, 6, 2, 1000, vector::pen(1,1,1,.3,4));
+                    game::mBomb.startBomb(mPos, 1, 6, 2, 200, vector::pen(1,1,1,.3,4));
                     game::mSound.playTrack(SOUNDID_BOMB);
                     theGame.startBomb();
                 }

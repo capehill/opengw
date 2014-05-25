@@ -59,6 +59,7 @@ private:
 
     float mSpawnIndex;
     int mLastSpawnIndex;
+    float mSpawnProgress;
 
     int mSpawnCheckTimer;
 

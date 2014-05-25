@@ -27,6 +27,8 @@ public:
     void run();
     void draw();
 
+    bool isBombing();
+
     RING* mRings;
     int mNumRings;
 

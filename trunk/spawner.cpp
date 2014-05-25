@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define MIN_SPAWN_DISTANCE 30
-#define MAX_SPAWNLIST_ITEMS 50
+#define MAX_SPAWN_INDEX 40
 
 spawner::spawner(void)
 {
@@ -31,13 +31,15 @@ int spawner::getSpawnIndex() const
 void spawner::run(void)
 {
     // Update our spawn index
-//    if (getSpawnIndex() < MAX_SPAWNLIST_ITEMS)
+    if (getSpawnIndex() < MAX_SPAWN_INDEX)
     {
-        mSpawnIndex += .002;
-        if (mSpawnIndex > 15) mSpawnIndex = 15;
+        mSpawnIndex += .001;
+        if (mSpawnIndex > MAX_SPAWN_INDEX) mSpawnIndex = MAX_SPAWN_INDEX;
         if (getSpawnIndex() > mLastSpawnIndex)
         {
             mLastSpawnIndex = getSpawnIndex();
+            mSpawnProgress = mSpawnIndex / MAX_SPAWN_INDEX;
+            if (mSpawnProgress > 1) mSpawnProgress = 1;
             transition();
         }
     }
@@ -139,7 +141,7 @@ void spawner::run(void)
         mWaveStartTimer = 0;
     }
 
-    if ((mSpawnWaitTimer <= 0) && numPlayersActive)
+    if ((mSpawnWaitTimer <= 0) && numPlayersActive && !game::mBomb.isBombing())
     {
         //
         // Randomly spawn enemies here and there
@@ -157,14 +159,7 @@ void spawner::run(void)
                 spawnEntities(entity::ENTITY_TYPE_WANDERER, 4);
 
             // Grunts
-            if (index <= 1)
-            {
-                spawnEntities(entity::ENTITY_TYPE_GRUNT, 2);
-            }
-            else if (index > 1)
-            {
-                spawnEntities(entity::ENTITY_TYPE_GRUNT, 4);
-            }
+            spawnEntities(entity::ENTITY_TYPE_GRUNT, (index <= 1) ? 2 : 4);
 
             // Spinners
             if (index >= 1)
@@ -179,7 +174,7 @@ void spawner::run(void)
             }
 
             // Black holes
-            if (index >= 4)
+            if (index >= 6)
             {
                 if (mathutils::frandFrom0To1() * 100 < 2)
                 {
@@ -194,41 +189,59 @@ void spawner::run(void)
 
             switch ((int)(mathutils::frandFrom0To1() * 12))
             {
+                //
+                // SWARM TYPE
+                //
                 case 0:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_GRUNT, 200);
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_GRUNT, ceil(numEnemyGrunt * mSpawnProgress));
                     break;
                 case 1:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_WEAVER, 24);
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_WEAVER, ceil(numEnemyWeaver * mSpawnProgress));
                     break;
                 case 2:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, 16);
+                    if (index > 4)
+                    {
+                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, ceil(numEnemySnake * mSpawnProgress));
+                    }
                     break;
                 case 3:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, 16);
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, ceil(numEnemySpinner * mSpawnProgress));
                     break;
                 case 4:
-//                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, mathutils::frandFrom0To1() * 4);
+//                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress));
                     break;
                 case 5:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, 100);
+                    if (index > 10)
+                    {
+                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, ceil(numEnemyMayfly * mSpawnProgress));
+                    }
                     break;
+                //
+                // RUSH TYPE
+                //
                 case 6:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_GRUNT, 40);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_GRUNT, ceil(numEnemyGrunt * mSpawnProgress) / 2);
                     break;
                 case 7:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_WEAVER, 40);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_WEAVER, ceil(numEnemyWeaver * mSpawnProgress) / 2);
                     break;
                 case 8:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SNAKE, 16);
+                    if (index > 4)
+                    {
+                        newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SNAKE, ceil(numEnemySnake * mSpawnProgress) / 2);
+                    }
                     break;
                 case 9:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SPINNER, 16);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SPINNER, ceil(numEnemySpinner * mSpawnProgress) / 2);
                     break;
                 case 10:
-//                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_BLACKHOLE, mathutils::frandFrom0To1() * 4);
+//                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress) / 2);
                     break;
                 case 11:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_REPULSOR, mathutils::frandFrom0To1() * 4);
+                    if (index > 8)
+                    {
+                        newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_REPULSOR, ceil(mathutils::frandFrom0To1() * numEnemyRepulsor * mSpawnProgress) / 2);
+                    }
                     break;
             }
         }
@@ -367,10 +380,9 @@ void spawner::run(void)
 // Not currently used
 void spawner::transition()
 {
-//    TCHAR s[256];
-//    wsprintf(s, L"New spawnIndex = %d\n", getSpawnIndex());
-//    OutputDebugString(s);
-//    int index = getSpawnIndex();
+    char s[256];
+    sprintf(s, "New spawnIndex = %d, amount=%f\n", getSpawnIndex(), mSpawnProgress);
+    OutputDebugStringA(s);
 }
 
 void spawner::spawnEntities(entity::EntityType type, int numWanted)

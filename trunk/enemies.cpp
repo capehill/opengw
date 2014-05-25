@@ -33,14 +33,7 @@ static int idxMayflyEnd;
 static int idxProtonStart;
 static int idxProtonEnd;
 
-static int idxGeomSmallStart;
-static int idxGeomSmallEnd;
 
-static int idxGeomMediumStart;
-static int idxGeomMediumEnd;
-
-static int idxGeomLargeStart;
-static int idxGeomLargeEnd;
 
 
 enemies::enemies()
@@ -51,8 +44,7 @@ enemies::enemies()
     {
 		idxWandererStart = entity;
 
-        int num = 10;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyWanderer; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_WANDERER);
         }
@@ -63,8 +55,7 @@ enemies::enemies()
     {
 		idxGruntStart = entity;
 
-        int num = 200;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyGrunt; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_GRUNT);
         }
@@ -75,8 +66,7 @@ enemies::enemies()
     {
 		idxSpinnerStart = entity;
 
-        int num = 25;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemySpinner; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_SPINNER);
         }
@@ -87,8 +77,7 @@ enemies::enemies()
     {
 		idxTinySpinnerStart = entity;
 
-        int num = 50;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyTinySpinner; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_TINYSPINNER);
         }
@@ -99,8 +88,7 @@ enemies::enemies()
     {
 		idxWeaverStart = entity;
 
-        int num = 100;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyWeaver; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_WEAVER);
         }
@@ -111,8 +99,7 @@ enemies::enemies()
     {
 		idxSnakeStart = entity;
 
-        int num = 50;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemySnake; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_SNAKE);
         }
@@ -123,8 +110,7 @@ enemies::enemies()
     {
 		idxBlackHoleStart = entity;
 
-        int num = 8;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyBlackHole; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_BLACKHOLE);
         }
@@ -135,8 +121,7 @@ enemies::enemies()
     {
 		idxRepulsorStart = entity;
 
-        int num = 4;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyRepulsor; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_REPULSOR);
         }
@@ -147,8 +132,7 @@ enemies::enemies()
     {
 		idxMayflyStart = entity;
 
-        int num = 200;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyMayfly; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_MAYFLY);
         }
@@ -159,47 +143,12 @@ enemies::enemies()
     {
 		idxProtonStart = entity;
 
-        int num = 200;
-        for (int i=0; i<num; i++)
+        for (int i=0; i<numEnemyProton; i++)
         {
             mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_PROTON);
         }
 
 		idxProtonEnd = entity-1;
-    }
-    // Geoms
-    {
-		idxGeomSmallStart = entity;
-
-        int num = 100;
-        for (int i=0; i<num; i++)
-        {
-            mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_GEOM_SMALL);
-        }
-
-		idxGeomSmallEnd = entity-1;
-    }
-    {
-		idxGeomMediumStart = entity;
-
-        int num = 100;
-        for (int i=0; i<num; i++)
-        {
-            mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_GEOM_MEDIUM);
-        }
-
-		idxGeomMediumEnd = entity-1;
-    }
-    {
-		idxGeomLargeStart = entity;
-
-        int num = 100;
-        for (int i=0; i<num; i++)
-        {
-            mEnemies[entity++] = entity::createEntity(entity::ENTITY_TYPE_GEOM_LARGE);
-        }
-
-		idxGeomLargeEnd = entity-1;
     }
 
     TCHAR s[256];
@@ -309,43 +258,38 @@ void enemies::run()
     // Keep the entities separated
     for (int i=0; i<NUM_ENEMIES; i++)
     {
-        if ((mEnemies[i]->getType() != entity::ENTITY_TYPE_GEOM_SMALL)
-            && (mEnemies[i]->getType() != entity::ENTITY_TYPE_GEOM_MEDIUM)
-            && (mEnemies[i]->getType() != entity::ENTITY_TYPE_GEOM_LARGE))
+        if (mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING)
         {
-            if (mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING)
+            for (int j=0; j<NUM_ENEMIES; j++)
             {
-                for (int j=0; j<NUM_ENEMIES; j++)
+                if (mEnemies[j]->getState() == entity::ENTITY_STATE_RUNNING)
                 {
-                    if (mEnemies[j]->getState() == entity::ENTITY_STATE_RUNNING)
+                    if (j != i)
                     {
-                        if (j != i)
+                        entity* e1 = mEnemies[i];
+                        entity* e2 = mEnemies[j];
+                        float distance = mathutils::calculate2dDistance(e1->getPos(), e2->getPos());
+                        float totalRadius = e1->getRadius() + e2->getRadius();
+                        if (distance < totalRadius)
                         {
-                            entity* e1 = mEnemies[i];
-                            entity* e2 = mEnemies[j];
-                            float distance = mathutils::calculate2dDistance(e1->getPos(), e2->getPos());
-                            float totalRadius = e1->getRadius() + e2->getRadius();
-                            if (distance < totalRadius)
+                            // Nudge each away from each other
+                            float angle = mathutils::calculate2dAngle(e2->getPos(), e1->getPos());
+                            Point3d vector(1,0,0);
+                            vector = mathutils::rotate2dPoint(vector, angle);
+                            if (e1->getType() == entity::ENTITY_TYPE_BLACKHOLE)
                             {
-                                // Nudge each away from each other
-                                float angle = mathutils::calculate2dAngle(e2->getPos(), e1->getPos());
-                                Point3d vector(1,0,0);
-                                vector = mathutils::rotate2dPoint(vector, angle);
-                                if (e1->getType() == entity::ENTITY_TYPE_BLACKHOLE)
+                                entityBlackHole* blackHole = dynamic_cast<entityBlackHole*>(e1);
+                                if (blackHole)
                                 {
-                                    entityBlackHole* blackHole = dynamic_cast<entityBlackHole*>(e1);
-                                    if (blackHole)
+                                    if (blackHole->mActivated)
                                     {
-                                        if (blackHole->mActivated)
-                                        {
-                                            e1->setSpeed(e1->getSpeed() + vector * .2);
-                                        }
+                                        e1->setSpeed(e1->getSpeed() + vector * .2);
                                     }
                                 }
-                                else
-                                {
-                                    e1->setPos(e1->getPos() + vector * .02);
-                                }
+                            }
+                            else
+                            {
+                                e1->setPos(e1->getPos() + vector * .02);
                             }
                         }
                     }
@@ -441,18 +385,6 @@ int enemies::getNumActiveEnemiesOfType(const entity::EntityType& type)
 			idxStart = idxProtonStart;
 			idxEnd = idxProtonEnd;
 			break;
-		case entity::ENTITY_TYPE_GEOM_SMALL:
-			idxStart = idxGeomSmallStart;
-			idxEnd = idxGeomSmallEnd;
-			break;
-		case entity::ENTITY_TYPE_GEOM_MEDIUM:
-			idxStart = idxGeomMediumStart;
-			idxEnd = idxGeomMediumEnd;
-			break;
-		case entity::ENTITY_TYPE_GEOM_LARGE:
-			idxStart = idxGeomLargeStart;
-			idxEnd = idxGeomLargeEnd;
-			break;
 	}
 
     int count = 0;
@@ -513,18 +445,6 @@ entity* enemies::getUnusedEnemyOfType(const entity::EntityType& type)
 		case entity::ENTITY_TYPE_PROTON:
 			idxStart = idxProtonStart;
 			idxEnd = idxProtonEnd;
-			break;
-		case entity::ENTITY_TYPE_GEOM_SMALL:
-			idxStart = idxGeomSmallStart;
-			idxEnd = idxGeomSmallEnd;
-			break;
-		case entity::ENTITY_TYPE_GEOM_MEDIUM:
-			idxStart = idxGeomMediumStart;
-			idxEnd = idxGeomMediumEnd;
-			break;
-		case entity::ENTITY_TYPE_GEOM_LARGE:
-			idxStart = idxGeomLargeStart;
-			idxEnd = idxGeomLargeEnd;
 			break;
 	}
 

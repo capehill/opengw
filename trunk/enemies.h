@@ -13,7 +13,20 @@
 #include "entityline.h"
 #include "player.h"
 
-#define NUM_ENEMIES 1100
+
+const int numEnemyWanderer    = 100;
+const int numEnemyGrunt       = 200;
+const int numEnemySpinner     = 100;
+const int numEnemyTinySpinner = 100;
+const int numEnemyWeaver      = 200;
+const int numEnemySnake       = 50;
+const int numEnemyBlackHole   = 8;
+const int numEnemyRepulsor    = 4;
+const int numEnemyMayfly      = 400;
+const int numEnemyProton      = 200;
+
+
+#define NUM_ENEMIES (numEnemyWanderer + numEnemyGrunt + numEnemySpinner + numEnemyTinySpinner + numEnemyWeaver + numEnemySnake + numEnemyBlackHole + numEnemyRepulsor + numEnemyMayfly + numEnemyProton)
 #define NUM_LINES 250
 
 class enemies
