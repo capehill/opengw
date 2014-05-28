@@ -132,18 +132,6 @@
     <ClCompile Include="highscore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="entitygeom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="entitygeomsmall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="entitygeommedium.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="entitygeomlarge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sincos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -291,18 +279,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="highscore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="entitygeom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="entitygeomsmall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="entitygeommedium.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="entitygeomlarge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sincos.h">

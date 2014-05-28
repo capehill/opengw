@@ -39,14 +39,11 @@ public:
 
     int getNumLives();
     int getNumBombs();
-    int getGeoms();
 
     void addLife();
     void takeLife();
     void addBomb();
     void takeBomb();
-    void addGeom(int value);
-    void clearGeoms();
     void switchWeapons();
 
     void addPointsNoMultiplier(int points);
@@ -78,7 +75,6 @@ protected:
 
     int mNumLives;
     int mNumBombs;
-    int mGeoms;
 
     float mExhaustSpreadIndex;
 

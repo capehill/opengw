@@ -100,57 +100,49 @@ void blackholes::run()
                                 }
 
                             }
-                            else if ((game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_GEOM_SMALL)
-                                || (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_GEOM_MEDIUM)
-                                || (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_GEOM_LARGE))
+
+                            if (distance < blackHole->getRadius())
                             {
-                                // Geoms not effected by black hole gravity
+                                // Add its drift to ours
+                                Point3d drift = enemy->getDrift();
+                                drift *= .25;
+                                blackHole->setDrift(blackHole->getDrift() + drift);
+
+                                // Destroy the enemy
+                                enemy->hit(blackHole);
+
+                                // Feed the black hole
+                                blackHole->feed(enemy->getScoreValue());
+
+                                // Distrupt the grid at the destruction point
+                                attractor::Attractor* att = game::mAttractors.getAttractor();
+                                if (att)
+                                {
+                                    att->strength = 1.5;
+                                    att->radius = 30;
+                                    att->pos = blackHole->getPos();
+                                    att->enabled = TRUE;
+                                    att->attractsParticles = FALSE;
+                                }
                             }
                             else
                             {
+                                float strength = 16;
                                 if (distance < blackHole->getRadius())
                                 {
-                                    // Add its drift to ours
-                                    Point3d drift = enemy->getDrift();
-                                    drift *= .25;
-                                    blackHole->setDrift(blackHole->getDrift() + drift);
-
-                                    // Destroy the enemy
-                                    enemy->hit(blackHole);
-
-                                    // Feed the black hole
-                                    blackHole->feed(enemy->getScoreValue());
-
-                                    // Distrupt the grid at the destruction point
-                                    attractor::Attractor* att = game::mAttractors.getAttractor();
-                                    if (att)
-                                    {
-                                        att->strength = 1.5;
-                                        att->radius = 30;
-                                        att->pos = blackHole->getPos();
-                                        att->enabled = TRUE;
-                                        att->attractsParticles = FALSE;
-                                    }
+                                    distance = blackHole->getRadius();
                                 }
-                                else
-                                {
-                                    float strength = 16;
-                                    if (distance < blackHole->getRadius())
-                                    {
-                                        distance = blackHole->getRadius();
-                                    }
 
-                                    float r = 1.0/(distance*distance);
+                                float r = 1.0/(distance*distance);
 
-                                    // Add a slight curving vector to the gravity
-                                    Point3d gravityVector(r * strength, 0, 0);
-                                    Point3d g = mathutils::rotate2dPoint(gravityVector, angle+.4);
+                                // Add a slight curving vector to the gravity
+                                Point3d gravityVector(r * strength, 0, 0);
+                                Point3d g = mathutils::rotate2dPoint(gravityVector, angle+.4);
 
-                                    Point3d speed = enemy->getDrift();
-                                    speed.x += g.x;
-                                    speed.y += g.y;
-                                    enemy->setDrift(speed);
-                                }
+                                Point3d speed = enemy->getDrift();
+                                speed.x += g.x;
+                                speed.y += g.y;
+                                enemy->setDrift(speed);
                             }
                         }
                     }

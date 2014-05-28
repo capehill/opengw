@@ -42,6 +42,7 @@ static SDL_mutex* mDrawMutex;
 */
 
 static SDL_Thread* mRunThread = NULL;
+static bool mRunFlag = false;
 
 static float q;
 static float damping;
@@ -55,8 +56,6 @@ typedef struct gridPoint
 }GridPoint;
 
 static GridPoint* mGrid;
-
-static bool mRunFlag = false;
 
 //#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower. This is also defined in game.cpp!
 
@@ -117,7 +116,7 @@ static int runThread(void *ptr)
         }
 
         // Run the grid
-        for (int pass=0; pass < 2; pass++)
+        for (int pass=0; pass < 4; pass++)
         {
             float accel_c = -q * dt;
             float damping_multiplier = exp(-dt * damping);

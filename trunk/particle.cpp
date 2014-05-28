@@ -14,6 +14,102 @@ static float brightness = 1.0f;
 static float particleLineRadius = 3;
 
 
+static SDL_Thread* mRunThread = NULL;
+static bool mRunFlag = false;
+
+
+particle::PARTICLE* particle::mParticles = NULL;
+int particle::mNumParticles = 0;
+int particle::mIndex = 0;
+
+
+static int runThread(void *ptr)
+{
+    int x,y;
+
+    while(1)
+    {
+        while (!mRunFlag)
+        {
+            Sleep(1);
+        };
+        mRunFlag = false;
+
+        int i;
+        if (particle::mParticles)
+        {
+            for (i=0; i<particle::mNumParticles; i++)
+            {
+                if (particle::mParticles[i].timeToLive > 0)
+                {
+                    // This particle is active
+
+                    particle::PARTICLE* particle = &particle::mParticles[i];
+
+                    --particle->timeToLive;
+                    if (particle->timeToLive <= 0)
+                    {
+                        // This particle died
+                        particle->timeToLive = 0;
+                    }
+                    else
+                    {
+                        // Evaluate against attractors
+                        Point3d ppoint = particle->posStream[0];
+                        if (particle->gravity)
+                        {
+                            Point3d speed = game::mAttractors.evaluateParticle(particle);
+                            particle->speedX += speed.x;
+                            particle->speedY += speed.y;
+                        }
+
+                        // Add drag
+                        particle->speedX *= particle->drag;
+                        particle->speedY *= particle->drag;
+                
+                        Point3d speedClamp(particle->speedX, particle->speedY, 0);
+                        speedClamp = mathutils::clamp2dVector(speedClamp, 2);
+                        particle->speedX = speedClamp.x;
+                        particle->speedY = speedClamp.y;
+
+                        // Move the particle
+                        particle->posStream[0].x += particle->speedX;
+                        particle->posStream[0].y += particle->speedY;
+                        particle->posStream[0].z = 0;
+
+                        if (particle->gridBound)
+                        {
+                            // Keep it within the grid
+
+						    Point3d hitPoint;
+                            Point3d speed(particle->speedX, particle->speedY);
+						    if (game::mGrid.hitTest(particle->posStream[0], 0, &hitPoint, &speed))
+						    {
+                                particle->hitGrid = true;
+							    particle->posStream[0] = hitPoint;
+
+                                particle->speedX = speed.x;
+                                particle->speedY = speed.y;
+						    }
+
+                        }
+
+                        // Shift the position stream
+                        for (int p=NUM_POS_STREAM_ITEMS-2; p >= 0; p--)
+                        {
+                            particle->posStream[p+1] = particle->posStream[p];
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    return 0;
+}
+
 particle::particle()
 {
     mNumParticles = 2000; // PERFORMANCE: The larger this number is, the larger the performance hit!
@@ -27,6 +123,14 @@ particle::particle()
             mParticles[i].timeToLive = 0;
         }
     }
+
+    // Thread stuff
+    mRunThread = SDL_CreateThread(runThread, "runThread");
+    if (!mRunThread)
+    {
+        OutputDebugString(L"Couldn't create particle run thread\n");
+    }
+
 }
 
 particle::~particle()
@@ -173,73 +277,7 @@ void particle::draw()
 
 void particle::run()
 {
-    int i;
-    if (mParticles)
-    {
-        for (i=0; i<mNumParticles; i++)
-        {
-            PARTICLE* particle = &mParticles[i];
-            if (particle->timeToLive > 0)
-            {
-                // This particle is active
-                --particle->timeToLive;
-                if (particle->timeToLive <= 0)
-                {
-                    // This particle died
-                    particle->timeToLive = 0;
-                }
-                else
-                {
-                    // Evaluate against attractors
-                    Point3d ppoint = particle->posStream[0];
-                    if (particle->gravity)
-                    {
-                        Point3d speed = game::mAttractors.evaluateParticle(particle);
-                        particle->speedX += speed.x;
-                        particle->speedY += speed.y;
-                    }
-
-                    // Add drag
-                    particle->speedX *= particle->drag;
-                    particle->speedY *= particle->drag;
-                
-                    Point3d speedClamp(particle->speedX, particle->speedY, 0);
-                    speedClamp = mathutils::clamp2dVector(speedClamp, 2);
-                    particle->speedX = speedClamp.x;
-                    particle->speedY = speedClamp.y;
-
-                    // Move the particle
-                    particle->posStream[0].x += particle->speedX;
-                    particle->posStream[0].y += particle->speedY;
-                    particle->posStream[0].z = 0;
-
-                    if (particle->gridBound/* && !particle->hitGrid*/)
-                    {
-                        // Keep it within the grid
-
-						Point3d hitPoint;
-                        Point3d speed(particle->speedX, particle->speedY);
-						if (game::mGrid.hitTest(particle->posStream[0], 0, &hitPoint, &speed))
-						{
-                            particle->hitGrid = true;
-							particle->posStream[0] = hitPoint;
-
-                            particle->speedX = speed.x;
-                            particle->speedY = speed.y;
-						}
-
-                    }
-
-                    // Shift the position stream
-                    for (int p=NUM_POS_STREAM_ITEMS-2; p >= 0; p--)
-                    {
-                        particle->posStream[p+1] = particle->posStream[p];
-                    }
-
-                }
-            }
-        }
-    }
+    mRunFlag = true;
 }
 
 void particle::killAll()

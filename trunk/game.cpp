@@ -465,7 +465,7 @@ void game::run()
                     float speed = mathutils::frandFrom0To1() * 4;
                     float spread = (2*PI);
                     int num = 50;
-                    int timeToLive = 99999;
+                    int timeToLive = 500;
                     vector::pen pen;
 
                     pen.r = get_sin(colorTimer+((2*PI)/1));
@@ -488,7 +488,6 @@ void game::run()
         }
     }
 
-    mParticles.run();
 }
 
 //#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
@@ -622,8 +621,11 @@ void game::draw(int pass)
 	}
 
     // Weird place to put this but it seems to be most effective here (?)
-    mGrid.run();
-
+    if (pass == scene::RENDERPASS_BLUR)
+    {
+        mGrid.run();
+        mParticles.run();
+    }
 }
 
 void game::startGame(int numPlayers, GameType gameType)

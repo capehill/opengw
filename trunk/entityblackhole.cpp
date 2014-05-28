@@ -38,7 +38,14 @@ void entityBlackHole::runTransition()
 
 void entityBlackHole::run()
 {
-    mAnimationSpeed = mStrength * .5;
+    if (mActivated)
+    {
+        mAnimationSpeed = mStrength * .5;
+    }
+    else
+    {
+        mAnimationSpeed = .5;
+    }
     mAnimationDepth = /*mStrength **/ .2;
 
     mSpeed = mathutils::clamp2dVector(mSpeed, .2);
@@ -116,34 +123,6 @@ void entityBlackHole::run()
             att->pos = mPos;
             att->enabled = TRUE;
             att->attractsParticles = TRUE;
-        }
-    }
-
-    // Generate random particles to fly around the black hole
-    if (mActivated)
-    {
-        float r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
-        r *= mStrength + (mBalance*.1);
-        for (int i=0; i<360; i++)
-        {
-            if (mathutils::frandFrom0To1() * 100 < 4)
-            {
-                float ang = mathutils::DegreesToRads(i);
-                Point3d pos = mPos;
-                Point3d angle(0,ang+.4,0);
-
-                float speed = 1;
-                float spread = 0;
-                int num = 1;
-                int timeToLive = 1000;
-                vector::pen pen = mPen;
-                pen.r = 1;//mathutils::frandFrom0To1() + .5;
-                pen.g = 1;//mathutils::frandFrom0To1() + .5;
-                pen.b = 1;//mathutils::frandFrom0To1() + .5;
-                pen.a = .5;
-                pen.lineRadius=5;
-                game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, FALSE, TRUE, .95);
-            }
         }
     }
 
@@ -274,8 +253,6 @@ void entityBlackHole::hit(entity* aEntity)
 
             mStrength *= .98;
 
-            bool createGeoms = false;
-
             if (mStrength < .7)
             {
                 // Destroy
@@ -294,68 +271,8 @@ void entityBlackHole::hit(entity* aEntity)
                             game::mPlayers.mPlayer1->addKillAtLocation(mPoints, pos);
                         else if (missile->mPlayerSource == 1)
                             game::mPlayers.mPlayer2->addKillAtLocation(mPoints, pos);
-
-                        createGeoms = true;
                     }
                 }
-                else
-                {
-                   createGeoms = true;
-                }
-
-/* UNCOMMENT THIS IF YOU WANT GW2-like GEOMS FLOATING AROUND
-
-                // Poop out random Geoms
-                if (createGeoms)
-                {
-                    for (int j=0; j<mFeedCount; j++)
-                    {
-                        if (mathutils::frandFrom0To1() * 100 < 50)
-                        {
-                            if (mathutils::frandFrom0To1() * 100 < 50)
-                            {
-                                entity* geom = game::mEnemies.getUnusedEnemyOfType(ENTITY_TYPE_GEOM_MEDIUM);
-                                if (geom)
-                                {
-                                    geom->setState(ENTITY_STATE_SPAWN_TRANSITION);
-                                    geom->setPos(this->getPos());
-                                    geom->setRotationRate((.01 * mathutils::frandFrom0To1()) - .05);
-                                    geom->setSpeed(Point3d((.1 * mathutils::frandFrom0To1()) - .05, (.1 * mathutils::frandFrom0To1()) - .05, 0));
-                                    geom->setDrift(Point3d((1 * mathutils::frandFrom0To1()) - .5, (1 * mathutils::frandFrom0To1()) - .5, 0));
-                                }
-                            }
-                            else
-                            {
-                                for (int i=0; i<2; i++)
-                                {
-                                    entity* geom = game::mEnemies.getUnusedEnemyOfType(ENTITY_TYPE_GEOM_SMALL);
-                                    if (geom)
-                                    {
-                                        geom->setState(ENTITY_STATE_SPAWN_TRANSITION);
-                                        geom->setPos(this->getPos());
-                                        geom->setRotationRate((.01 * mathutils::frandFrom0To1()) - .05);
-                                        geom->setSpeed(Point3d((.1 * mathutils::frandFrom0To1()) - .05, (.1 * mathutils::frandFrom0To1()) - .05, 0));
-                                        geom->setDrift(Point3d((1 * mathutils::frandFrom0To1()) - .5, (1 * mathutils::frandFrom0To1()) - .5, 0));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            entity* geom = game::mEnemies.getUnusedEnemyOfType(ENTITY_TYPE_GEOM_LARGE);
-                            if (geom)
-                            {
-                                geom->setState(ENTITY_STATE_SPAWN_TRANSITION);
-                                geom->setPos(this->getPos());
-                                geom->setRotationRate((.01 * mathutils::frandFrom0To1()) - .05);
-                                geom->setSpeed(Point3d((.1 * mathutils::frandFrom0To1()) - .05, (.1 * mathutils::frandFrom0To1()) - .05, 0));
-                                geom->setDrift(Point3d((1 * mathutils::frandFrom0To1()) - .5, (1 * mathutils::frandFrom0To1()) - .5, 0));
-                            }
-                        }
-                    }
-                }
-*/
-
             }
         }
         else
@@ -623,9 +540,22 @@ void entityBlackHole::drawRing()
     {
         glColor4f(1, 1, 1, 1);
     }
+    else if (mState != entity::ENTITY_STATE_SPAWNING)
+    {
+        //glColor4f((mPen.r*c)+.5, (mPen.g*c)+.25, (mPen.b*c)+.25, mPen.a);
+
+        if (scene::mPass == scene::RENDERPASS_PRIMARY)
+        {
+            glColor4f(mPen.r, mPen.g, mPen.b, (mPen.a*c)+.5);
+        }
+        else
+        {
+            glColor4f(mPen.r, .25, .25, 1);
+        }
+    }
     else
     {
-        glColor4f(mPen.r+(c*.25), mPen.g+(c*.25), mPen.b+(c*.25), mPen.a);
+        glColor4f(mPen.r, mPen.g, mPen.b, mPen.a);
     }
 
     if (activated && (mState != entity::ENTITY_STATE_SPAWNING))

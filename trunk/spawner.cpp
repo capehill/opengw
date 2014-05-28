@@ -7,11 +7,11 @@
 
 spawner::spawner(void)
 {
-//    clearWaveListEntities();
 }
 
 void spawner::init()
 {
+    mNumWavesAllowed = 0;
     mSpawnIndex = 0;
     mLastSpawnIndex = 0;
 
@@ -174,16 +174,37 @@ void spawner::run(void)
             }
 
             // Black holes
-            if (index >= 6)
+            if (index >= 2)
             {
-                if (mathutils::frandFrom0To1() * 100 < 2)
+                if (mathutils::frandFrom0To1() * 100 < 4)
                 {
                     spawnEntities(entity::ENTITY_TYPE_BLACKHOLE, 1);
                 }
             }
+/*
+            if (game::mEnemies.getNumActiveEnemiesOfType(entity::ENTITY_TYPE_BLACKHOLE) == 0)
+            {
+                spawnEntities(entity::ENTITY_TYPE_BLACKHOLE, 1);
+            }
+*/
         }
 
-        if ((++mWaveStartTimer >= 20) && (numWaveData() == 0))
+        mNumWavesAllowed = 0;
+        if (index > 1)
+        {
+            mNumWavesAllowed = 1;
+        }
+        if (index > 12)
+        {
+            mNumWavesAllowed = 2;
+        }
+        if (index > 20)
+        {
+            // Make it rain!!
+            mNumWavesAllowed = 9999;
+        }
+
+        if ((++mWaveStartTimer >= 20) && (numWaveData() < mNumWavesAllowed))
         {
             mWaveStartTimer = 0;
 
@@ -193,19 +214,19 @@ void spawner::run(void)
                 // SWARM TYPE
                 //
                 case 0:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_GRUNT, ceil(numEnemyGrunt * mSpawnProgress));
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_GRUNT, max(20, ceil(numEnemyGrunt * mSpawnProgress)));
                     break;
                 case 1:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_WEAVER, ceil(numEnemyWeaver * mSpawnProgress));
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_WEAVER, max(20, ceil(numEnemyWeaver * mSpawnProgress)));
                     break;
                 case 2:
                     if (index > 4)
                     {
-                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, ceil(numEnemySnake * mSpawnProgress));
+                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, max(8, ceil(numEnemySnake * mSpawnProgress)));
                     }
                     break;
                 case 3:
-                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, ceil(numEnemySpinner * mSpawnProgress));
+                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, max(20, ceil(numEnemySpinner * mSpawnProgress)));
                     break;
                 case 4:
 //                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress));
@@ -213,26 +234,26 @@ void spawner::run(void)
                 case 5:
                     if (index > 10)
                     {
-                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, ceil(numEnemyMayfly * mSpawnProgress));
+                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, max(50, ceil(numEnemyMayfly * mSpawnProgress)));
                     }
                     break;
                 //
                 // RUSH TYPE
                 //
                 case 6:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_GRUNT, ceil(numEnemyGrunt * mSpawnProgress) / 2);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_GRUNT, max(20, ceil(numEnemyGrunt * mSpawnProgress) / 2));
                     break;
                 case 7:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_WEAVER, ceil(numEnemyWeaver * mSpawnProgress) / 2);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_WEAVER, max(20, ceil(numEnemyWeaver * mSpawnProgress) / 2));
                     break;
                 case 8:
                     if (index > 4)
                     {
-                        newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SNAKE, ceil(numEnemySnake * mSpawnProgress) / 2);
+                        newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SNAKE, max(8, ceil(numEnemySnake * mSpawnProgress) / 2));
                     }
                     break;
                 case 9:
-                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SPINNER, ceil(numEnemySpinner * mSpawnProgress) / 2);
+                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_SPINNER, max(20, ceil(numEnemySpinner * mSpawnProgress) / 2));
                     break;
                 case 10:
 //                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress) / 2);
@@ -247,115 +268,6 @@ void spawner::run(void)
         }
 
         runWaves();
-
-
-/*
-        // Limit the number of waves that can happen at a time
-        runWaveListEntities();
-        int numWaveEntities = numWaveListEntities();
-
-        // Slowly allow more and more simulatanious waves
-        int numAllowedWaveEntities = 10 - index;
-        if (numAllowedWaveEntities <= 0) numAllowedWaveEntities = 1;
-
-        // Start a wave
-        if (numWaveEntities < numAllowedWaveEntities)
-        {
-            if (index >= 2)
-            {
-                --mWaveStartTimer;
-                if (mWaveStartTimer < 0) mWaveStartTimer=0;
-                if ((mWaveStartTimer == 0) && (mWaveEntity == entity::ENTITY_TYPE_UNDEF))
-                {
-//                    mWaveStartTimer = 100;
-
-                    switch ((int)(mathutils::frandFrom0To1() * 18))
-                    {
-                        default:
-                        case 0:
-                        case 1:
-                        case 11:
-                            mWaveEntity = entity::ENTITY_TYPE_GRUNT;
-                            mWaveType = WAVETYPE_SWARM;
-                            mWaveEntityCounter = (index >= 10) ? 60 : 40;
-                            break;
-                        case 2:
-                        case 12:
-                            mWaveEntity = entity::ENTITY_TYPE_WEAVER;
-                            mWaveType = WAVETYPE_SWARM;
-                            mWaveEntityCounter = (index >= 10) ? 24 : 12;
-                            break;
-                        case 3:
-                        case 13:
-                            mWaveEntity = entity::ENTITY_TYPE_SNAKE;
-                            mWaveType = WAVETYPE_SWARM;
-                            mWaveEntityCounter = (index >= 10) ? 16 : 8;
-                            break;
-                        case 4:
-                        case 14:
-                            mWaveEntity = entity::ENTITY_TYPE_SPINNER;
-                            mWaveType = WAVETYPE_SWARM;
-                            mWaveEntityCounter = (index >= 10) ? 16 : 8;
-                            break;
-                        case 10:
-                        case 15:
-                            mWaveEntity = entity::ENTITY_TYPE_BLACKHOLE;
-                            mWaveType = WAVETYPE_SWARM;
-                            mWaveEntityCounter = mathutils::frandFrom0To1() * 4;
-                            break;
-                        case 5:
-                            mWaveEntity = entity::ENTITY_TYPE_GRUNT;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = 16;
-                            break;
-                        case 6:
-                            mWaveEntity = entity::ENTITY_TYPE_WEAVER;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = 16;
-                            break;
-                        case 7:
-                            mWaveEntity = entity::ENTITY_TYPE_SNAKE;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? 12 : 4;
-                            break;
-                        case 8:
-                            mWaveEntity = entity::ENTITY_TYPE_SPINNER;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? 12 : 4;
-                            break;
-                        case 16:
-                            mWaveEntity = entity::ENTITY_TYPE_BLACKHOLE;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? (mathutils::frandFrom0To1() * 6) : (mathutils::frandFrom0To1() * 4);
-                            break;
-                        case 17:
-                            mWaveEntity = entity::ENTITY_TYPE_REPULSOR;
-                            mWaveType = WAVETYPE_RUSH;
-                            mWaveEntityCounter = (index >= 10) ? (mathutils::frandFrom0To1() * 4) : 1;
-                            break;
-                        case 9:
-                            if (index >= 8)
-                            {
-                                mWaveEntity = entity::ENTITY_TYPE_MAYFLY;
-                                mWaveType = WAVETYPE_SWARM;
-                                mWaveEntityCounter = 100;
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-
-        // Run waves
-        if (mWaveEntity != entity::ENTITY_TYPE_UNDEF)
-        {
-            if (++mWaveIntervalTimer > 10)
-            {
-                mWaveIntervalTimer = 0;
-                runWaves();
-            }
-        }
-*/
     }
     else
     {
@@ -439,44 +351,10 @@ void spawner::runWaves()
             if (wd->mWaveType == WAVETYPE_RUSH)
             {
                 // Pick a player to attack
-                Point3d playerPos = game::mPlayers.mPlayer1->getPos();
-/*
-                int playerNum = ceil(4 * mathutils::frandFrom0To1());
-                bool selectedPlayer = false;
-                switch (playerNum)
-                {
-                    case 0:
-                        if (game::mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_RUNNING))
-                        {
-                            playerPos = game::mPlayers.mPlayer1->getPos();
-                            selectedPlayer = true;
-                        }
-                        break;
-                    case 1:
-                        if (game::mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_RUNNING))
-                        {
-                            playerPos = game::mPlayers.mPlayer2->getPos();
-                            selectedPlayer = true;
-                        }
-                        break;
-                    case 2:
-                        if (game::mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_RUNNING))
-                        {
-                            playerPos = game::mPlayers.mPlayer3->getPos();
-                            selectedPlayer = true;
-                        }
-                        break;
-                    case 3:
-                        if (game::mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_RUNNING))
-                        {
-                            playerPos = game::mPlayers.mPlayer4->getPos();
-                            selectedPlayer = true;
-                        }
-                        break;
-                }
+                player* randPlayer = game::mPlayers.getRandomActivePlayer();
+                if (!randPlayer) return;
+                Point3d playerPos = randPlayer->getPos();
 
-                if (!selectedPlayer) return; // TODO COME UP WITH A WAY TO RANDOMLY SELECT FROM THE AVAILABLE PLAYERS. THIS IS STUPID.
-*/
                 // Keep cranking out enemies until the spawn counter reaches 0
                 while (wd->spawnCount-- > 0)
                 {

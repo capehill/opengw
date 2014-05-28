@@ -41,8 +41,6 @@ void player::initPlayerForGame()
     mBombCounter = 0;
     mLifeCounter = 0;
 
-    mGeoms = 0;
-
     mScore = 0;
 
     mMultiplier = 1;
@@ -865,11 +863,6 @@ int player::getNumBombs()
     else return game::m2PlayerNumBombs;
 }
 
-int player::getGeoms()
-{
-    return mGeoms;
-}
-
 void player::addLife()
 {
     if (theGame.numPlayers() == 1)
@@ -902,17 +895,6 @@ void player::takeBomb()
     if (theGame.numPlayers() == 1)
         --mNumBombs;
     // No bombs on 2 player game
-}
-
-void player::addGeom(int value)
-{
-//    mGeoms += value;
-//    mMultiplier += 1;
-}
-
-void player::clearGeoms()
-{
-//    mGeoms = 0;
 }
 
 void player::addPointsNoMultiplier(int points)

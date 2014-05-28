@@ -33,9 +33,6 @@ public:
         ENTITY_TYPE_REPULSOR,
         ENTITY_TYPE_REPULSOR_SHIELD,
         ENTITY_TYPE_PROTON,
-        ENTITY_TYPE_GEOM_SMALL,
-        ENTITY_TYPE_GEOM_MEDIUM,
-        ENTITY_TYPE_GEOM_LARGE,
         ENTITY_TYPE_LINE,
         ENTITY_NUM_TYPES // Must be last
     }EntityType;

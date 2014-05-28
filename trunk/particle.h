@@ -47,9 +47,9 @@ public:
 
     void killAll();
 
-    PARTICLE* mParticles;
-    int mNumParticles;
-    int mIndex;
+    static PARTICLE* mParticles;
+    static int mNumParticles;
+    static int mIndex;
 
 private:
 

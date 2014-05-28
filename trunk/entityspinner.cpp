@@ -78,7 +78,7 @@ void entitySpinner::destroyTransition()
     if (enemy)
     {
         enemy->setPos(spawnPoint + pos);
-        enemy->setSpeed(spawnPoint * .2);
+        enemy->setDrift(mHitSpeed);
         enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
     }
 
@@ -88,18 +88,20 @@ void entitySpinner::destroyTransition()
     if (enemy)
     {
         enemy->setPos(spawnPoint + pos);
-        enemy->setSpeed(spawnPoint * .2);
+        enemy->setDrift(mHitSpeed);
         enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
     }
 }
 
 void entitySpinner::hit(entity* aEntity)
 {
+    mHitSpeed = Point3d(0,0,0);
     if (aEntity)
     {
         entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
         if (missile)
         {
+            mHitSpeed = missile->getSpeed();
             entity::hit(aEntity);
             return;
         }

@@ -189,3 +189,84 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
 
     }
 }
+
+player* players::getRandomActivePlayer()
+{
+    bool p1, p2, p3, p4;
+
+    p1 = false;
+    p2 = false;
+    p3 = false;
+    p4 = false;
+
+    if (mPlayer1->mJoined)
+    {
+        if (mPlayer1->getState() == entity::ENTITY_STATE_RUNNING)
+            p1 = true;
+    }
+    if (mPlayer2->mJoined)
+    {
+        if (mPlayer2->getState() == entity::ENTITY_STATE_RUNNING)
+            p2 = true;
+    }
+    if (mPlayer3->mJoined)
+    {
+        if (mPlayer3->getState() == entity::ENTITY_STATE_RUNNING)
+            p3 = true;
+    }
+    if (mPlayer4->mJoined)
+    {
+        if (mPlayer4->getState() == entity::ENTITY_STATE_RUNNING)
+            p4 = true;
+    }
+
+    if (!p1 && !p2 && !p3 && !p4)
+    {
+        // Nobody's home
+        return NULL;
+    }
+    if (p1 && !p2 && !p3 && !p4)
+    {
+        return mPlayer1;
+    }
+    if (!p1 && p2 && !p3 && !p4)
+    {
+        return mPlayer2;
+    }
+    if (!p1 && !p2 && p3 && !p4)
+    {
+        return mPlayer3;
+    }
+    if (!p1 && !p2 && !p3 && p4)
+    {
+        return mPlayer4;
+    }
+    else
+    {
+        while(1)
+        {
+            int player = ceil(mathutils::frandFrom0To1() * 4);
+            if ((player == 0) && p1)
+            {
+                return mPlayer1;
+            }
+            if ((player == 1) && p2)
+            {
+                return mPlayer2;
+            }
+            if ((player == 2) && p3)
+            {
+                return mPlayer3;
+            }
+            if ((player == 3) && p4)
+            {
+                return mPlayer4;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+
+

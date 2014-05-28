@@ -14,10 +14,6 @@
 #include "entityblackhole.h"
 #include "entityrepulsor.h"
 #include "entityProton.h"
-#include "entityGeom.h"
-#include "entityGeomSmall.h"
-#include "entityGeomMedium.h"
-#include "entityGeomLarge.h"
 #include "entityLine.h"
 
 entity::entity()
@@ -65,12 +61,6 @@ entity* entity::createEntity(EntityType _entity)
             return new entityRepulsor();
         case ENTITY_TYPE_PROTON:
             return new entityProton();
-        case ENTITY_TYPE_GEOM_SMALL:
-            return new entityGeomSmall();
-        case ENTITY_TYPE_GEOM_MEDIUM:
-            return new entityGeomMedium();
-        case ENTITY_TYPE_GEOM_LARGE:
-            return new entityGeomLarge();
         case ENTITY_TYPE_LINE:
             return new entityLine();
         default:
@@ -289,8 +279,6 @@ void entity::indicating()
 
 void entity::hit(entity* aEntity)
 {
-//    bool createGeoms = false;
-
     if (aEntity)
     {
         entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
@@ -307,8 +295,6 @@ void entity::hit(entity* aEntity)
                     game::mPlayers.mPlayer3->addKillAtLocation(mScoreValue, getPos());
                 else if (missile->mPlayerSource == 3)
                     game::mPlayers.mPlayer4->addKillAtLocation(mScoreValue, getPos());
-
-//                createGeoms = true;
             }
 
             game::mSound.playTrack(SOUNDID_ENEMYHIT);
@@ -325,44 +311,9 @@ void entity::hit(entity* aEntity)
     else
     {
         // It must be either a bomb or the player getting destroyed
-//        createGeoms = true;
     }
 
     setState(ENTITY_STATE_DESTROY_TRANSITION);
-
-/* UNCOMMENT THIS IF YOU WANT GW2-like GEOMS FLOATING AROUND
-    if (createGeoms)
-    {
-        // Poop out random Geoms
-        if (mathutils::frandFrom0To1() * 100 < 50)
-        {
-            entity* geom = game::mEnemies.getUnusedEnemyOfType(ENTITY_TYPE_GEOM_MEDIUM);
-            if (geom)
-            {
-                geom->setState(ENTITY_STATE_SPAWN_TRANSITION);
-                geom->setPos(this->getPos());
-                geom->setRotationRate((.01 * mathutils::frandFrom0To1()) - .05);
-                geom->setSpeed(Point3d((.1 * mathutils::frandFrom0To1()) - .05, (.1 * mathutils::frandFrom0To1()) - .05, 0));
-                geom->setDrift(Point3d((1 * mathutils::frandFrom0To1()) - .5, (1 * mathutils::frandFrom0To1()) - .5, 0));
-            }
-        }
-        else
-        {
-            for (int i=0; i<2; i++)
-            {
-                entity* geom = game::mEnemies.getUnusedEnemyOfType(ENTITY_TYPE_GEOM_SMALL);
-                if (geom)
-                {
-                    geom->setState(ENTITY_STATE_SPAWN_TRANSITION);
-                    geom->setPos(this->getPos());
-                    geom->setRotationRate((.01 * mathutils::frandFrom0To1()) - .05);
-                    geom->setSpeed(Point3d((.1 * mathutils::frandFrom0To1()) - .05, (.1 * mathutils::frandFrom0To1()) - .05, 0));
-                    geom->setDrift(Point3d((1 * mathutils::frandFrom0To1()) - .5, (1 * mathutils::frandFrom0To1()) - .5, 0));
-                }
-            }
-        }
-    }
-*/
 }
 
 entity* entity::hitTest(const Point3d& pos, float radius)

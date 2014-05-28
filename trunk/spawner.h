@@ -39,17 +39,11 @@ public:
 
     int getSpawnIndex() const;
 
-//    void clearWaveListEntities();
-
 private:
     void transition();
 
     void spawnEntities(entity::EntityType type, int numWanted);
     void runWaves();
-
-//    void addToWaveList(entity* e);
-//    int numWaveListEntities();
-//    void runWaveListEntities();
 
     void clearWaveData();
     void newWave(WAVETYPE mWaveType, entity::EntityType entityType, int spawnCount);
@@ -59,27 +53,13 @@ private:
 
     float mSpawnIndex;
     int mLastSpawnIndex;
+    int mNumWavesAllowed;
     float mSpawnProgress;
 
     int mSpawnCheckTimer;
 
     int mSpawnWaitTimer;
 
-//    int mWaveIntervalTimer;
-//    int mWaveStartTimer;
-//    int mWaveEntityCounter;
-//    WAVETYPE mWaveType;
-//    entity::EntityType mWaveEntity;
-
-/*
-    typedef struct
-    {
-        entity* e;
-        int genId;
-    } WaveListItem;
-
-    WaveListItem mWaveList[NUM_WAVELIST];
-*/
     int mWaveStartTimer;
     WAVEDATA mWaveData[NUM_WAVEDATA];
 };

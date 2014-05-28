@@ -15,6 +15,9 @@ public:
     virtual void hit(entity* aEntity);
 
     float mAnimationIndex;
+
+private:
+    Point3d mHitSpeed;
 };
 
 #endif // ENTITYSPINNER_H

@@ -168,7 +168,7 @@ void entityPlayerMissile::run()
                 attractor::Attractor* att = game::mAttractors.getAttractor();
                 if (att)
                 {
-					att->strength = 40;
+					att->strength = 30;
 					att->radius = 7;
 					att->pos = mPos;
 					att->enabled = TRUE;

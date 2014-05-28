@@ -17,6 +17,7 @@ public:
     void draw();
 
     player* getPlayerClosestToPosition(const Point3d& point);
+    player* getRandomActivePlayer();
 
     static player* mPlayer1;
     static player* mPlayer2;

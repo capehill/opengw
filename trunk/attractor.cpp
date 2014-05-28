@@ -65,7 +65,7 @@ Point3d attractor::evaluateParticle(particle::PARTICLE* p)
 
             // Add a slight curving vector to the gravity
             Point3d gravityVector(-r * strength * .5, 0, 0); // .5
-            Point3d g = mathutils::rotate2dPoint(gravityVector, angle+.35); // .7
+            Point3d g = mathutils::rotate2dPoint(gravityVector, angle+.4); // .35 , .7
 
             speed.x += g.x;
             speed.y += g.y;

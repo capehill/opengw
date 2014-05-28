@@ -109,10 +109,6 @@
     <ClCompile Include="enemies.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="entityblackhole.cpp" />
-    <ClCompile Include="entitygeom.cpp" />
-    <ClCompile Include="entitygeomlarge.cpp" />
-    <ClCompile Include="entitygeommedium.cpp" />
-    <ClCompile Include="entitygeomsmall.cpp" />
     <ClCompile Include="entitygrunt.cpp" />
     <ClCompile Include="entityline.cpp" />
     <ClCompile Include="entitymayfly.cpp" />
@@ -166,10 +162,6 @@
     <ClInclude Include="enemies.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="entityblackhole.h" />
-    <ClInclude Include="entitygeom.h" />
-    <ClInclude Include="entitygeomlarge.h" />
-    <ClInclude Include="entitygeommedium.h" />
-    <ClInclude Include="entitygeomsmall.h" />
     <ClInclude Include="entitygrunt.h" />
     <ClInclude Include="entityline.h" />
     <ClInclude Include="entitymayfly.h" />
