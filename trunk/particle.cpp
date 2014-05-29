@@ -243,7 +243,7 @@ void particle::draw()
                 }
 
                 float width = speedNormal * 8;
-                if (width > 5) width = 5;
+                if (width > 4) width = 4;
 
                 glColor4f(particle->color.r, particle->color.g, particle->color.b, a); // RGBA
                 glLineWidth(width);

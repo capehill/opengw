@@ -1,4 +1,5 @@
 #include "entitySpinner.h"
+#include "entityTinySpinner.h"
 #include "game.h"
 #include "sincos.h"
 
@@ -74,22 +75,22 @@ void entitySpinner::destroyTransition()
     float angleToPlayer = mathutils::calculate2dAngle(pos, game::mPlayers.mPlayer1->getPos());
     spawnPoint = mathutils::rotate2dPoint(spawnPoint, angleToPlayer + mathutils::DegreesToRads(90));
 
-    entity* enemy = game::mEnemies.getUnusedEnemyOfType(entity::ENTITY_TYPE_TINYSPINNER);
-    if (enemy)
+    entityTinySpinner* miniSpinner = dynamic_cast<entityTinySpinner*>(game::mEnemies.getUnusedEnemyOfType(entity::ENTITY_TYPE_TINYSPINNER));
+    if (miniSpinner)
     {
-        enemy->setPos(spawnPoint + pos);
-        enemy->setDrift(mHitSpeed);
-        enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+        miniSpinner->setPos(spawnPoint + pos);
+        miniSpinner->setInitialSpeed(mHitSpeed * 1.4);
+        miniSpinner->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
     }
 
     spawnPoint = mathutils::rotate2dPoint(spawnPoint, angleToPlayer - mathutils::DegreesToRads(90));
 
-    enemy = game::mEnemies.getUnusedEnemyOfType(entity::ENTITY_TYPE_TINYSPINNER);
-    if (enemy)
+    miniSpinner = dynamic_cast<entityTinySpinner*>(game::mEnemies.getUnusedEnemyOfType(entity::ENTITY_TYPE_TINYSPINNER));
+    if (miniSpinner)
     {
-        enemy->setPos(spawnPoint + pos);
-        enemy->setDrift(mHitSpeed);
-        enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
+        miniSpinner->setPos(spawnPoint + pos);
+        miniSpinner->setInitialSpeed(mHitSpeed * 1.4);
+        miniSpinner->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
     }
 }
 

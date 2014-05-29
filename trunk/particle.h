@@ -7,7 +7,7 @@
 
 //#define NUM_POS_STREAM_ITEMS 7
 //#define NUM_POS_STREAM_ITEMS 4
-#define NUM_POS_STREAM_ITEMS 5
+#define NUM_POS_STREAM_ITEMS 4
 
 class particle
 {

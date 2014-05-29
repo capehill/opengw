@@ -169,7 +169,7 @@ void entityPlayerMissile::run()
                 if (att)
                 {
 					att->strength = 30;
-					att->radius = 7;
+					att->radius = 5;
 					att->pos = mPos;
 					att->enabled = TRUE;
 					att->attractsParticles = FALSE;

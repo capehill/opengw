@@ -73,6 +73,8 @@ void entityTinySpinner::run()
 void entityTinySpinner::spawnTransition()
 {
     entity::spawnTransition();
+    mDrift = mInitialSpeed;
+    mInitialSpeed = Point3d(0,0,0);
 }
 
 void entityTinySpinner::spawn()
