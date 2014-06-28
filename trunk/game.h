@@ -28,6 +28,8 @@ enum
 
     SOUNDID_MENU_MUSICLOOP,
 
+    SOUNDID_MENU_SELECT,
+
     SOUNDID_BACKGROUND_NOISELOOP,
 
     SOUNDID_PLAYERSPAWN,
@@ -111,7 +113,7 @@ public:
     void run();
     void draw(int pass);
 
-    void startGame(int numPlayers, GameType gameType);
+    void startGame(GameType gameType);
     void endGame();
 
     static void showMessageAtLocation(char* message, const Point3d& pos, const vector::pen& pen);
@@ -141,6 +143,8 @@ public:
     static GameType mGameType;
 
     static BOOL mFreeplay;
+
+    static BOOL mPaused;
 
     static int mCredits;
     static int mLevel;
@@ -175,6 +179,14 @@ private:
     bool mDebounce;
 
     entity* mAttractModeBlackHoles[4];
+
+    // SETTINGS
+    bool mGridSmoothing;
+    bool mParticleSmoothing;
+    bool mEnemySmoothing;
+    bool mPlayerSmoothing;
+    bool mStarSmoothing;
+
 };
 
 extern game theGame;

@@ -476,7 +476,7 @@ void drawOffscreens()
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
     if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
-        glColor4f(1, 1, 1, .8);
+        glColor4f(1, 1, 1, 1);
     else
         glColor4f(1, 1, 1, 1);
 

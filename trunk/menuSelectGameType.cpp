@@ -11,7 +11,7 @@ static float mpPlayer3Amount = 0;
 static float mpPlayer4Amount = 0;
 
 
-void menuSelectGameType::init()
+void menuSelectGameType::init(int player)
 {
     debounceStart = true;
     player1Amount = 0;
@@ -20,24 +20,34 @@ void menuSelectGameType::init()
     mpPlayer3Amount = 0;
     mpPlayer4Amount = 0;
 
-    theGame.mPlayers.mPlayer1->mJoined = false;
-    theGame.mPlayers.mPlayer2->mJoined = false;
-    theGame.mPlayers.mPlayer3->mJoined = false;
-    theGame.mPlayers.mPlayer4->mJoined = false;
+    theGame.mPlayers.mPlayer1->mJoined = player == 0 ? true : false;
+    theGame.mPlayers.mPlayer2->mJoined = player == 1 ? true : false;
+    theGame.mPlayers.mPlayer3->mJoined = player == 2 ? true : false;
+    theGame.mPlayers.mPlayer4->mJoined = player == 3 ? true : false;
+
+    game::mSound.playTrack(SOUNDID_MENU_SELECT);
 }
 
 void menuSelectGameType::run()
 {
     int dir = 0;
 
+    if (theGame.mControls.getBackButton(0) || theGame.mControls.getBackButton(1) || theGame.mControls.getBackButton(2) || theGame.mControls.getBackButton(3))
+    {
+        // Exit the menu
+        game::mGameMode = game::GAMEMODE_ATTRACT;
+        game::mSound.playTrack(SOUNDID_MENU_SELECT);
+        return;
+    }
+
     if (!debounceStart)
     {
         if (selection == 0)
         {
-            if (theGame.mControls.getStartButton(0))
+            if (theGame.mControls.getStartButton(0) || theGame.mControls.getStartButton(1) || theGame.mControls.getStartButton(2) || theGame.mControls.getStartButton(3))
             {
-                theGame.mPlayers.mPlayer1->mJoined = true;
-                theGame.startGame(1, game::GAMETYPE_SINGLEPLAYER);
+                theGame.startGame(game::GAMETYPE_SINGLEPLAYER);
+                game::mSound.playTrack(SOUNDID_MENU_SELECT);
             }
         }
         else
@@ -52,7 +62,8 @@ void menuSelectGameType::run()
                 || theGame.mControls.getTriggerButton(2)
                 || theGame.mControls.getTriggerButton(3))
             {
-                theGame.startGame(theGame.numPlayers(), game::GAMETYPE_MULTIPLAYER_COOP);
+                theGame.startGame(game::GAMETYPE_MULTIPLAYER_COOP);
+                game::mSound.playTrack(SOUNDID_MENU_SELECT);
             }
 
 /*
@@ -99,7 +110,7 @@ void menuSelectGameType::run()
         }
     }
 
-    Point3d leftStick = game::mControls.getLeftStick(0);
+    Point3d leftStick = game::mControls.getLeftStick(0) + game::mControls.getLeftStick(1) + game::mControls.getLeftStick(2) + game::mControls.getLeftStick(3);
     float leftDistance = mathutils::calculate2dDistance(Point3d(0,0,0), leftStick);
     if (leftDistance > .1)
     {
@@ -112,7 +123,8 @@ void menuSelectGameType::run()
             dir = -1;
         }
     }
-    Point3d rightStick = game::mControls.getRightStick(0);
+
+    Point3d rightStick = game::mControls.getRightStick(0) + game::mControls.getRightStick(1) + game::mControls.getRightStick(2) + game::mControls.getRightStick(3);
     float rightDistance = mathutils::calculate2dDistance(Point3d(0,0,0), rightStick);
     if (rightDistance > .1)
     {
@@ -126,8 +138,23 @@ void menuSelectGameType::run()
         }
     }
 
-    if (dir < 0) selection = 0;
-    if (dir > 0) selection = 1;
+    if (dir < 0)
+    {
+        if (selection != 0)
+        {
+            selection = 0;
+            game::mSound.playTrack(SOUNDID_MENU_SELECT);
+        }
+    }
+    else if (dir > 0)
+    {
+        if (selection != 1)
+        {
+            selection = 1;
+            game::mSound.playTrack(SOUNDID_MENU_SELECT);
+        }
+    }
+
 /*
     if (dir > 0)
     {
@@ -241,6 +268,7 @@ void menuSelectGameType::draw()
         pen.r = 1;
         pen.g = 1;
         pen.b = 1;
+        pen.a = .5;
         glBegin(GL_LINES);
         theGame.mPlayers.mPlayer1->getModel()->Identity();
         theGame.mPlayers.mPlayer1->getModel()->Scale(4);
@@ -317,7 +345,7 @@ void menuSelectGameType::draw()
     // Single player selection rectangle
     if (selection == 0)
     {
-        glColor4f(1,1,1,1);
+        glColor4f(1,1,1,.5);
         glLineWidth(4);
 
         glBegin(GL_LINE_LOOP);

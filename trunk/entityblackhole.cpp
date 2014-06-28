@@ -538,7 +538,14 @@ void entityBlackHole::drawRing()
 
     if (activated)
     {
-        glColor4f(1, 1, 1, 1);
+        if (scene::mPass == scene::RENDERPASS_PRIMARY)
+        {
+            glColor4f(1,1,1,1);
+        }
+        else
+        {
+            glColor4f(mPen.r, .25, .25, 1);
+        }
     }
     else if (mState != entity::ENTITY_STATE_SPAWNING)
     {

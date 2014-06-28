@@ -13,11 +13,6 @@ entityPlayer3::entityPlayer3()
     mScale = .1;
     mRadius = 2;
 
-    mScoreValue = 0;
-
-    mSpawnTime = 35;
-    mSheildTimer = PLAYER_SHEILD_TIME;
-
     mPen = vector::pen(1, .6, .2, 1, 12);
     mExhaustPen = vector::pen(1, .6, .2, 40, 5);
     mMissilesPen = vector::pen(1, .6, .2, 40, 5);

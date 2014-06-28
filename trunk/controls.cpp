@@ -8,10 +8,12 @@
 
 const float CLAMPVALUE = .3;
 
-#define XBOX_BUTTON_A   0
-#define XBOX_BUTTON_B   1
-#define XBOX_BUTTON_X   2
-#define XBOX_BUTTON_Y   3
+#define XBOX_BUTTON_A       0
+#define XBOX_BUTTON_B       1
+#define XBOX_BUTTON_X       2
+#define XBOX_BUTTON_Y       3
+#define XBOX_BUTTON_BACK    6
+#define XBOX_BUTTON_START   7
 
 // XBOX JOYSTICK VALUES
 
@@ -86,6 +88,16 @@ bool controls::getStartButton(int player)
     return readKeyboardStart(player) || readXBoxStart(player);
 }
 
+bool controls::getBackButton(int player)
+{
+    return readKeyboardBack(player) || readXBoxBack(player);
+}
+
+bool controls::getPauseButton(int player)
+{
+    return readKeyboardPause(player) || readXBoxPause(player);
+}
+
 //
 // Keyboard controller
 //
@@ -150,6 +162,16 @@ bool controls::readKeyboardStart(int player)
             break;
     }
     return false;
+}
+
+bool controls::readKeyboardBack(int player)
+{
+    return (::GetAsyncKeyState(VK_BACK) & 0x8000);
+}
+
+bool controls::readKeyboardPause(int player)
+{
+    return (::GetAsyncKeyState('P') & 0x8000);
 }
 
 
@@ -232,3 +254,22 @@ bool controls::readXBoxStart(int player)
     return SDL_JoystickGetButton(mControllers[player], XBOX_BUTTON_A);
 }
 
+bool controls::readXBoxBack(int player)
+{
+    if (!mControllers[player]) return false;
+
+    SDL_Event event;
+    SDL_PollEvent(&event);
+
+    return SDL_JoystickGetButton(mControllers[player], XBOX_BUTTON_B);
+}
+
+bool controls::readXBoxPause(int player)
+{
+    if (!mControllers[player]) return false;
+
+    SDL_Event event;
+    SDL_PollEvent(&event);
+
+    return SDL_JoystickGetButton(mControllers[player], XBOX_BUTTON_START);
+}

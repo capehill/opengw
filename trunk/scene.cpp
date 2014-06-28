@@ -277,6 +277,7 @@ void scene::draw(int pass)
 				{
 					drawCredits();
 
+/*
 					static int flashTimer = 0;
 					++flashTimer;
 
@@ -289,7 +290,6 @@ void scene::draw(int pass)
 						pen.lineRadius = 8;
 						font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press Start");
 
-/*
 						vector::pen pen(1,1,1,.5,3);
 						if (game::mCredits == 1)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1 Player Start");
@@ -310,8 +310,8 @@ void scene::draw(int pass)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, or 3 Player Start");
 						else if (game::mCredits == 4)
 							font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Press 1, 2, 3, or 4 Player Start");
-*/
 					}
+*/
 
 				}
 				else
@@ -411,11 +411,7 @@ void scene::drawNumLives()
 
 void scene::drawNumBombs()
 {
-    if (theGame.numPlayers() > 1)
-    {
-        // No bombs on multiplayer player game
-    }
-    else
+    if (theGame.mGameType == game::GAMETYPE_SINGLEPLAYER)
     {
         // 1 player display
 
@@ -449,13 +445,17 @@ void scene::drawNumBombs()
             font::AlphanumericsPrint(font::ALIGN_CENTER, .016, .12+.06, .9, &pen, "x%d", overflow);
         }
     }
+    else
+    {
+        // No bombs on multiplayer player game
+    }
 }
 
 void scene::drawScores()
 {
     BOOL gameover = (game::mGameMode != game::GAMEMODE_PLAYING);
 
-    if (theGame.numPlayers() == 1)
+    if (theGame.mGameType == game::GAMETYPE_SINGLEPLAYER)
     {
         // 1 player display
 
@@ -485,7 +485,7 @@ void scene::drawScores()
     {
         // Multi player display
 
-        for (int i=0; i<theGame.numPlayers(); i++)
+        for (int i=0; i<4; i++)
         {
             Point3d pos;
             player* player;
@@ -531,17 +531,11 @@ void scene::drawScores()
             else
             {
                 vector::pen pen(player->getFontPen(), .75, 3);
-                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
-		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
-                else
-    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
+		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
 
 		        pen.a=.1;
 		        pen.lineRadius = 8;
-                if (gameover || (player->getState() != entity::ENTITY_STATE_RUNNING))
-		            font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
-                else
-    		        font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
+    		    font::AlphanumericsPrint(font::ALIGN_LEFT, .02, pos.x, pos.y, &pen, "Press Start");
             }
         }
     }

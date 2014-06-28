@@ -14,14 +14,9 @@ entityPlayer1::entityPlayer1()
     mScale = 1.7;
     mRadius = 2;
 
-    mScoreValue = 0;
-
-    mSpawnTime = 35;
-    mSheildTimer = PLAYER_SHEILD_TIME;
-
     mPen = vector::pen(1, 1, 1, 1, 12);
-    mExhaustPen = vector::pen(defaultFontPen, 40, 5);
-    mMissilesPen = vector::pen(defaultFontPen, 40, 5);
+    mExhaustPen = vector::pen(.96, 1, .68, 40, 5);
+    mMissilesPen = vector::pen(.96, 1, .68, 40, 5);
     mFontPen = vector::pen(defaultFontPen, 40, 5);
 
     mPos.x = theGame.mGrid.extentX() / 2;
@@ -62,8 +57,8 @@ void entityPlayer1::initPlayerForGame()
     if ((theGame.numPlayers() == 1) || (theGame.mGameMode != game::GAMEMODE_PLAYING))
     {
         mPen = vector::pen(1, 1, 1, 1, 12);
-        mExhaustPen = vector::pen(1, .95, .2, 1, 5);
-        mMissilesPen = vector::pen(1, .95, .2, 1, 5);
+        mExhaustPen = vector::pen(.9, 1, .35, 1, 5);
+        mMissilesPen = vector::pen(.9, 1, .35, 1, 5);
         mFontPen = vector::pen(defaultFontPen, 1, 5);
 
         mPos.x = theGame.mGrid.extentX() / 2;

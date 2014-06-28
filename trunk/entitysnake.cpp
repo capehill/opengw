@@ -39,7 +39,7 @@ public:
 
         mModel.mNumVertex = 3;
         mModel.mVertexList = new Point3d[mModel.mNumVertex];
-        mModel.mVertexList[i++] = Point3d(0, .8);
+        mModel.mVertexList[i++] = Point3d(0, .9);
         mModel.mVertexList[i++] = Point3d(.5, -.5);
         mModel.mVertexList[i++] = Point3d(-.5, -.5);
 
@@ -338,7 +338,7 @@ void entitySnake::run()
         Point3d moveVector(0, 1, 0);
         moveVector = mathutils::rotate2dPoint(moveVector, mAngle);
         mSpeed += moveVector;
-        mSpeed = mathutils::clamp2dVector(mSpeed, .5);
+        mSpeed = mathutils::clamp2dVector(mSpeed, .6);
 
         mSpeed *= .95;
 
@@ -492,6 +492,38 @@ void entitySnake::draw()
             mModel.Translate(trans);
             mModel.emit(pen);
 			
+            // *********************************************
+
+            progress = progress + .25;
+
+            a = 1-progress;
+            if (a<0) a = 0;
+            if (a>1) a = 1;
+
+            pen.a = a;
+
+            mModel.Identity();
+            mModel.Scale(scale * progress * 4);
+            mModel.Rotate(mAngle);
+            mModel.Translate(trans);
+            mModel.emit(pen);
+
+            // *********************************************
+
+            progress = progress + .25;
+
+            a = 1-progress;
+            if (a<0) a = 0;
+            if (a>1) a = 1;
+
+            pen.a = a;
+
+            mModel.Identity();
+            mModel.Scale(scale * progress * 7);
+            mModel.Rotate(mAngle);
+            mModel.Translate(trans);
+            mModel.emit(pen);
+
             // *********************************************
 
             // Restore stuff

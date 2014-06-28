@@ -141,6 +141,15 @@ void spawner::run(void)
         mWaveStartTimer = 0;
     }
 
+/*
+    if (numWaveData() == 0)
+    {
+        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SNAKE, max(8, ceil(numEnemySnake * mSpawnProgress) / 2));
+    }
+    runWaves();
+    return;
+*/
+
     if ((mSpawnWaitTimer <= 0) && numPlayersActive && !game::mBomb.isBombing())
     {
         //

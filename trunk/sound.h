@@ -16,6 +16,11 @@ public:
     void stopAllTracks();
     void stopAllTracksBut(int track);
     int playTrackGroup(int trackFirst, int trackLast);
+    void pauseTrack(int track);
+    void unpauseTrack(int track);
+    void pauseAllTracks();
+    void unpauseAllTracks();
+    void pauseAllTracksBut(int track);
     bool isTrackPlaying(int track);
 
     void startSound();
@@ -31,6 +36,7 @@ private:
         Uint8 *data;
         bool loop;
         bool playing;
+        bool paused;
         float vol;
         double speed;
         double pos;

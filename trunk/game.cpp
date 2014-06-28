@@ -27,6 +27,7 @@ game::GameMode game::mGameMode;
 game::GameType game::mGameType;
 game::PointDisplay* game::mPointDisplays;
 BOOL game::mFreeplay = TRUE;
+BOOL game::mPaused = FALSE;
 int game::mCredits = 0;
 int game::mLevel = 0;
 int game::m2PlayerNumLives = 0;
@@ -36,11 +37,21 @@ int game::m2PlayerNumBombs = 0;
 game::game()
 {
     //
+    // Settings
+    //
+    mGridSmoothing = false;
+    mParticleSmoothing = false;
+    mEnemySmoothing = false;
+    mPlayerSmoothing = true;
+    mStarSmoothing = true;
+
+    //
     // Load our sounds
     //
 
     mSound.loadTrack("sounds/musicloop.wav", SOUNDID_MUSICLOOP, .2, true);
     mSound.loadTrack("sounds/menumusicloop.wav", SOUNDID_MENU_MUSICLOOP, .2, true);
+    mSound.loadTrack("sounds/menuselect.wav", SOUNDID_MENU_SELECT, .2, false);
 
     mSound.loadTrack("sounds/backgroundnoiseloop.wav", SOUNDID_BACKGROUND_NOISELOOP, .2, true);
 
@@ -136,6 +147,7 @@ game::~game()
 
 void game::run()
 {
+    // Credits
     static bool creditButtonLast = FALSE;
     bool creditButton = FALSE; // mControls.getCreditButton();
     if (creditButton && !creditButtonLast)
@@ -147,6 +159,31 @@ void game::run()
     if (mFreeplay)
     {
         mCredits = 4;
+    }
+
+    // Pause functionality
+    if (mGameMode == GAMEMODE_PLAYING)
+    {
+        static bool pauseLast = FALSE;
+        bool pause = mControls.getPauseButton(0) || mControls.getPauseButton(1) || mControls.getPauseButton(2) || mControls.getPauseButton(3);
+        if (pause && !pauseLast)
+        {
+            game::mSound.playTrack(SOUNDID_MENU_SELECT);
+            mPaused = !mPaused;
+            if (mPaused)
+            {
+                mSound.pauseAllTracksBut(SOUNDID_MENU_SELECT);
+            }
+            else
+            {
+                mSound.unpauseAllTracks();
+            }
+        }
+        pauseLast = pause;
+        if (mPaused)
+        {
+            return;
+        }
     }
 
     // Run the camera
@@ -180,13 +217,31 @@ void game::run()
                 }
                 if (!mDebounce)
                 {
-                    if (mControls.getStartButton(0)
-                        || mControls.getStartButton(1)
-                        || mControls.getStartButton(2)
-                        || mControls.getStartButton(3))
+                    if (mControls.getStartButton(0))
                     {
                         // Go to game type selection screen
-                        menuSelectGameType::init();
+                        menuSelectGameType::init(0);
+                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                        mDebounce = true;
+                    }
+                    else if (mControls.getStartButton(1))
+                    {
+                        // Go to game type selection screen
+                        menuSelectGameType::init(1);
+                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                        mDebounce = true;
+                    }
+                    else if (mControls.getStartButton(2))
+                    {
+                        // Go to game type selection screen
+                        menuSelectGameType::init(2);
+                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                        mDebounce = true;
+                    }
+                    else if (mControls.getStartButton(3))
+                    {
+                        // Go to game type selection screen
+                        menuSelectGameType::init(3);
                         mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
                         mDebounce = true;
                     }
@@ -198,9 +253,6 @@ void game::run()
             break;
         case GAMEMODE_PLAYING:
             {
-                // TODO - ADD SELECTION SCREEN FOR SINGLE/MULTIPLAYER GAME
-                // Check for players jumping into the game
-
                 if ((numPlayers() > 1) && (m2PlayerNumLives > 0))
                 {
                     if (mControls.getStartButton(0) && !mPlayers.mPlayer1->mJoined)
@@ -488,6 +540,8 @@ void game::run()
         }
     }
 
+    mGrid.run();
+    mParticles.run();
 }
 
 //#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
@@ -508,22 +562,41 @@ void game::draw(int pass)
 #endif
             )
         {
-            glLineWidth(5);
+            if (mGridSmoothing)
+            {
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+            }
+
+            glLineWidth(6);
             mGrid.brightness = mBrightness;
             mGrid.draw();
+
+            if (mGridSmoothing)
+            {
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
+            }
         }
 
         // Particles
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            //glEnable(GL_LINE_SMOOTH);
-            //glEnable(GL_MULTISAMPLE);
+            if (mParticleSmoothing)
+            {
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+            }
+
             glLineWidth(4);
 
             mParticles.draw();
 
-            //glDisable(GL_MULTISAMPLE);
-            //glDisable(GL_LINE_SMOOTH);
+            if (mParticleSmoothing)
+            {
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_LINE_SMOOTH);
+            }
         }
         else
         {
@@ -540,13 +613,19 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-//                glEnable(GL_LINE_SMOOTH);
-//                glEnable(GL_MULTISAMPLE);
+                if (mEnemySmoothing)
+                {
+                    glEnable(GL_LINE_SMOOTH);
+                    glEnable(GL_MULTISAMPLE);
+                }
 
                 mEnemies.draw();
 
-//                glDisable(GL_MULTISAMPLE);
-//                glDisable(GL_LINE_SMOOTH);
+                if (mEnemySmoothing)
+                {
+                    glDisable(GL_MULTISAMPLE);
+                    glDisable(GL_LINE_SMOOTH);
+                }
             }
             else
             {
@@ -562,13 +641,19 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_MULTISAMPLE);
+                if (mPlayerSmoothing)
+                {
+                    glEnable(GL_LINE_SMOOTH);
+                    glEnable(GL_MULTISAMPLE);
+                }
 
                 mPlayers.draw();
 
-                glDisable(GL_MULTISAMPLE);
-                glDisable(GL_LINE_SMOOTH);
+                if (mPlayerSmoothing)
+                {
+                    glDisable(GL_MULTISAMPLE);
+                    glDisable(GL_LINE_SMOOTH);
+                }
             }
             else
             {
@@ -583,13 +668,19 @@ void game::draw(int pass)
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            glEnable(GL_POINT_SMOOTH);
-            glEnable(GL_MULTISAMPLE);
+            if (mStarSmoothing)
+            {
+                glEnable(GL_POINT_SMOOTH);
+                glEnable(GL_MULTISAMPLE);
+            }
 
             mStars.draw();
 
-            glDisable(GL_MULTISAMPLE);
-            glDisable(GL_POINT_SMOOTH);
+            if (mStarSmoothing)
+            {
+                glDisable(GL_MULTISAMPLE);
+                glDisable(GL_POINT_SMOOTH);
+            }
         }
 
         // Bombs
@@ -619,16 +710,9 @@ void game::draw(int pass)
         }
 
 	}
-
-    // Weird place to put this but it seems to be most effective here (?)
-    if (pass == scene::RENDERPASS_BLUR)
-    {
-        mGrid.run();
-        mParticles.run();
-    }
 }
 
-void game::startGame(int numPlayers, GameType gameType)
+void game::startGame(GameType gameType)
 {
     mGameType = gameType;
 
@@ -642,22 +726,7 @@ void game::startGame(int numPlayers, GameType gameType)
     mSkillLevel = 0;
 
     mSpawner.init();
-/*
-    this->mPlayers.mPlayer1->mJoined = false;
-    this->mPlayers.mPlayer2->mJoined = false;
-    this->mPlayers.mPlayer3->mJoined = false;
-    this->mPlayers.mPlayer4->mJoined = false;
 
-    // TEMP CODE - REPLACE THIS WITH SOME SORT OF "JOIN" MENU
-    if (numPlayers >= 1)
-        this->mPlayers.mPlayer1->mJoined = true;
-    if (numPlayers >= 2)
-        this->mPlayers.mPlayer2->mJoined = true;
-    if (numPlayers >= 3)
-        this->mPlayers.mPlayer3->mJoined = true;
-    if (numPlayers >= 4)
-        this->mPlayers.mPlayer4->mJoined = true;
-*/
     // Fire up the players
     if (this->mPlayers.mPlayer1->mJoined)
     {
@@ -676,7 +745,7 @@ void game::startGame(int numPlayers, GameType gameType)
         this->mPlayers.mPlayer4->initPlayerForGame();
     }
 
-    if (numPlayers > 1)
+    if (numPlayers() > 1)
     {
         // Shared lives and bombs
         m2PlayerNumLives = 10;

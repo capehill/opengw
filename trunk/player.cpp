@@ -8,6 +8,12 @@ player::player()
 {
     mDrawSheild = FALSE;
 
+    mScoreValue = 0;
+
+    mSpawnTime = 40;
+
+    mSheildTimer = PLAYER_SHEILD_TIME;
+
     mJoined = FALSE;
 
     mDestroyTime = 40;
@@ -76,7 +82,7 @@ void player::run()
     if (getEnabled())
     {
         // Read the trigger
-        if (theGame.numPlayers() == 1)
+        if (theGame.mGameType == game::GAMETYPE_SINGLEPLAYER)
         {
             bool trigger = game::mControls.getTriggerButton(mPlayerAssignment);
             if (trigger)
@@ -116,8 +122,6 @@ void player::run()
             else distance = .5;
 
             float angle = mathutils::calculate2dAngle(Point3d(0,0,0), leftStick) + mathutils::DegreesToRads(90);
-            Point3d thrust(distance*0.75, 0, 0);
-            thrust = mathutils::rotate2dPoint(thrust, angle);
 
             angle -= mathutils::DegreesToRads(90);
 
@@ -129,6 +133,8 @@ void player::run()
             this->setAngle(currentAngle);
 
             // Move
+            Point3d thrust(distance*0.75, 0, 0);
+            thrust = mathutils::rotate2dPoint(thrust, currentAngle+mathutils::DegreesToRads(90));
             playerSpeed = thrust;
             this->setPos(this->getPos() + thrust);
 
@@ -145,13 +151,13 @@ void player::run()
             // Main stream
             {
                 float spread = .1;
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -2, 0), angle);
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -2, 0), currentAngle);
                 exhaustOffset += getPos();
                 game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
             }
             // First swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(mExhaustSpreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), currentAngle + (get_sin(mExhaustSpreadIndex) * .3));
                 exhaustOffset += getPos();
 
                 float spread = 0;
@@ -159,7 +165,7 @@ void player::run()
             }
             // Second swirl
             {
-                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), angle + (get_sin(-mExhaustSpreadIndex) * .3));
+                exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -3, 0), currentAngle + (get_sin(-mExhaustSpreadIndex) * .3));
                 exhaustOffset += getPos();
 
                 float spread = 0;
@@ -359,8 +365,8 @@ void player::spawn()
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
     {
-        att->strength = -50;
-        att->radius = 10;
+        att->strength = -.5;
+        att->radius = 100;
         att->pos = mPos;
         att->enabled = TRUE;
         att->attractsParticles = TRUE;
@@ -771,6 +777,14 @@ void player::destroyTransition()
     }
     else
         game::mSound.playTrack(SOUNDID_PLAYERHIT);
+}
+
+void player::destroy()
+{
+    if (--mStateTimer <= 0)
+    {
+        setState(ENTITY_STATE_INACTIVE);
+    }
 }
 
 void player::addKillAtLocation(int points, Point3d pos)

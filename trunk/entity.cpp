@@ -21,7 +21,7 @@ entity::entity()
 {
     setState(ENTITY_STATE_INACTIVE);
     mSpawnTime = 60;
-    mDestroyTime = 0;
+    mDestroyTime = 3;
     mIndicateTime = 75;
     mStateTimer = 0;
     mAggression = 1;
@@ -236,6 +236,18 @@ void entity::destroyTransition()
 
     ++mGenId;
 
+    // Explode the object into line entities
+    game::mEnemies.explodeEntity(*this);
+}
+
+void entity::destroy()
+{
+    if (--mStateTimer <= 0)
+    {
+        setState(ENTITY_STATE_INACTIVE);
+        return;
+    }
+
     // Throw out some particles
     Point3d pos(this->mPos);
     Point3d angle(0,0,0);
@@ -250,17 +262,6 @@ void entity::destroyTransition()
     pen.a = .9;
     pen.lineRadius=5;
     game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .96, TRUE);
-
-    // Explode the object into line entities
-    game::mEnemies.explodeEntity(*this);
-}
-
-void entity::destroy()
-{
-    if (--mStateTimer <= 0)
-    {
-        setState(ENTITY_STATE_INACTIVE);
-    }
 }
 
 void entity::indicateTransition()

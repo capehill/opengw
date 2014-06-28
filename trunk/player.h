@@ -17,6 +17,7 @@ public:
     virtual void spawn();
     virtual void spawnTransition();
     virtual void destroyTransition();
+    virtual void destroy();
     virtual void indicating();
 
     virtual void draw();
