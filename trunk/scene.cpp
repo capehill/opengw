@@ -14,7 +14,7 @@ void glDisable2D();
 #define VIRTUAL_SCREEN_WIDTH 800
 #define VIRTUAL_SCREEN_HEIGHT 600
 
-vector::pen defaultFontPen(1, 1, 0, .6, 3);
+vector::pen defaultFontPen(0, 1, 0, .6, 3);
 
 scene::scene()
 {
@@ -316,6 +316,7 @@ void scene::draw(int pass)
 				}
 				else
 				{
+/* Add this back for coinop support
 					drawCredits();
 
 					vector::pen pen = defaultFontPen;
@@ -324,6 +325,7 @@ void scene::draw(int pass)
 					pen.a=.1;
 					pen.lineRadius = 8;
 					font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.2, &pen, "Insert Coins");
+*/
 				}
 			}
         }

@@ -211,8 +211,8 @@ grid::grid()
     vector::pen darkColor(0.2f, 0.2f, 1.0f, (0.15f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
     vector::pen lightColor(0.2f, 0.2f, 1.0f, (0.4f * ((scene::mPass == scene::RENDERPASS_PRIMARY) ? .75 : .25)) * brightness, 0);
 #else
-    vector::pen darkColor(0.2f, 0.2f, 1.0f, 0.15f * brightness, 0);
-    vector::pen lightColor(.2f, 0.2f, 1.0f, 0.4f * brightness, 0);
+    vector::pen darkColor(0.4f, 0.4f, 1.0f, 0.15f * brightness, 0);
+    vector::pen lightColor(.4f, 0.4f, 1.0f, 0.4f * brightness, 0);
 #endif
 
     unsigned int i=0;

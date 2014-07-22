@@ -2,8 +2,6 @@
 #include "game.h"
 #include "entityPlayerMissile.h"
 
-extern vector::pen defaultFontPen;
-
 entityPlayer1::entityPlayer1()
     : player()
 {
@@ -17,7 +15,7 @@ entityPlayer1::entityPlayer1()
     mPen = vector::pen(1, 1, 1, 1, 12);
     mExhaustPen = vector::pen(.96, 1, .68, 40, 5);
     mMissilesPen = vector::pen(.96, 1, .68, 40, 5);
-    mFontPen = vector::pen(defaultFontPen, 40, 5);
+    mFontPen = vector::pen(1, 1, 0, 40, 5);
 
     mPos.x = theGame.mGrid.extentX() / 2;
     mPos.y = theGame.mGrid.extentY() / 2;
@@ -59,7 +57,7 @@ void entityPlayer1::initPlayerForGame()
         mPen = vector::pen(1, 1, 1, 1, 12);
         mExhaustPen = vector::pen(.9, 1, .35, 1, 5);
         mMissilesPen = vector::pen(.9, 1, .35, 1, 5);
-        mFontPen = vector::pen(defaultFontPen, 1, 5);
+        mFontPen = vector::pen(1, 1, 0, 1, 5);
 
         mPos.x = theGame.mGrid.extentX() / 2;
         mPos.y = theGame.mGrid.extentY() / 2;

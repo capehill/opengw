@@ -152,6 +152,13 @@ public:
     static int m2PlayerNumLives;
     static int m2PlayerNumBombs;
 
+    // SETTINGS
+    bool mGridSmoothing;
+    bool mParticleSmoothing;
+    bool mEnemySmoothing;
+    bool mPlayerSmoothing;
+    bool mStarSmoothing;
+
 private:
     typedef struct
     {
@@ -179,13 +186,6 @@ private:
     bool mDebounce;
 
     entity* mAttractModeBlackHoles[4];
-
-    // SETTINGS
-    bool mGridSmoothing;
-    bool mParticleSmoothing;
-    bool mEnemySmoothing;
-    bool mPlayerSmoothing;
-    bool mStarSmoothing;
 
 };
 

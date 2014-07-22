@@ -35,7 +35,7 @@ void entityLine::spawnTransition()
 
 void entityLine::run()
 {
-    mPen.a *= .97;
+    mPen.a *= .9;
 
     if (--mTimeToLive <= 0)
     {

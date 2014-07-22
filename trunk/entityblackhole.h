@@ -35,6 +35,8 @@ public:
 
     float mStrength;
 
+    int mFeedCount;
+
     int mPoints;
 
 private:
@@ -43,7 +45,7 @@ private:
     float mHumSpeed;
     float mHumSpeedTarget;
     int mHumLoopSoundId;
-    int mFeedCount;
+    float mGridPullIndex;
 };
 
 #endif // ENTITYBLACKHOLE_H

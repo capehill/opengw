@@ -298,24 +298,28 @@ void game::run()
                 // Slow the music down when someone is respawning
                 if (this->mPlayers.mPlayer1->mJoined && (game::mPlayers.mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = 0;
+                    mMusicSpeed = .5;
                 }
                 if (this->mPlayers.mPlayer2->mJoined && (game::mPlayers.mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = 0;
+                    mMusicSpeed = .5;
                 }
                 if (this->mPlayers.mPlayer3->mJoined && (game::mPlayers.mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = 0;
+                    mMusicSpeed = .5;
                 }
                 if (this->mPlayers.mPlayer4->mJoined && (game::mPlayers.mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED))
                 {
-                    mMusicSpeedTarget = .5;
+                    mMusicSpeedTarget = 0;
+                    mMusicSpeed = .5;
                 }
 
                 if (mMusicSpeed < mMusicSpeedTarget)
 				{
-                    mMusicSpeed += .01;
+                    mMusicSpeed += .005;
 					if (mMusicSpeed > mMusicSpeedTarget)
 						mMusicSpeed = mMusicSpeedTarget;
 				}

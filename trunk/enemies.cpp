@@ -486,31 +486,38 @@ void enemies::explodeEntity(entity& e)
         if (line)
         {
             vector::pen pen = e.getPen();
-            pen.r *= 1.2;
-            pen.g *= 1.2;
-            pen.b *= 1.2;
-            if (pen.r > 1) pen.r = 1;
-            if (pen.g > 1) pen.g = 1;
-            if (pen.b > 1) pen.b = 1;
-            pen.a = 2;
+            pen.r *= 1.5;
+            pen.g *= 1.5;
+            pen.b *= 1.5;
+//            if (pen.r > 1) pen.r = 1;
+//            if (pen.g > 1) pen.g = 1;
+//            if (pen.b > 1) pen.b = 1;
+            pen.a = 5;
             line->setPen(pen);
 
             Point3d from = m->mVertexList[m->mEdgeList[i].from];
             Point3d to = m->mVertexList[m->mEdgeList[i].to];
             Point3d midpoint((from.x + to.x) / 2, (from.y + to.y) / 2, 0);
 
+            Point3d offset(midpoint.x, midpoint.y);
+
+            from.x -= offset.x;
+            from.y -= offset.y;
+            to.x -= offset.x;
+            to.y -= offset.y;
+
             line->addEndpoints(from, to);
-            line->setPos(objectPos);
+            line->setPos(objectPos + midpoint);
             line->setScale(e.getScale());
             line->setAngle(e.getAngle());
 
-            line->setRotationRate((mathutils::frandFrom0To1() * .04) - .02);
+            line->setRotationRate((mathutils::frandFrom0To1() * .8) - .4);
 
             float angle = mathutils::calculate2dAngle(Point3d(0,0,0), midpoint);
 
             float variation = (mathutils::frandFrom0To1() * 2) - 1;
 
-            Point3d speedVector(0,.3,0);
+            Point3d speedVector(0,.5,0);
             speedVector = mathutils::rotate2dPoint(speedVector, angle + variation);
 
             speedVector += e.getDrift() * .1;

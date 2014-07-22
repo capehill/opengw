@@ -1,5 +1,6 @@
 #include "particle.h"
 #include "game.h"
+#include "entityBlackHole.h"
 
 #define VIRTUAL_SCREEN_WIDTH 800 // FIX ME
 #define VIRTUAL_SCREEN_HEIGHT 600 // FIX ME
@@ -62,7 +63,25 @@ static int runThread(void *ptr)
                             particle->speedX += speed.x;
                             particle->speedY += speed.y;
                         }
-
+#if 1
+                        // Evaluate against black holes
+                        for (int i=0; i<NUM_ENEMIES; i++)
+                        {
+                            if ((game::mEnemies.mEnemies[i]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (game::mEnemies.mEnemies[i]->getState() == entity::ENTITY_STATE_RUNNING))
+                            {
+                                entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
+                                if (blackHole->mActivated)
+                                {
+                                    if (mathutils::calculate2dDistance(particle->posStream[0], blackHole->getPos()) < blackHole->getRadius()*1.01)
+                                    {
+                                        // kill this particle
+                                        particle->timeToLive *= .7;
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+#endif
                         // Add drag
                         particle->speedX *= particle->drag;
                         particle->speedY *= particle->drag;
@@ -112,7 +131,7 @@ static int runThread(void *ptr)
 
 particle::particle()
 {
-    mNumParticles = 2000; // PERFORMANCE: The larger this number is, the larger the performance hit!
+    mNumParticles = 3000; // PERFORMANCE: The larger this number is, the larger the performance hit!
     mIndex = 0;
 
     mParticles = new PARTICLE[mNumParticles];
@@ -244,8 +263,13 @@ void particle::draw()
 
                 float width = speedNormal * 8;
                 if (width > 4) width = 4;
+                else if (width < 1) width = 1;
 
-                glColor4f(particle->color.r, particle->color.g, particle->color.b, a); // RGBA
+                if (scene::mPass == scene::RENDERPASS_BLUR)
+                {
+                    width *= 4;
+                }
+
                 glLineWidth(width);
 
                 // This is SO inefficient
@@ -255,13 +279,25 @@ void particle::draw()
 
                 glBegin(GL_LINES);
 
+                float aa = a;
+                if (aa > 1) aa = 1;
                 for (int p=0; p<NUM_POS_STREAM_ITEMS-1; p++)
                 {
+                    if (aa <= 0) break;
+
+                    glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
+
                     Point3d from = particle->posStream[p];
                     Point3d to = particle->posStream[p+1];
 
+                    glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
                     glVertex3d(from.x, from.y, 0);
+                    aa-=.1;
+
+                    glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
                     glVertex3d(to.x, to.y, 0);
+                    aa-=.1;
+
                 }
 
         	    glEnd();

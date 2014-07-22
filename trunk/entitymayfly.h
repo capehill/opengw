@@ -10,6 +10,7 @@ public:
     entityMayfly();
 
     virtual void run();
+    virtual void draw();
 
     int mFlipTimer;
     int mFlipDirection;

@@ -17,8 +17,6 @@ void blackholes::run()
             entityBlackHole* blackHole = static_cast<entityBlackHole*>(game::mEnemies.mEnemies[i]);
             if (blackHole->mActivated)
             {
-/*
-                // I'm not sure it's accurate to suck players into black holes. I'll have to double check.
                 //
                 // Players
                 for (int p=0; p<2; p++)
@@ -32,7 +30,6 @@ void blackholes::run()
                         if (distance < blackHole->getRadius())
                         {
                             // Destroy the player
-//                            player->setState(entity::ENTITY_STATE_DESTROY_TRANSITION);
                         }
                         else
                         {
@@ -54,7 +51,6 @@ void blackholes::run()
                         }
                     }
                 }
-*/
 
                 for (int j=0; j<NUM_ENEMIES; j++)
                 {
@@ -69,18 +65,37 @@ void blackholes::run()
 
                             if (game::mEnemies.mEnemies[j]->getType() == entity::ENTITY_TYPE_BLACKHOLE)
                             {
-                                // It's another black hole. Keep it at the proper distance
+                                // It's another black hole. Keep it at the proper distance or combine it
 
                                 entityBlackHole* blackHole2 = static_cast<entityBlackHole*>(enemy);
 //                                if (blackHole2->mActivated)
                                 {
                                     float totalRadius = blackHole->getRadius()+blackHole2->getRadius();
+                                    if (distance < 6)
+                                    {
+                                        // Combine both black holes
 
-                                    if (distance < (totalRadius*2))
+                                        Point3d avgPos = (blackHole->getPos() + blackHole2->getPos()) * .5;
+                                        float strength = max(blackHole->mStrength, blackHole2->mStrength);
+                                        int feedCount = blackHole->mFeedCount + blackHole2->mFeedCount;
+
+                                        // Upgrade the first one
+                                        blackHole->setPos(avgPos);
+                                        blackHole->mStrength = strength;
+                                        blackHole->mFeedCount = feedCount;
+                                        blackHole->feed(blackHole2->mPoints);
+                                        blackHole->feed(0);
+
+                                        // Kill the second one
+                                        blackHole2->setState(entity::ENTITY_STATE_DESTROY_TRANSITION);
+
+                                        game::mSound.playTrack(SOUNDID_GRAVITYWELLHIT);
+                                    }
+                                    else if (distance < totalRadius)
                                     {
                                         // Push them away from each other if they get too close
 
-                                        float strength = 10;
+                                        float strength = 6;
                                         if (distance < blackHole->getRadius())
                                         {
                                             distance = blackHole->getRadius();

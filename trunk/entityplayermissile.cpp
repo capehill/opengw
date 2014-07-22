@@ -205,7 +205,7 @@ void entityPlayerMissile::destroyTransition()
     int timeToLive = 200;
     vector::pen pen = mPen;
     pen.lineRadius=5;
-    pen.a = 1;
+    pen.a = .7;
     game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive);
 }
 

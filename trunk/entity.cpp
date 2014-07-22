@@ -20,7 +20,7 @@ entity::entity()
     : mType(ENTITY_TYPE_UNDEF)
 {
     setState(ENTITY_STATE_INACTIVE);
-    mSpawnTime = 60;
+    mSpawnTime = 40;
     mDestroyTime = 3;
     mIndicateTime = 75;
     mStateTimer = 0;
@@ -251,17 +251,17 @@ void entity::destroy()
     // Throw out some particles
     Point3d pos(this->mPos);
     Point3d angle(0,0,0);
-    float speed = 3.5;
+    float speed = 2.0;
     float spread = 2*PI;
-    int num = 50;
+    int num = 20;
     int timeToLive = 200;
     vector::pen pen = mPen;
     pen.r *= 1.2;
     pen.g *= 1.2;
     pen.b *= 1.2;
-    pen.a = .9;
+    pen.a = 200;
     pen.lineRadius=5;
-    game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .96, TRUE);
+    game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .97, TRUE);
 }
 
 void entity::indicateTransition()

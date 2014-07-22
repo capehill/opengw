@@ -40,8 +40,8 @@ public:
         mModel.mNumVertex = 3;
         mModel.mVertexList = new Point3d[mModel.mNumVertex];
         mModel.mVertexList[i++] = Point3d(0, .9);
-        mModel.mVertexList[i++] = Point3d(.5, -.5);
-        mModel.mVertexList[i++] = Point3d(-.5, -.5);
+        mModel.mVertexList[i++] = Point3d(.6, -.6);
+        mModel.mVertexList[i++] = Point3d(-.6, -.6);
 
         i = 0;
 

@@ -26,6 +26,8 @@ entityBlackHole::entityBlackHole()
     mBalance = 0;
     mBalanceRate = 0;
 
+    mGridPullIndex = mathutils::frandFrom0To1();
+
     mHumLoopSoundId = -1;
 
     // This entity doesn't use a model
@@ -62,7 +64,6 @@ void entityBlackHole::run()
     if (mActivated)
     {
         mStrength += .0003;
-//        if (mStrength > 1.8) mStrength = 1.8;
 
         if (mHumLoopSoundId == -1)
             mHumLoopSoundId = game::mSound.playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
@@ -117,8 +118,27 @@ void entityBlackHole::run()
         attractor::Attractor* att = game::mAttractors.getAttractor();
         if (att)
         {
-            att->strength = -25 * dir;
-            att->radius = 10;
+            float s = sin(mGridPullIndex);
+
+            if (fabs(s) > .7)
+            {
+                mGridPullIndex += 0.2f;
+            }
+            else
+            {
+                mGridPullIndex += 0.04f;
+            }
+
+            if (s > 0) s *= .5;
+            s = ((s+1)/2) + .5;
+
+//            mGridPullIndex += 0.04f;
+//            s = ((s+1)/2) + 1;
+
+
+            att->strength = s * -30;
+
+            att->radius = 6;
 
             att->pos = mPos;
             att->enabled = TRUE;
@@ -136,13 +156,11 @@ void entityBlackHole::run()
     mSpeed *= .98;
 
     mAnimationIndex+=mAnimationSpeed;
-//    mAttractorStrengthIndex += .05;
 
     entity::run();
 
 
     // Keep it on the grid
-    // THIS IS WRONG!!!!
 
     const float leftEdge = getRadius();
     const float bottomEdge = getRadius();
@@ -244,13 +262,13 @@ void entityBlackHole::indicateTransition()
 
 void entityBlackHole::hit(entity* aEntity)
 {
+    game::mSound.playTrack(SOUNDID_GRAVITYWELLHIT);
+
     entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
     if (missile)
     {
         if (mActivated)
         {
-            game::mSound.playTrack(SOUNDID_GRAVITYWELLHIT);
-
             mStrength *= .98;
 
             if (mStrength < .7)
@@ -357,6 +375,10 @@ void entityBlackHole::hit(entity* aEntity)
     }
     else if (aEntity && aEntity->getType() == entity::ENTITY_TYPE_BLACKHOLE)
     {
+        // This code can probably go away
+        // This code can probably go away
+        // This code can probably go away
+
         mActivated = TRUE;
 
         mBalance = 2;
@@ -372,6 +394,10 @@ void entityBlackHole::hit(entity* aEntity)
             att->enabled = TRUE;
             att->attractsParticles = FALSE;
         }
+
+        // This code can probably go away
+        // This code can probably go away
+        // This code can probably go away
     }
     else
     {
@@ -480,9 +506,30 @@ void entityBlackHole::drawRing()
     }
 
     // Enable if you want the black holes to appear as "holes" in the grid
-#if 1
+#if 0
+    if (activated && (mState != entity::ENTITY_STATE_SPAWNING) && (scene::mPass != scene::RENDERPASS_PRIMARY))
+    {
+        glDisable(GL_BLEND);
+
+        glColor4f(1, .5, .5, 1);
+
+        glBegin(GL_TRIANGLE_FAN);
+
+        glVertex3f( mPos.x, mPos.y, 0 );
+
+        float c = r*1.5;
+
+        for (float angle = 0; angle < 2.01*PI; angle += delta_theta )
+            glVertex3f( mPos.x + (c*get_cos(angle)), mPos.y + (c*get_sin(angle)), 0 );
+
+        glEnd();
+
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    }
+
     if (activated && (mState != entity::ENTITY_STATE_SPAWNING))
     {
+        glEnable(GL_BLEND);
         glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 
         glColor4f(0, 0, 0, 1);
@@ -574,21 +621,33 @@ void entityBlackHole::drawRing()
         glLineWidth(mPen.lineRadius);
     }
 
+    if (!theGame.mEnemySmoothing)
+    {
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_MULTISAMPLE);
+    }
 
     glBegin(GL_LINE_LOOP);
 
     for (float angle = 0; angle < 2*PI; angle += delta_theta )
+    {
         glVertex3f( mPos.x + (r*get_cos(angle)), mPos.y + (r*get_sin(angle)), 0 );
+    }
 
     glEnd();
 
+    if (!theGame.mEnemySmoothing)
+    {
+        glDisable(GL_MULTISAMPLE);
+        glDisable(GL_LINE_SMOOTH);
+    }
 }
 
 void entityBlackHole::feed(int points)
 {
     mPoints += points * 2;
-    mStrength += .08;
-    mBalanceRate += .2;
+    mStrength += .06;
+    mBalanceRate += .14;
     ++mFeedCount;
 }
 
@@ -599,6 +658,7 @@ const float entityBlackHole::getRadius() const
     {
         r = mRadius + (get_sin(mAnimationIndex)*mAnimationDepth);
         r *= mStrength + (mBalance*.1);
+        r *= 2;
     }
     else
     {
