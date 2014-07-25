@@ -377,7 +377,7 @@ void entitySnake::spawnTransition()
     entity::spawnTransition();
 
 	// Aim towards the closest player
-	mAngle = mathutils::calculate2dAngle(mPos, game::mPlayers.getPlayerClosestToPosition(mPos)->getPos()) + mathutils::DegreesToRads(-90);
+	mAngle = mathutils::frandFrom0To1() * 2 * PI;
 
     updateTarget();
 

@@ -723,7 +723,7 @@ void game::startGame(GameType gameType)
     mBrightness = -2; // we fade in the grid on start game
 
     mCamera.center();
-    mCamera.mCurrentZoom = 0;//PDH 120
+    mCamera.mCurrentZoom = 0;
 
     mLevel = 0;
 

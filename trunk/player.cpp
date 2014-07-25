@@ -146,14 +146,14 @@ void player::run()
             int num = 1;
             int timeToLive = 200;
             vector::pen pen = this->getExhaustPen();
-            pen.a = 20;
+            pen.a = 200;
 
             // Main stream
             {
                 float spread = .1;
                 exhaustOffset = mathutils::rotate2dPoint(Point3d(0, -2, 0), currentAngle);
                 exhaustOffset += getPos();
-                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
+                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .92, FALSE);
             }
             // First swirl
             {
@@ -161,7 +161,7 @@ void player::run()
                 exhaustOffset += getPos();
 
                 float spread = 0;
-                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
+                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .92, FALSE);
             }
             // Second swirl
             {
@@ -169,7 +169,7 @@ void player::run()
                 exhaustOffset += getPos();
 
                 float spread = 0;
-                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .93, FALSE);
+                game::mParticles.emitter(&exhaustOffset, &exhaustAngle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .92, FALSE);
             }
             mExhaustSpreadIndex += .18;
 
@@ -362,11 +362,15 @@ void player::spawn()
 
     // Rez-up grid distortion
 
+    float b = (float)mStateTimer / mSpawnTime;
+    b = 1 - b;
+    b = (b * 2) - 1;
+
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
     {
-        att->strength = -.5;
-        att->radius = 100;
+        att->strength = fabs(40 * b);
+        att->radius = fabs(40 * b);
         att->pos = mPos;
         att->enabled = TRUE;
         att->attractsParticles = TRUE;

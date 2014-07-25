@@ -132,10 +132,6 @@ void entityBlackHole::run()
             if (s > 0) s *= .5;
             s = ((s+1)/2) + .5;
 
-//            mGridPullIndex += 0.04f;
-//            s = ((s+1)/2) + 1;
-
-
             att->strength = s * -30;
 
             att->radius = 6;
@@ -188,6 +184,50 @@ void entityBlackHole::run()
         mSpeed.y = -mSpeed.y;
     }
 
+    if (mActivated)
+    {
+        float delta_theta = .1;
+        for (float a = 0; a < 2*PI; a += delta_theta )
+        {
+            if (mathutils::frandFrom0To1() > .99)
+            {
+                float r = mRadius * 8 * mathutils::frandFrom0To1();
+                Point3d pos = Point3d(r*get_cos(a), r*get_sin(a), 0);
+                pos += mPos;
+
+                Point3d direction(0,1,0);
+                mathutils::rotate2dPoint(direction, mathutils::frandFrom0To1()*2*PI);
+                float speed = 0.1;
+                float spread = 2*PI;
+                int num = 1;
+                int timeToLive = mathutils::frandFrom0To1() * 300;
+
+                vector::pen pen;
+                pen.r = mathutils::frandFrom0To1();
+                pen.g = mathutils::frandFrom0To1();
+                pen.b = mathutils::frandFrom0To1();
+                pen.a = 100;
+
+                pen.lineRadius=5;
+                game::mParticles.emitter(&pos, &direction, speed, spread, num, &pen, timeToLive, true, true, .95);
+            }
+        }
+/*
+
+        for (int i=0; i<20; i++)
+        {
+            Point3d pos(this->mPos);
+            Point3d angle(0,0,0);
+            float speed = ((float)i/200) * 5;
+            float spread = 2*PI;
+            int num = 1;
+            int timeToLive = mathutils::frandFrom0To1() * 300;
+            vector::pen pen = mPen;
+            pen.lineRadius=5;
+            game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive);
+        }
+*/
+    }
 }
 
 void entityBlackHole::spawnTransition()

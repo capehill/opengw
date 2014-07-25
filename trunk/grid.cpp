@@ -87,6 +87,7 @@ static int runThread(void *ptr)
                 {
                     for(x=xstart; x<=xend; ++x)
                     {
+                        //Point3d gpoint = (gridxy(x,y).pos + gridxy(x,y).center) * .5;
                         Point3d gpoint = gridxy(x,y).pos;
                         Point3d apoint = att.pos;
 

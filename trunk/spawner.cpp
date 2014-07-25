@@ -146,7 +146,7 @@ void spawner::run(void)
 /*
     if (numWaveData() == 0)
     {
-        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, 100);
+        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, 1);
     }
     runWaves();
     return;

@@ -270,6 +270,8 @@ void particle::draw()
                     width *= 4;
                 }
 
+                if (width < 2) width = 2;
+
                 glLineWidth(width);
 
                 // This is SO inefficient
@@ -289,6 +291,12 @@ void particle::draw()
 
                     Point3d from = particle->posStream[p];
                     Point3d to = particle->posStream[p+1];
+
+                    if ((from.x == to.x) && (from.y == to.y))
+                    {
+                        to.x += .1;
+                        to.y += .1;
+                    }
 
                     glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
                     glVertex3d(from.x, from.y, 0);
