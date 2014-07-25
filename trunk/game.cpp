@@ -15,7 +15,7 @@ spawner game::mSpawner;
 bomb game::mBomb;
 highscore game::mHighscore;
 grid game::mGrid;
-
+settings game::mSettings;
 
 #define NUM_POINT_DISPLAYS 40
 #define TIME_POINT_DISPLAY 50
@@ -26,7 +26,6 @@ int game::mSkillLevel;
 game::GameMode game::mGameMode;
 game::GameType game::mGameType;
 game::PointDisplay* game::mPointDisplays;
-BOOL game::mFreeplay = TRUE;
 BOOL game::mPaused = FALSE;
 int game::mCredits = 0;
 int game::mLevel = 0;
@@ -36,15 +35,6 @@ int game::m2PlayerNumBombs = 0;
 
 game::game()
 {
-    //
-    // Settings
-    //
-    mGridSmoothing = false;
-    mParticleSmoothing = false;
-    mEnemySmoothing = false;
-    mPlayerSmoothing = true;
-    mStarSmoothing = true;
-
     //
     // Load our sounds
     //
@@ -156,7 +146,7 @@ void game::run()
     }
     creditButtonLast = creditButton;
 
-    if (mFreeplay)
+    if (mSettings.mCreditsPerGame == 0)
     {
         mCredits = 4;
     }
@@ -566,7 +556,7 @@ void game::draw(int pass)
 #endif
             )
         {
-            if (mGridSmoothing)
+            if (mSettings.mGridSmoothing)
             {
                 glEnable(GL_LINE_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
@@ -576,7 +566,7 @@ void game::draw(int pass)
             mGrid.brightness = mBrightness;
             mGrid.draw();
 
-            if (mGridSmoothing)
+            if (mSettings.mGridSmoothing)
             {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_LINE_SMOOTH);
@@ -586,7 +576,7 @@ void game::draw(int pass)
         // Particles
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            if (mParticleSmoothing)
+            if (mSettings.mParticleSmoothing)
             {
                 glEnable(GL_LINE_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
@@ -596,7 +586,7 @@ void game::draw(int pass)
 
             mParticles.draw();
 
-            if (mParticleSmoothing)
+            if (mSettings.mParticleSmoothing)
             {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_LINE_SMOOTH);
@@ -617,7 +607,7 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                if (mEnemySmoothing)
+                if (mSettings.mEnemySmoothing)
                 {
                     glEnable(GL_LINE_SMOOTH);
                     glEnable(GL_MULTISAMPLE);
@@ -625,7 +615,7 @@ void game::draw(int pass)
 
                 mEnemies.draw();
 
-                if (mEnemySmoothing)
+                if (mSettings.mEnemySmoothing)
                 {
                     glDisable(GL_MULTISAMPLE);
                     glDisable(GL_LINE_SMOOTH);
@@ -645,7 +635,7 @@ void game::draw(int pass)
 
             if (pass == scene::RENDERPASS_PRIMARY)
             {
-                if (mPlayerSmoothing)
+                if (mSettings.mPlayerSmoothing)
                 {
                     glEnable(GL_LINE_SMOOTH);
                     glEnable(GL_MULTISAMPLE);
@@ -653,7 +643,7 @@ void game::draw(int pass)
 
                 mPlayers.draw();
 
-                if (mPlayerSmoothing)
+                if (mSettings.mPlayerSmoothing)
                 {
                     glDisable(GL_MULTISAMPLE);
                     glDisable(GL_LINE_SMOOTH);
@@ -672,7 +662,7 @@ void game::draw(int pass)
         // Stars
         if (pass == scene::RENDERPASS_PRIMARY)
         {
-            if (mStarSmoothing)
+            if (mSettings.mStarSmoothing)
             {
                 glEnable(GL_POINT_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
@@ -680,7 +670,7 @@ void game::draw(int pass)
 
             mStars.draw();
 
-            if (mStarSmoothing)
+            if (mSettings.mStarSmoothing)
             {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_POINT_SMOOTH);

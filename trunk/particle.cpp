@@ -63,7 +63,7 @@ static int runThread(void *ptr)
                             particle->speedX += speed.x;
                             particle->speedY += speed.y;
                         }
-#if 1
+
                         // Evaluate against black holes
                         for (int i=0; i<NUM_ENEMIES; i++)
                         {
@@ -81,7 +81,7 @@ static int runThread(void *ptr)
                                 }
                             }
                         }
-#endif
+
                         // Add drag
                         particle->speedX *= particle->drag;
                         particle->speedY *= particle->drag;

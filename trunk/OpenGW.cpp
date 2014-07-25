@@ -416,88 +416,87 @@ void createOffscreens()
 
 }
 
-#define DO_BLUR // PERFORMANCE: Enabling this has a large impact on performance!
-
 void drawOffscreens()
 {
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT,(int*)viewport);
 
-#ifdef DO_BLUR
-    // Draw to the blur texture
+    if (theGame.mSettings.mEnableGlow)
     {
-        glViewport(0, 0, blurBufferWidth, blurBufferHeight);
+        // Draw to the blur texture
+        {
+            glViewport(0, 0, blurBufferWidth, blurBufferHeight);
 
-        oglScene.draw(scene::RENDERPASS_BLUR);
+            oglScene.draw(scene::RENDERPASS_BLUR);
 
-        // Transfer image to the blur texture
-        glBindTexture(GL_TEXTURE_2D, texOffscreen);
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, blurBufferWidth, blurBufferHeight, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+            // Transfer image to the blur texture
+            glBindTexture(GL_TEXTURE_2D, texOffscreen);
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, blurBufferWidth, blurBufferHeight, 0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
     }
-#endif
 
     // Draw the scene normally
     glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
     oglScene.draw(scene::RENDERPASS_PRIMARY);
 
-#ifdef DO_BLUR
-
-    ///////////////////////////////////////////////////////
-    // Do blur
-
-    // Bind the blur texture and copy the screen bits to it
-    glBindTexture(GL_TEXTURE_2D, texOffscreen);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
-
-    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+    if (theGame.mSettings.mEnableGlow)
     {
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 8);
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 8);
-    }
-    else
-    {
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 4);
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 4);
-    }
+        ////////////////////////////////////////////////
+        // Do blur
 
-    // Bind the blur result back to our texture
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, blurBufferWidth, blurBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
+        // Bind the blur texture and copy the screen bits to it
+        glBindTexture(GL_TEXTURE_2D, texOffscreen);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
 
-    ////////////////////////////////////////////////
-    // Draw the blur texture on top of the existing scene
+        if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+        {
+            superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 8);
+            superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 8);
+        }
+        else
+        {
+            superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 4);
+            superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, 4);
+        }
 
-	// Glowy blending effect
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        // Bind the blur result back to our texture
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, blurBufferWidth, blurBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
 
-    glEnable( GL_TEXTURE_2D );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+        ////////////////////////////////////////////////
+        // Draw the blur texture on top of the existing scene
 
-    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
-        glColor4f(1, 1, 1, 1);
-    else
-        glColor4f(1, 1, 1, 1);
+	    // Glowy blending effect
+	    glDisable(GL_DEPTH_TEST);
+	    glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    // Draw it on the screen
-    glBegin( GL_QUADS );
-    glTexCoord2d(0.0,0.0); glVertex2d(-1.0, -1.0);
-    glTexCoord2d(1.0,0.0); glVertex2d(1.0, -1.0);
-    glTexCoord2d(1.0,1.0); glVertex2d(1.0, 1.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
-    if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
-    {
+        glEnable( GL_TEXTURE_2D );
+        glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+        if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+            glColor4f(1, 1, 1, 1);
+        else
+            glColor4f(1, 1, 1, 1);
+
+        // Draw it on the screen
+        glBegin( GL_QUADS );
         glTexCoord2d(0.0,0.0); glVertex2d(-1.0, -1.0);
         glTexCoord2d(1.0,0.0); glVertex2d(1.0, -1.0);
         glTexCoord2d(1.0,1.0); glVertex2d(1.0, 1.0);
         glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
-    }
-    glEnd();
+        if (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED)
+        {
+            glTexCoord2d(0.0,0.0); glVertex2d(-1.0, -1.0);
+            glTexCoord2d(1.0,0.0); glVertex2d(1.0, -1.0);
+            glTexCoord2d(1.0,1.0); glVertex2d(1.0, 1.0);
+            glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+        }
+        glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable( GL_TEXTURE_2D );
-#endif
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable( GL_TEXTURE_2D );
+    }
 }
 
 

@@ -355,7 +355,7 @@ void scene::draw(int pass)
 
 void scene::drawCredits()
 {
-    if (game::mFreeplay)
+    if (game::mSettings.mCreditsPerGame == 0)
     {
 /*
         vector::pen pen = defaultFontPen;
@@ -578,7 +578,7 @@ void scene::glDisable2D()
 
 void scene::showHighScores()
 {
-	if (game::mFreeplay || game::mCredits)
+	if (game::mSettings.mCreditsPerGame == 0 || game::mCredits)
 	{
 		game::mGameMode = game::GAMEMODE_CREDITED;
 	}

@@ -21,6 +21,8 @@
 #include "spawner.h"
 #include "bomb.h"
 #include "highscore.h"
+#include "settings.h"
+
 
 enum
 {
@@ -135,14 +137,13 @@ public:
     static spawner mSpawner;
     static bomb mBomb;
 	static highscore mHighscore;
+    static settings mSettings;
 
     static int mSkillLevel;
 
     static GameMode mGameMode;
 
     static GameType mGameType;
-
-    static BOOL mFreeplay;
 
     static BOOL mPaused;
 
@@ -151,13 +152,6 @@ public:
 
     static int m2PlayerNumLives;
     static int m2PlayerNumBombs;
-
-    // SETTINGS
-    bool mGridSmoothing;
-    bool mParticleSmoothing;
-    bool mEnemySmoothing;
-    bool mPlayerSmoothing;
-    bool mStarSmoothing;
 
 private:
     typedef struct

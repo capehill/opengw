@@ -661,7 +661,7 @@ void entityBlackHole::drawRing()
         glLineWidth(mPen.lineRadius);
     }
 
-    if (!theGame.mEnemySmoothing)
+    if (!theGame.mSettings.mEnemySmoothing)
     {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_MULTISAMPLE);
@@ -676,7 +676,7 @@ void entityBlackHole::drawRing()
 
     glEnd();
 
-    if (!theGame.mEnemySmoothing)
+    if (!theGame.mSettings.mEnemySmoothing)
     {
         glDisable(GL_MULTISAMPLE);
         glDisable(GL_LINE_SMOOTH);
