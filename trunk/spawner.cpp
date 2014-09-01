@@ -33,7 +33,7 @@ void spawner::run(void)
     // Update our spawn index
     if (getSpawnIndex() < MAX_SPAWN_INDEX)
     {
-        mSpawnIndex += .001;
+        mSpawnIndex += .0008;
         if (mSpawnIndex > MAX_SPAWN_INDEX) mSpawnIndex = MAX_SPAWN_INDEX;
         if (getSpawnIndex() > mLastSpawnIndex)
         {
@@ -142,7 +142,6 @@ void spawner::run(void)
     }
 
 
-
 /*
     if (numWaveData() == 0)
     {
@@ -221,7 +220,7 @@ void spawner::run(void)
         {
             mWaveStartTimer = 0;
 
-            switch ((int)(mathutils::frandFrom0To1() * 12))
+            switch ((int)(mathutils::frandFrom0To1() * 13))
             {
                 //
                 // SWARM TYPE
@@ -242,10 +241,13 @@ void spawner::run(void)
                     newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_SPINNER, max(20, ceil(numEnemySpinner * mSpawnProgress)));
                     break;
                 case 4:
-//                    newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress));
+                    if (index > 4)
+                    {
+                        newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_BLACKHOLE, max(4, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress)));
+                    }
                     break;
                 case 5:
-                    if (index > 10)
+                    if (index > 8)
                     {
                         newWave(WAVETYPE_SWARM, entity::ENTITY_TYPE_MAYFLY, max(50, ceil(numEnemyMayfly * mSpawnProgress)));
                     }
@@ -272,7 +274,7 @@ void spawner::run(void)
 //                    newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_BLACKHOLE, ceil(mathutils::frandFrom0To1() * numEnemyBlackHole * mSpawnProgress) / 2);
                     break;
                 case 11:
-                    if (index > 8)
+                    if (index > 4)
                     {
                         newWave(WAVETYPE_RUSH, entity::ENTITY_TYPE_REPULSOR, ceil(mathutils::frandFrom0To1() * numEnemyRepulsor * mSpawnProgress) / 2);
                     }

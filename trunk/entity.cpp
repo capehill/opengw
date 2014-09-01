@@ -266,6 +266,7 @@ void entity::destroy()
 
 void entity::indicateTransition()
 {
+    ++mGenId;
     mStateTimer = mIndicateTime;
     setState(ENTITY_STATE_INDICATING);
 }

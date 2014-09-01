@@ -182,6 +182,9 @@ void game::run()
     // Run the point displays
     runPointDisplays();
 
+    // Run the enemies
+    mEnemies.run();
+
     switch(mGameMode)
     {
         case GAMEMODE_ATTRACT:
@@ -270,7 +273,6 @@ void game::run()
                 mCamera.followPlayer();
                 mStars.run();
                 mBlackHoles.run();
-                mEnemies.run();
                 mPlayers.run();
                 mBomb.run();
                 mSpawner.run();
@@ -356,7 +358,8 @@ void game::run()
 					game::mGameMode = game::GAMEMODE_HIGHSCORES_CHECK;
                 else // TODO - MULTIPLAYER HIGH SCORES?????
 */
-                    mGameMode = GAMEMODE_ATTRACT;
+                mGameMode = GAMEMODE_ATTRACT;
+                mCamera.mCurrentZoom = 1;
             }
             break;
     }
@@ -601,7 +604,6 @@ void game::draw(int pass)
         }
 
         // Enemies
-        if (mGameMode == GAMEMODE_PLAYING)
         {
             glLineWidth(4);
 

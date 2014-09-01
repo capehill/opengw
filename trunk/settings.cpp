@@ -5,7 +5,7 @@
 
 settings::settings()
 {
-    mCreditsPerGame = 0; // Freeplay
+    mCreditsPerGame = 0; // 0 = Freeplay
 
     mEnableGlow = true;
 

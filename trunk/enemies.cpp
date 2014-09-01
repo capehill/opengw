@@ -533,8 +533,11 @@ void enemies::disableAllEnemies()
 {
     for (int i=0; i<NUM_ENEMIES; i++)
     {
-        mEnemies[i]->setState(entity::ENTITY_STATE_INACTIVE);
-        mEnemies[i]->incGenId();
+        if (mEnemies[i]->getState() != entity::ENTITY_STATE_INDICATING)
+        {
+            mEnemies[i]->setState(entity::ENTITY_STATE_INACTIVE);
+            mEnemies[i]->incGenId();
+        }
     }
 }
 

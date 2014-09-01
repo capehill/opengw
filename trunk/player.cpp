@@ -133,7 +133,7 @@ void player::run()
             this->setAngle(currentAngle);
 
             // Move
-            Point3d thrust(distance*0.75, 0, 0);
+            Point3d thrust(distance*0.6, 0, 0);
             thrust = mathutils::rotate2dPoint(thrust, currentAngle+mathutils::DegreesToRads(90));
             playerSpeed = thrust;
             this->setPos(this->getPos() + thrust);
@@ -146,7 +146,7 @@ void player::run()
             int num = 1;
             int timeToLive = 200;
             vector::pen pen = this->getExhaustPen();
-            pen.a = 200;
+            pen.a = 100;
 
             // Main stream
             {
@@ -364,13 +364,21 @@ void player::spawn()
 
     float b = (float)mStateTimer / mSpawnTime;
     b = 1 - b;
-    b = (b * 2) - 1;
 
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
     {
-        att->strength = fabs(40 * b);
-        att->radius = fabs(40 * b);
+        att->strength = 20;
+        att->radius = 28 * b;
+        att->pos = mPos;
+        att->enabled = TRUE;
+        att->attractsParticles = TRUE;
+    }
+    att = game::mAttractors.getAttractor();
+    if (att)
+    {
+        att->strength = -20;
+        att->radius = 30 * b;
         att->pos = mPos;
         att->enabled = TRUE;
         att->attractsParticles = TRUE;
@@ -413,7 +421,7 @@ void player::firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed)
         {
             float angle = mathutils::calculate2dAngle(Point3d(0,0,0), fireAngle) + mathutils::DegreesToRads(90);
 
-            float speed = .9;
+            float speed = .7;
             float spread = .4;
             float missileAngle1 = (angle + spread);
             float missileAngle2 = (angle - spread);
@@ -741,8 +749,9 @@ void player::destroyTransition()
 
     mStateTimer = mDestroyTime;
 
-    // Reset the multipler
+    // Reset the multipler stuff
     mMultiplier = 1;
+    mKillCounter = 0;
 
     attractor::Attractor* att = game::mAttractors.getAttractor();
     if (att)
@@ -757,17 +766,17 @@ void player::destroyTransition()
     // Throw out some particles
     Point3d pos(this->mPos);
     Point3d angle(0,0,0);
-    float speed = 2;
+    float speed = 2.0;
     float spread = 2*PI;
-    int num = 200;
-    int timeToLive = 300;
+    int num = 500;
+    int timeToLive = 200;
     vector::pen pen = mPen;
     pen.r *= 1.2;
     pen.g *= 1.2;
     pen.b *= 1.2;
-    pen.a = .8;
+    pen.a = 200;
     pen.lineRadius=5;
-    game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .98, TRUE);
+    game::mParticles.emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, TRUE, TRUE, .97, TRUE);
 
     setState(ENTITY_STATE_DESTROYED);
 
@@ -841,7 +850,7 @@ void player::addKillAtLocation(int points, Point3d pos)
     {
         // Increment the multiplier and display a message
         mKillCounter = 0;
-        if (mMultiplier < 10)
+        if (mMultiplier <= 5)
         {
             ++mMultiplier;
             showMultiplier = true;
