@@ -1,7 +1,8 @@
 #include "menuSelectGameType.h"
 
 
-static int selection = 0;
+int menuSelectGameType::selection = 0;
+
 static bool debounceStart = false;
 
 static float player1Amount = 0;
@@ -173,8 +174,8 @@ void menuSelectGameType::run()
         }
     }
 */
-    const float amountIncrease = .008;
-    const float amountDampener = .992;
+    const float amountIncrease = .02;
+    const float amountDampener = .97;
 
     if (selection == 0)
     {
@@ -187,10 +188,10 @@ void menuSelectGameType::run()
             player1Amount *= amountDampener;
         }
 
-        mpPlayer1Amount *= amountDampener;
-        mpPlayer2Amount *= amountDampener;
-        mpPlayer3Amount *= amountDampener;
-        mpPlayer4Amount *= amountDampener;
+        if (mpPlayer1Amount > 0) mpPlayer1Amount *= amountDampener;
+        if (mpPlayer2Amount > 0) mpPlayer2Amount *= amountDampener;
+        if (mpPlayer3Amount > 0) mpPlayer3Amount *= amountDampener;
+        if (mpPlayer4Amount > 0) mpPlayer4Amount *= amountDampener;
     }
     else if (selection == 1)
     {
@@ -235,8 +236,15 @@ void menuSelectGameType::run()
             mpPlayer4Amount *= amountDampener;
         }
 
-        player1Amount *= amountDampener;
+        if (player1Amount > 0) player1Amount *= amountDampener;
     }
+
+    if (fabs(player1Amount) < amountIncrease) player1Amount = 0;
+    if (fabs(mpPlayer1Amount) < amountIncrease) mpPlayer1Amount = 0;
+    if (fabs(mpPlayer2Amount) < amountIncrease) mpPlayer2Amount = 0;
+    if (fabs(mpPlayer3Amount) < amountIncrease) mpPlayer3Amount = 0;
+    if (fabs(mpPlayer4Amount) < amountIncrease) mpPlayer4Amount = 0;
+
 }
 
 void menuSelectGameType::draw()
@@ -281,7 +289,14 @@ void menuSelectGameType::draw()
 
     // Multiplayer
 
-    pos.x = (theGame.mGrid.extentX() / 2)-30;
+    const float player1xPos = (theGame.mGrid.extentX() / 2)-30;
+    const float player2xPos = (theGame.mGrid.extentX() / 2)-10;
+    const float player3xPos = (theGame.mGrid.extentX() / 2)+10;
+    const float player4xPos = (theGame.mGrid.extentX() / 2)+30;
+
+    // PLAYER 1
+
+    pos.x = player1xPos;
     pos.y = (theGame.mGrid.extentY() / 2)-16;
 
     {
@@ -296,7 +311,9 @@ void menuSelectGameType::draw()
         glEnd();
     }
 
-    pos.x = (theGame.mGrid.extentX() / 2)-10;
+    // PLAYER 2
+
+    pos.x = player2xPos;
     pos.y = (theGame.mGrid.extentY() / 2)-16;
 
     {
@@ -311,8 +328,9 @@ void menuSelectGameType::draw()
         glEnd();
     }
 
+    // PLAYER 3
 
-    pos.x = (theGame.mGrid.extentX() / 2)+10;
+    pos.x = player3xPos;
     pos.y = (theGame.mGrid.extentY() / 2)-16;
 
     {
@@ -327,7 +345,9 @@ void menuSelectGameType::draw()
         glEnd();
     }
 
-    pos.x = (theGame.mGrid.extentX() / 2)+30;
+    // PLAYER 4
+
+    pos.x = player4xPos;
     pos.y = (theGame.mGrid.extentY() / 2)-16;
 
     {
@@ -371,15 +391,51 @@ void menuSelectGameType::draw()
 
         glBegin(GL_LINE_LOOP);
 
-        Point3d p1((theGame.mGrid.extentX() / 2)-40, (theGame.mGrid.extentY() / 2)-25, 0);
-        Point3d p2((theGame.mGrid.extentX() / 2)+40, (theGame.mGrid.extentY() / 2)-25, 0);
-        Point3d p3((theGame.mGrid.extentX() / 2)+40, (theGame.mGrid.extentY() / 2)-7, 0);
-        Point3d p4((theGame.mGrid.extentX() / 2)-40, (theGame.mGrid.extentY() / 2)-7, 0);
+        Point3d p1((theGame.mGrid.extentX() / 2)+40, (theGame.mGrid.extentY() / 2)-7, 0);
+        Point3d p2((theGame.mGrid.extentX() / 2)-40, (theGame.mGrid.extentY() / 2)-7, 0);
+        Point3d p3((theGame.mGrid.extentX() / 2)-40, (theGame.mGrid.extentY() / 2)-25, 0);
+
+        const float indicatorW = 3;
+        const float indicatorH = 1.5;
+
+        // Player 1 indicator
+        Point3d p4(player1xPos-(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+        Point3d p5(player1xPos, ((theGame.mGrid.extentY() / 2)-25) + ((theGame.mPlayers.mPlayer1->mJoined) ? indicatorH : 0), 0);
+        Point3d p6(player1xPos+(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+
+        // Player 2 indicator
+        Point3d p7(player2xPos-(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+        Point3d p8(player2xPos, ((theGame.mGrid.extentY() / 2)-25) + ((theGame.mPlayers.mPlayer2->mJoined) ? indicatorH : 0), 0);
+        Point3d p9(player2xPos+(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+
+        // Player 3 indicator
+        Point3d p10(player3xPos-(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+        Point3d p11(player3xPos, ((theGame.mGrid.extentY() / 2)-25) + ((theGame.mPlayers.mPlayer3->mJoined) ? indicatorH : 0), 0);
+        Point3d p12(player3xPos+(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+
+        // Player 4 indicator
+        Point3d p13(player4xPos-(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+        Point3d p14(player4xPos, ((theGame.mGrid.extentY() / 2)-25) + ((theGame.mPlayers.mPlayer4->mJoined) ? indicatorH : 0), 0);
+        Point3d p15(player4xPos+(indicatorW/2), ((theGame.mGrid.extentY() / 2)-25), 0);
+
+        Point3d p16((theGame.mGrid.extentX() / 2)+40, (theGame.mGrid.extentY() / 2)-25, 0);
 
         glVertex3f(p1.x, p1.y, 0 );
         glVertex3f(p2.x, p2.y, 0 );
         glVertex3f(p3.x, p3.y, 0 );
         glVertex3f(p4.x, p4.y, 0 );
+        glVertex3f(p5.x, p5.y, 0 );
+        glVertex3f(p6.x, p6.y, 0 );
+        glVertex3f(p7.x, p7.y, 0 );
+        glVertex3f(p8.x, p8.y, 0 );
+        glVertex3f(p9.x, p9.y, 0 );
+        glVertex3f(p10.x, p10.y, 0 );
+        glVertex3f(p11.x, p11.y, 0 );
+        glVertex3f(p12.x, p12.y, 0 );
+        glVertex3f(p13.x, p13.y, 0 );
+        glVertex3f(p14.x, p14.y, 0 );
+        glVertex3f(p15.x, p15.y, 0 );
+        glVertex3f(p16.x, p16.y, 0 );
 
         glEnd();
     }

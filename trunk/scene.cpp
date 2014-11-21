@@ -1,6 +1,6 @@
 #include "scene.h"
 #include "game.h"
-
+#include "menuSelectGameType.h"
 
 #include "game.h"
 game theGame;
@@ -337,6 +337,31 @@ void scene::draw(int pass)
 		    pen.a=.1;
 		    pen.lineRadius = 8;
 		    font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, 0, &pen, "Choose Game Type And Players");
+
+		    pen.r = 1;
+		    pen.g = 1;
+		    pen.b = 1;
+            pen.a = 1;
+            pen.lineRadius = defaultFontPen.lineRadius;
+            if (menuSelectGameType::selection == 0)
+            {
+		        font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, .9, &pen, "Single Player");
+            }
+            else
+            {
+		        font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.9, &pen, "Multiplayer Co-op");
+            }
+
+		    pen.a=.1;
+		    pen.lineRadius = 8;
+            if (menuSelectGameType::selection == 0)
+            {
+		        font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, .9, &pen, "Single Player");
+            }
+            else
+            {
+		        font::AlphanumericsPrint(font::ALIGN_CENTER, .025, 0, -.9, &pen, "Multiplayer Co-op");
+            }
         }
         else // RUNNING
         {
