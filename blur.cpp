@@ -1,5 +1,7 @@
 #include "blur.h"
 
+#include <vector>
+
 // Super Fast Blur v1.1
 // by Mario Klingemann <http://incubator.quasimondo.com>
 // converted to C++ by Mehmet Akten, <http://www.memo.tv>
@@ -8,9 +10,37 @@
 // radius will approximate a gaussian blur quite well.
 //
 
-
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
+
+static std::vector<unsigned char> r, g, b;
+static std::vector<int> vMIN, vMAX;
+static std::vector<unsigned char> dv;
+
+// At quick test, resizing doesn't happen much.
+// This should be faster than 6 * (new + delete) on every call.
+static void resizeBlurBuffers(std::size_t w, std::size_t h, std::size_t wh, std::size_t div)
+{
+    if (wh != r.size()) {
+        //puts("resize rgb");
+        r.resize(wh, 0);
+        g.resize(wh, 0);
+        b.resize(wh, 0);
+    }
+
+    const std::size_t maxWH = max(w, h);
+    if (maxWH != vMIN.size()) {
+        //puts("resize vMIN");
+        vMIN.resize(maxWH, 0);
+        vMAX.resize(maxWH, 0);
+    }
+
+    const std::size_t div256 = div * 256;
+    if (div256 != dv.size()) {
+        //puts("resize dv");
+        dv.resize(div256, 0);
+    }
+}
 
 void superFastBlur(unsigned char *pix, int w, int h, int radius)
 {
@@ -20,50 +50,44 @@ void superFastBlur(unsigned char *pix, int w, int h, int radius)
     int hm=h-1;
     int wh=w*h;
     int div=radius+radius+1;
-    unsigned char r[wh];
-    unsigned char g[wh];
-    unsigned char b[wh];
-    int rsum,gsum,bsum,x,y,i,p,p1,p2,yp,yi,yw;
-    int vMIN[max(w,h)];
-    int vMAX[max(w,h)];
+    int yi = 0;
+    int yw = 0;
 
-    unsigned char dv[256*div];
-    for (i=0;i<256*div;i++) dv[i]=(i/div);
+    resizeBlurBuffers(w, h, wh, div);
 
-    yw=yi=0;
-
-	// precalc
-	for (x=0;x<w;x++)
-	{
-		vMIN[x]=min(x+radius+1,wm);
-		vMAX[x]=max(x-radius,0);
-	}
-
-    for (y=0;y<h;y++)
+    for (int i=0;i<256*div;i++)
     {
-        rsum=gsum=bsum=0;
-        for(i=-radius;i<=radius;i++)
+        dv[i]=(i/div);
+    }
+
+    // precalc
+    for (int x=0;x<w;x++)
+    {
+        vMIN[x]=min(x+radius+1,wm);
+        vMAX[x]=max(x-radius,0);
+    }
+
+    for (int y=0;y<h;y++)
+    {
+        int rsum = 0;
+        int gsum = 0;
+        int bsum = 0;
+        for(int i=-radius;i<=radius;i++)
         {
-            p = (yi + min(wm, max(i,0))) * 3;
+            int p = (yi + min(wm, max(i,0))) * 3;
             rsum += pix[p];
             gsum += pix[p+1];
             bsum += pix[p+2];
         }
 
-        for (x=0;x<w;x++)
+        for (int x=0;x<w;x++)
         {
-
             r[yi]=dv[rsum];
             g[yi]=dv[gsum];
             b[yi]=dv[bsum];
-/*
-            if(y==0)
-            {
-                vMIN[x]=min(x+radius+1,wm);
-                vMAX[x]=max(x-radius,0);
-            }*/
-            p1 = (yw+vMIN[x])*3;
-            p2 = (yw+vMAX[x])*3;
+
+            int p1 = (yw+vMIN[x])*3;
+            int p2 = (yw+vMAX[x])*3;
 
             rsum += pix[p1] - pix[p2];
             gsum += pix[p1+1] - pix[p2+1];
@@ -74,18 +98,20 @@ void superFastBlur(unsigned char *pix, int w, int h, int radius)
         yw+=w;
     }
 
-	// precalc
-	for(y=0;y<h;y++)
-	{
-		vMIN[y]=min(y+radius+1,hm)*w;
-		vMAX[y]=max(y-radius,0)*w;
-	}
-
-    for (x=0;x<w;x++)
+    // precalc
+    for(int y=0;y<h;y++)
     {
-        rsum=gsum=bsum=0;
-        yp=-radius*w;
-        for(i=-radius;i<=radius;i++)
+        vMIN[y]=min(y+radius+1,hm)*w;
+        vMAX[y]=max(y-radius,0)*w;
+    }
+
+    for (int x=0;x<w;x++)
+    {
+        int rsum = 0;
+        int gsum = 0;
+        int bsum = 0;
+        int yp=-radius*w;
+        for(int i=-radius;i<=radius;i++)
         {
             yi=max(0,yp)+x;
             rsum+=r[yi];
@@ -94,19 +120,14 @@ void superFastBlur(unsigned char *pix, int w, int h, int radius)
             yp+=w;
         }
         yi=x;
-        for (y=0;y<h;y++)
+        for (int y=0;y<h;y++)
         {
             pix[yi*3] = dv[rsum];
             pix[yi*3 + 1] = dv[gsum];
             pix[yi*3 + 2] = dv[bsum];
-			/*
-            if(x==0)
-            {
-                vMIN[y]=min(y+radius+1,hm)*w;
-                vMAX[y]=max(y-radius,0)*w;
-            }*/
-            p1=x+vMIN[y];
-            p2=x+vMAX[y];
+
+            int p1=x+vMIN[y];
+            int p2=x+vMAX[y];
 
             rsum+=r[p1]-r[p2];
             gsum+=g[p1]-g[p2];
