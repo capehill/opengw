@@ -427,9 +427,9 @@ void game::run()
 
                 if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
                 {
-                    static float breathValue = 0;
+                    //static float breathValue = 0;
                     att->strength = 200;//sin(breathValue) * 10;
-                    breathValue += .002;
+                    //breathValue += .002;
                 }
             }
 
