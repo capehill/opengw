@@ -1,26 +1,27 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
-
 #include "point3d.h"
-
-#include "SDL.h"
+#include <SDL.h>
 
 class controls
 {
 public:
-
     controls();
     ~controls();
-
+    
     Point3d getLeftStick(int player);
     Point3d getRightStick(int player);
     bool getTriggerButton(int player);
     bool getStartButton(int player);
     bool getBackButton(int player);
     bool getPauseButton(int player);
-
+    
+    // Hot-plugging support
+    void handleControllerAdded(int deviceIndex);
+    void handleControllerRemoved(SDL_JoystickID instanceId);
+    void scanForControllers();
+    
 private:
-
     // Keyboard
     Point3d readKeyboardLeftStick(int player);
     Point3d readKeyboardRightStick(int player);
@@ -28,20 +29,16 @@ private:
     bool readKeyboardStart(int player);
     bool readKeyboardBack(int player);
     bool readKeyboardPause(int player);
-
-    // XBox controller
-    Point3d readXBoxControllerLeftStick(int player);
-    Point3d readXBoxControllerRightStick(int player);
-    bool readXBoxControllerTrigger(int player);
-    bool readXBoxStart(int player);
-    bool readXBoxBack(int player);
-    bool readXBoxPause(int player);
-
-    SDL_Joystick* mControllers[4];
-
-    int mNumJoysticks;
-
+    
+    // Controllers (modern API)
+    Point3d readControllerLeftStick(int player);
+    Point3d readControllerRightStick(int player);
+    bool readControllerTrigger(int player);
+    bool readControllerStart(int player);
+    bool readControllerBack(int player);
+    bool readControllerPause(int player);
+    
+    SDL_GameController* mControllers[4];
+    int mNumControllers;
 };
-
-#endif // CONTROLS_H
-
+#endif

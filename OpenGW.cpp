@@ -11,8 +11,8 @@
 #include <cstdio>
 #include <memory>
 
-static const int displayWidth = 800;
-static const int displayHeight = 600;
+static const int displayWidth = 1920;
+static const int displayHeight = 1080;
 
 //declare image buffers
 static const int blurBufferWidth = 500;
@@ -66,6 +66,12 @@ static bool handleEvents()
 			case SDL_QUIT:
 				printf("Quit\n");
 				return false;
+            case SDL_CONTROLLERDEVICEADDED:
+                game::mControls.handleControllerAdded(e.cdevice.which);
+                break;
+            case SDL_CONTROLLERDEVICEREMOVED:
+                game::mControls.handleControllerRemoved(e.cdevice.which);
+                break;
 		}
 	}
 
@@ -74,16 +80,18 @@ static bool handleEvents()
 }
 
 int main(int argc, char** argv) {
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_JOYSTICK) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_JOYSTICK|SDL_INIT_GAMECONTROLLER) < 0) {
 		printf("SDL_Init failed: %s\n", SDL_GetError());
 		return 0;
 	}
 
 	Uint32 flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
-	if (0) {
-		flags |= SDL_WINDOW_FULLSCREEN;
-	}
+	//if (0) {
+	//	flags |= SDL_WINDOW_FULLSCREEN;
+	//}
 
+    flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    
 	window = SDL_CreateWindow("OpenGL SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		displayWidth, displayHeight, flags);
 
