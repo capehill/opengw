@@ -146,7 +146,7 @@ particle::particle()
     }
 
     // Thread stuff
-    mRunThread = SDL_CreateThread(runThread, "runThread", NULL);
+    mRunThread = SDL_CreateThread(runThread, "particle", NULL);
     if (!mRunThread)
     {
 #ifdef USE_SDL
