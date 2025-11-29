@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 		srand(SDL_GetTicks());
 		make_sin_cos_tables();
 
-		oglScene.reset(new scene);
+		oglScene = std::make_unique<scene>();
 
 		OGLCreate();
 

@@ -25,7 +25,7 @@ vector::pen defaultFontPen(0, 1, 0, .6, 3);
 
 scene::scene()
 {
-	theGame.reset(new game);
+	theGame = std::make_unique<game>();
 
 	mAttractModeTimer = 0;
 	mShowHighScores = false;

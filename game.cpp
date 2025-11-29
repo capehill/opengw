@@ -38,8 +38,8 @@ int game::m2PlayerNumBombs = 0;
 
 game::game()
 {
-    mGrid.reset(new grid()); // TODO: make_unique
-    mParticles.reset(new particle());
+    mGrid = std::make_unique<grid>();
+    mParticles = std::make_unique<particle>();
 
     //
     // Load our sounds
@@ -103,7 +103,7 @@ game::game()
 
     mBrightness = 0;
 
-    mCamera.reset(new camera(*this));
+    mCamera = std::make_unique<camera>(*this);
     mCamera->center();
 
     mPointDisplays = new PointDisplay[NUM_POINT_DISPLAYS];
@@ -115,7 +115,7 @@ game::game()
     // Tag 4 black holes for attract mode
     for (int i=0; i<4; i++)
     {
-        mAttractModeBlackHoles[i].reset(new entity());
+        mAttractModeBlackHoles[i] = std::make_unique<entity>();
         mAttractModeBlackHoles[i]->setPos(Point3d(mathutils::frandFrom0To1() * mGrid->extentX(), mathutils::frandFrom0To1() * mGrid->extentY(), 0));
         mAttractModeBlackHoles[i]->setEdgeBounce(false);
 
@@ -135,9 +135,9 @@ game::game()
 
     mSound.playTrack(SOUNDID_MENU_MUSICLOOP);
 
-    mStars.reset(new stars(*this));
-    mPlayers.reset(new players(*this));
-    mEnemies.reset(new enemies(*this));
+    mStars = std::make_unique<stars>(*this);
+    mPlayers = std::make_unique<players>(*this);
+    mEnemies = std::make_unique<enemies>(*this);
 }
 
 game::~game()

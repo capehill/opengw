@@ -175,9 +175,9 @@ entityRepulsor::entityRepulsor(const game& gameRef)
     mModel.mEdgeList[i].from = 8; mModel.mEdgeList[i++].to = 10;
     mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 3;
 
-    mShield1.reset(new entityRepulsorShieldLine());
-    mShield2.reset(new entityRepulsorShieldLine());
-    mShield3.reset(new entityRepulsorShieldLine());
+    mShield1 = std::make_unique<entityRepulsorShieldLine>();
+    mShield2 = std::make_unique<entityRepulsorShieldLine>();
+    mShield3 = std::make_unique<entityRepulsorShieldLine>();
 }
 
 
