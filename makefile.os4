@@ -2,7 +2,7 @@ LIBS = -lSDL2
 OWN_PATHS = -I.
 HEADERS = $(OWN_PATHS) -I/SDK/local/newlib/include/SDL2
 DEFINES = -DUSE_SDL
-CFLAGS = -std=c++20 -Wall -O3 -ggdb -fpermissive
+CFLAGS = -std=c++20 -Wall -O3 -ggdb
 NAME = opengw
 OBJDIR = obj
 
