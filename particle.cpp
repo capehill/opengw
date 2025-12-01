@@ -38,6 +38,9 @@ static int runThread(void *ptr)
         // TODO: fix data races
         //std::unique_lock<std::mutex> lock(m);
 
+        const auto blackHoleStart = theGame->mEnemies->getBlackHoleStart();
+        const auto blackHoleEnd = blackHoleStart + numEnemyBlackHole;
+
         for (int i=0; i<particle::mNumParticles; i++)
         {
             particle::PARTICLE* particle = &particle::mParticles[i];
@@ -62,20 +65,16 @@ static int runThread(void *ptr)
                     }
 
                     // Evaluate against black holes
-                    // TODO: we shouldn't loop all enemies here
-                    for (int j=0; j<NUM_ENEMIES; j++)
+                    for (int j = blackHoleStart; j < blackHoleEnd; j++)
                     {
-                        if ((theGame->mEnemies->mEnemies[j]->getType() == entity::ENTITY_TYPE_BLACKHOLE) && (theGame->mEnemies->mEnemies[j]->getState() == entity::ENTITY_STATE_RUNNING))
+                        auto blackHole = static_cast<entityBlackHole*>(theGame->mEnemies->mEnemies[j]);
+                        if (blackHole->mActivated)
                         {
-                            auto blackHole = static_cast<entityBlackHole*>(theGame->mEnemies->mEnemies[j]);
-                            if (blackHole->mActivated)
+                            if (mathutils::calculate2dDistance(particle->posStream[0], blackHole->getPos()) < blackHole->getRadius()*1.01)
                             {
-                                if (mathutils::calculate2dDistance(particle->posStream[0], blackHole->getPos()) < blackHole->getRadius()*1.01)
-                                {
-                                    // kill this particle
-                                    particle->timeToLive *= .7;
-                                    continue;
-                                }
+                                // kill this particle
+                                particle->timeToLive *= .7;
+                                continue;
                             }
                         }
                     }

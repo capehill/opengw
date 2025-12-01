@@ -51,6 +51,8 @@ public:
     entityLine* getUnusedLine();
     void explodeEntity(entity& e);
 
+    int getBlackHoleStart() const;
+
     entity* mEnemies[NUM_ENEMIES];
     entityLine* mLines[NUM_LINES];
 

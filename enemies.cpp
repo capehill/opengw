@@ -555,3 +555,10 @@ void enemies::disableAllLines()
     }
 }
 
+int enemies::getBlackHoleStart() const
+{
+    // Knowing this, we can skip most enemies
+    // when calculating particles
+    return idxBlackHoleStart;
+}
+
