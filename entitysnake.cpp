@@ -217,7 +217,7 @@ public:
         entity::destroy();
     }
 
-    void hit(entity* aEntity)
+    void hit(entity* /*aEntity*/)
     {
         // Do nothing and don't call the base class method (tail segments are invinsible)
     }

@@ -231,6 +231,9 @@ void enemies::run()
             case entity::ENTITY_STATE_INDICATING:
                 mEnemies[i]->indicating();
                 break;
+            default:
+                //printf("Unhandled enemy state\n");
+                break;
         }
     }
 
@@ -256,6 +259,9 @@ void enemies::run()
                 break;
             case entity::ENTITY_STATE_DESTROYED:
                 mLines[i]->destroy();
+                break;
+            default:
+                //printf("Unhandled line state\n");
                 break;
         }
     }
@@ -390,6 +396,9 @@ int enemies::getNumActiveEnemiesOfType(const entity::EntityType& type)
 			idxStart = idxProtonStart;
 			idxEnd = idxProtonEnd;
 			break;
+		default:
+		    printf("Unhandled enemy type\n");
+			break;
 	}
 
     int count = 0;
@@ -451,6 +460,9 @@ entity* enemies::getUnusedEnemyOfType(const entity::EntityType& type)
 			idxStart = idxProtonStart;
 			idxEnd = idxProtonEnd;
 			break;
+		default:
+		    printf("Unhandled enemy type\n");
+		    break;
 	}
 
     for (int i=idxStart; i<=idxEnd; i++)

@@ -79,7 +79,7 @@ static bool handleEvents()
 	return true;
 }
 
-int main(int argc, char** argv) {
+int main(int /*argc*/, char** /*argv*/) {
 	printf("SDL_Init\n");
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_JOYSTICK) < 0) {
 		printf("SDL_Init failed: %s\n", SDL_GetError());

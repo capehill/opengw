@@ -63,11 +63,11 @@ struct GridPoint
 
 static std::vector<GridPoint> mGrid;
 
-static std::mutex m;
+//static std::mutex m;
 
 //#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower. This is also defined in game.cpp!
 
-static int runThread(void *ptr)
+static int runThread(void * /*ptr*/)
 {
     profiler prof("grid");
 

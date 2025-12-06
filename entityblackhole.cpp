@@ -691,7 +691,7 @@ void entityBlackHole::feed(int points)
     ++mFeedCount;
 }
 
-const float entityBlackHole::getRadius() const
+float entityBlackHole::getRadius() const
 {
     float r;
     if (mActivated)

@@ -2,7 +2,7 @@ LIBS = -lSDL2 -lGL -lGLU
 OWN_PATHS = -I.
 HEADERS = $(OWN_PATHS) -I/usr/include/SDL2
 DEFINES = -DUSE_SDL
-CFLAGS = -std=c++20 -Wall -O3 -ggdb
+CFLAGS = -std=c++20 -Wall -Wextra -O3 -ggdb
 NAME = opengw
 OBJDIR = obj
 

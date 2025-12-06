@@ -91,11 +91,11 @@ public:
 
     model* getModel() { return &mModel; }
 
-    const int getScoreValue() const { return mScoreValue; }
+    int getScoreValue() const { return mScoreValue; }
 
-    const float getRadius() const { return mRadius; }
+    float getRadius() const { return mRadius; }
 
-    const float getAggression() const { return mAggression; }
+    float getAggression() const { return mAggression; }
 
     void setEdgeBounce(bool bounce) { mEdgeBounce = bounce; }
 

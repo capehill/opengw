@@ -123,6 +123,9 @@ void players::run()
             case entity::ENTITY_STATE_DESTROYED:
                 currentPlayer->destroy();
                 break;
+            default:
+                printf("Unhandled player state\n");
+                break;
         }
     }
 }

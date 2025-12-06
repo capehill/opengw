@@ -305,6 +305,9 @@ void player::runMissiles()
                 case entity::ENTITY_STATE_DESTROYED:
                     missile->destroy();
                     break;
+                default:
+                    printf("Unhandled missile state\n");
+                    break;
             }
         }
     }

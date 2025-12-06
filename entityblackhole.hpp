@@ -22,7 +22,7 @@ public:
 
     void feed(int points);
 
-    const float getRadius() const;
+    float getRadius() const;
 
     bool mActivated;
     float mAnimationIndex;

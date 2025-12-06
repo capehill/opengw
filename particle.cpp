@@ -19,9 +19,9 @@ std::vector<particle::PARTICLE> particle::mParticles;
 int particle::mNumParticles = 0;
 int particle::mIndex = 0;
 
-static std::mutex m;
+//static std::mutex m;
 
-static int runThread(void *ptr)
+static int runThread(void * /*ptr*/)
 {
     printf("Particle thread running\n");
 

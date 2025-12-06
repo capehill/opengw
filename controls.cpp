@@ -88,7 +88,7 @@ bool controls::getPauseButton(int player)
 //
 // Keyboard controller
 //
-Point3d controls::readKeyboardLeftStick(int player)
+Point3d controls::readKeyboardLeftStick(int /*player*/)
 {
     bool up = keyboardState[SDL_SCANCODE_W];
     bool down = keyboardState[SDL_SCANCODE_S];
@@ -107,7 +107,7 @@ Point3d controls::readKeyboardLeftStick(int player)
     return Point3d(x,y,0);
 }
 
-Point3d controls::readKeyboardRightStick(int player)
+Point3d controls::readKeyboardRightStick(int /*player*/)
 {
     bool up = keyboardState[SDL_SCANCODE_UP];
     bool down = keyboardState[SDL_SCANCODE_DOWN];
@@ -126,7 +126,7 @@ Point3d controls::readKeyboardRightStick(int player)
     return Point3d(x,y,0);
 }
 
-bool controls::readKeyboardTrigger(int player)
+bool controls::readKeyboardTrigger(int /*player*/)
 {
     return keyboardState[SDL_SCANCODE_SPACE];
 }
@@ -151,12 +151,12 @@ bool controls::readKeyboardStart(int player)
     return false;
 }
 
-bool controls::readKeyboardBack(int player)
+bool controls::readKeyboardBack(int /*player*/)
 {
     return keyboardState[SDL_SCANCODE_BACKSPACE];
 }
 
-bool controls::readKeyboardPause(int player)
+bool controls::readKeyboardPause(int /*player*/)
 {
     return keyboardState[SDL_SCANCODE_P];
 }

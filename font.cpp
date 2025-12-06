@@ -1196,7 +1196,7 @@ namespace font
         glEnd();
     }
 
-    static inline void drawText(float scale, Point3d* p, vector::pen* color, bool lower)
+    static inline void drawText(float scale, Point3d* p, vector::pen* /*color*/, bool lower)
     {
         Point3d start, end;
 

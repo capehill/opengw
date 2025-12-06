@@ -38,7 +38,7 @@ public:
         mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
     }
 
-    void hit(entity* aEntity)
+    void hit(entity* /*aEntity*/)
     {
         // Do nothing and don't call the base class method (shield lines are invinsible)
     }

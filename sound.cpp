@@ -50,7 +50,7 @@ sound::~sound()
     SDL_UnlockAudio();
 }
 
-void sound::bufferCallback(void *unused, Uint8 *stream, int len)
+void sound::bufferCallback(void * /*unused*/, Uint8 *stream, int len)
 {
 	Sint16 *buf = (Sint16 *)stream;
 
