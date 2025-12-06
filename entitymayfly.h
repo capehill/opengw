@@ -1,5 +1,4 @@
-#ifndef ENTITY_MAYFLY_H
-#define ENTITY_MAYFLY_H
+#pragma once
 
 #include "entity.h"
 
@@ -17,6 +16,3 @@ public:
 
     Point3d mTarget;
 };
-
-#endif
-

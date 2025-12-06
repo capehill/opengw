@@ -1,5 +1,4 @@
-#ifndef ENTITY_PROTON_H
-#define ENTITY_PROTON_H
+#pragma once
 
 #include "entity.h"
 
@@ -15,6 +14,3 @@ private:
     void drawRing();
 
 };
-
-#endif
-

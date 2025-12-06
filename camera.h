@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "point3d.h"
 
@@ -22,5 +21,3 @@ public:
 
     const game& mGame;
 };
-
-#endif // CAMERA_H

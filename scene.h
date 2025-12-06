@@ -1,5 +1,4 @@
-#ifndef _SCENE_H
-#define _SCENE_H
+#pragma once
 
 #include "model.h"
 #include "texture.h"
@@ -47,5 +46,3 @@ private:
 
     texture mTextureMarquee;
 };
-
-#endif

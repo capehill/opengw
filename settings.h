@@ -1,6 +1,4 @@
-#ifndef __SETTINGS_H__
-#define __SETTINGS_H__
-
+#pragma once
 
 class settings
 {
@@ -23,6 +21,3 @@ public:
     int mParticles;
     int mGridPasses;
 };
-
-
-#endif // __SETTINGS_H__

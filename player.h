@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include "entity.h"
 #include "entityplayermissile.h"
@@ -86,5 +85,3 @@ protected:
 };
 
 #define PLAYER_SHEILD_TIME 250
-
-#endif // PLAYER_H

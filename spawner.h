@@ -1,5 +1,4 @@
-#ifndef SPAWNER_H
-#define SPAWNER_H
+#pragma once
 
 #include "entity.h"
 
@@ -62,5 +61,3 @@ private:
     int mWaveStartTimer { 0 };
     WAVEDATA mWaveData[NUM_WAVEDATA] { };
 };
-
-#endif

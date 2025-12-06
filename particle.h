@@ -1,5 +1,4 @@
-#ifndef PARTICLE_H
-#define PARTICLE_H
+#pragma once
 
 #include "point3d.h"
 #include "vector.h"
@@ -53,5 +52,3 @@ private:
                                   int aTime, vector::pen* aColor, bool gravity, bool gridBound, float drag, bool glowPass);
 
 };
-
-#endif // PARTICLE_H

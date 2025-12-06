@@ -1,6 +1,4 @@
-#ifndef MENU_SELECT_GAME_TYPE_H
-#define MENU_SELECT_GAME_TYPE_H
-
+#pragma once
 
 #include "defines.h"
 #include "scene.h"
@@ -14,5 +12,3 @@ public:
 
     static int selection;
 };
-
-#endif // MENU_SELECT_GAME_TYPE_H

@@ -1,5 +1,4 @@
-#ifndef CONTROLS_H
-#define CONTROLS_H
+#pragma once
 
 #include "point3d.h"
 
@@ -42,6 +41,3 @@ private:
     int mNumJoysticks;
 
 };
-
-#endif // CONTROLS_H
-

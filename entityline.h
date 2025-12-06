@@ -1,5 +1,4 @@
-#ifndef ENTITY_LINE_H
-#define ENTITY_LINE_H
+#pragma once
 
 #include "entity.h"
 
@@ -16,6 +15,3 @@ public:
 
     int mTimeToLive;
 };
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef ENTITYWANDERER_H
-#define ENTITYWANDERER_H
+#pragma once
 
 #include "entity.h"
 
@@ -15,5 +14,3 @@ public:
     float mAnimationIndex;
     bool mFlipped;
 };
-
-#endif // ENTITYWANDERER_H

@@ -1,5 +1,4 @@
-#ifndef ENTITYPLAYER1_H
-#define ENTITYPLAYER1_H
+#pragma once
 
 #include "player.h"
 
@@ -15,5 +14,3 @@ public:
 
     const game& mGame;
 };
-
-#endif // ENTITYPLAYER1_H

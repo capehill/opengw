@@ -1,5 +1,4 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
 #include "mathutils.h"
 #include "defines.h"
@@ -150,5 +149,3 @@ protected:
 
     model mModel;
 };
-
-#endif // ENTITY_H

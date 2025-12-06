@@ -1,5 +1,4 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#pragma once
 
 #include "defines.h"
 #include "point3d.h"
@@ -27,6 +26,3 @@ namespace vector
     void drawVector(const Point3d& from, const Point3d& to, const pen& penStyle);
     void extendVector(Point3d* from, Point3d* to, double amount);
 };
-
-
-#endif // VECTOR_H

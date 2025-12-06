@@ -1,5 +1,4 @@
-#ifndef ENTITYREPULSOR_H
-#define ENTITYREPULSOR_H
+#pragma once
 
 #include "entity.h"
 
@@ -41,5 +40,3 @@ protected:
 
     const game& mGame;
 };
-
-#endif // ENTITYREPULSOR_H

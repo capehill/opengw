@@ -1,5 +1,4 @@
-#ifndef MODEL_H
-#define MODEL_H
+#pragma once
 
 #include "point3d.h"
 #include "vector.h"
@@ -37,5 +36,3 @@ public:
     bool mIsLineLoop;
 
 };
-
-#endif // MODEL_H

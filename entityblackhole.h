@@ -1,5 +1,4 @@
-#ifndef ENTITYBLACKHOLE_H
-#define ENTITYBLACKHOLE_H
+#pragma once
 
 #include "entity.h"
 
@@ -51,5 +50,3 @@ private:
 
     const game& mGame;
 };
-
-#endif // ENTITYBLACKHOLE_H

@@ -1,5 +1,4 @@
-#ifndef ENTITYPLAYER4_H
-#define ENTITYPLAYER4_H
+#pragma once
 
 #include "player.h"
 
@@ -11,5 +10,3 @@ public:
     virtual void initPlayerForGame();
     virtual void spawnTransition();
 };
-
-#endif // ENTITYPLAYER4_H

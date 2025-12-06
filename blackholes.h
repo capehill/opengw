@@ -1,5 +1,4 @@
-#ifndef BLACKHOLES_H
-#define BLACKHOLES_H
+#pragma once
 
 class blackholes
 {
@@ -9,5 +8,3 @@ public:
     static void run();
 
 };
-
-#endif // BLACKHOLES_H

@@ -1,5 +1,4 @@
-#ifndef ENTITYWEAVER_H
-#define ENTITYWEAVER_H
+#pragma once
 
 #include "entity.h"
 
@@ -13,5 +12,3 @@ public:
 
     float mAnimationIndex;
 };
-
-#endif // ENTITYWEAVER_H

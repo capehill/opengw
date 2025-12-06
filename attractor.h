@@ -1,5 +1,4 @@
-#ifndef ATTRACTOR_H
-#define ATTRACTOR_H
+#pragma once
 
 #include "point3d.h"
 #include "particle.h"
@@ -28,5 +27,3 @@ public:
     std::vector<Attractor> mAttractors;
     int mNumAttractors;
 };
-
-#endif // ATTRACTOR_H

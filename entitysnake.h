@@ -1,5 +1,4 @@
-#ifndef ENTITYSNAKE_H
-#define ENTITYSNAKE_H
+#pragma once
 
 #include "entity.h"
 
@@ -30,5 +29,3 @@ private:
 
     void updateTarget();
 };
-
-#endif // ENTITYSNAKE_H

@@ -1,5 +1,4 @@
-#ifndef ENTITYPLAYERMISSILE_H
-#define ENTITYPLAYERMISSILE_H
+#pragma once
 
 #include "entity.h"
 
@@ -22,5 +21,3 @@ private:
     Point3d mLastPos;
 
 };
-
-#endif // ENTITYPLAYERMISSILE_H

@@ -1,5 +1,4 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
 
 #include "point3d.h"
 #include "sincos.h"
@@ -120,5 +119,3 @@ public:
     }
 
 };
-
-#endif // MATRIX_H

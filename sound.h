@@ -1,5 +1,4 @@
-#ifndef SOUND_H_
-#define SOUND_H_
+#pragma once
 
 #include "SDL.h"
 
@@ -48,6 +47,3 @@ private:
     static float* mLeftSamples;
     static float* mRightSamples;
 };
-
-
-#endif

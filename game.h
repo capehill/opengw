@@ -1,6 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
-
+#pragma once
 
 #include "defines.h"
 #include "sound.h"
@@ -186,5 +184,3 @@ private:
 };
 
 extern std::unique_ptr<game> theGame;
-
-#endif // GAME_H

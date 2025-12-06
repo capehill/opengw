@@ -1,5 +1,4 @@
-#ifndef _FONT_H_
-#define _FONT_H_
+#pragma once
 
 // Good sizes are:
 // 6.2
@@ -30,6 +29,3 @@ namespace font
 //    extern float AlphanumericsPrintVScale;
 
 };
-
-#endif
-

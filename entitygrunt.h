@@ -1,5 +1,4 @@
-#ifndef ENTITYGRUNT_H
-#define ENTITYGRUNT_H
+#pragma once
 
 #include "entity.h"
 
@@ -17,5 +16,3 @@ public:
 
     const game& mGame;
 };
-
-#endif // ENTITYGRUNT_H

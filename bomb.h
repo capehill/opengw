@@ -1,5 +1,4 @@
-#ifndef BOMB_H
-#define BOMB_H
+#pragma once
 
 #include "point3d.h"
 #include "vector.h"
@@ -33,6 +32,3 @@ public:
     int mNumRings;
 
 };
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef ENEMIES_H
-#define ENEMIES_H
+#pragma once
 
 #include "defines.h"
 #include "point3d.h"
@@ -58,5 +57,3 @@ public:
 
     const game& mGame;
 };
-
-#endif // ENEMIES_H

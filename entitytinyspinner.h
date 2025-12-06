@@ -1,5 +1,4 @@
-#ifndef ENTITYTINYSPINNER_H
-#define ENTITYTINYSPINNER_H
+#pragma once
 
 #include "entityspinner.h"
 
@@ -28,5 +27,3 @@ private:
 
     const game& mGame;
 };
-
-#endif // ENTITYTINYSPINNER_H

@@ -1,5 +1,4 @@
-#ifndef MATHUTILS_H
-#define MATHUTILS_H
+#pragma once
 
 #include "defines.h"
 #include "point3d.h"
@@ -59,5 +58,3 @@ namespace mathutils
     bool lineCircleIntersects(const Point3d& c, float r, const Point3d& p1, const Point3d& p2);
 
 };
-
-#endif // MATHUTILS_H

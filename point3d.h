@@ -1,5 +1,4 @@
-#ifndef POINT3D_H
-#define POINT3D_H
+#pragma once
 
 #include <math.h>
 
@@ -123,6 +122,3 @@ struct Point3d
         return distance;
     }
 };
-
-
-#endif // POINT3D_H

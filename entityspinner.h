@@ -1,5 +1,4 @@
-#ifndef ENTITYSPINNER_H
-#define ENTITYSPINNER_H
+#pragma once
 
 #include "entity.h"
 
@@ -22,5 +21,3 @@ private:
     Point3d mHitSpeed;
     const game& mGame;
 };
-
-#endif // ENTITYSPINNER_H

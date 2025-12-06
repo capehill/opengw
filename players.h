@@ -1,5 +1,4 @@
-#ifndef PLAYERS_H
-#define PLAYERS_H
+#pragma once
 
 #include "player.h"
 
@@ -24,5 +23,3 @@ public:
 
     const game& mGame;
 };
-
-#endif // PLAYERS_H

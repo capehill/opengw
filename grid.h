@@ -1,5 +1,4 @@
-#ifndef GRID_H
-#define GRID_H
+#pragma once
 
 struct Point3d;
 
@@ -23,6 +22,3 @@ public:
 
     float brightness = 1.0f;
 };
-
-#endif // GRID_H
-

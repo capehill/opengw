@@ -1,5 +1,4 @@
-#ifndef STARS_H
-#define STARS_H
+#pragma once
 
 #include "point3d.h"
 
@@ -27,5 +26,3 @@ public:
     STAR* mStars;
     const game& mGame;
 };
-
-#endif // STARS_H
