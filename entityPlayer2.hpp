@@ -4,7 +4,7 @@
 
 class entityPlayer2 : public player
 {
-public:
+  public:
     entityPlayer2();
 
     virtual void initPlayerForGame();

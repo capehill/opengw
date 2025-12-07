@@ -4,13 +4,12 @@
 
 class entityProton : public entity
 {
-public:
+  public:
     entityProton(void);
 
     virtual void run();
     virtual void spawnTransition();
 
-private:
+  private:
     void drawRing();
-
 };

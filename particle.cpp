@@ -1,13 +1,13 @@
 #include "particle.hpp"
-#include "game.hpp"
-#include "entityblackhole.hpp"
 #include "enemies.hpp"
+#include "entityblackhole.hpp"
+#include "game.hpp"
 #include "mathutils.hpp"
 #include "profiler.hpp"
 
 #include <atomic>
-#include <mutex>
 #include <cstdio>
+#include <mutex>
 
 #include "SDL_opengl.h"
 
@@ -19,18 +19,16 @@ std::vector<particle::PARTICLE> particle::mParticles;
 int particle::mNumParticles = 0;
 int particle::mIndex = 0;
 
-//static std::mutex m;
+// static std::mutex m;
 
-static int runThread(void * /*ptr*/)
+static int runThread(void* /*ptr*/)
 {
     printf("Particle thread running\n");
 
     profiler prof("particle");
 
-    while(!quitFlag)
-    {
-        while (!mRunFlag && !quitFlag)
-        {
+    while (!quitFlag) {
+        while (!mRunFlag && !quitFlag) {
             SDL_Delay(1);
         }
         mRunFlag = false;
@@ -38,42 +36,33 @@ static int runThread(void * /*ptr*/)
         prof.start();
 
         // TODO: fix data races
-        //std::unique_lock<std::mutex> lock(m);
+        // std::unique_lock<std::mutex> lock(m);
 
         const auto blackHoleStart = theGame->mEnemies->getBlackHoleStart();
         const auto blackHoleEnd = blackHoleStart + numEnemyBlackHole;
 
-        for (int i=0; i<particle::mNumParticles; i++)
-        {
+        for (int i = 0; i < particle::mNumParticles; i++) {
             particle::PARTICLE* particle = &particle::mParticles[i];
 
-            if (particle->timeToLive > 0)
-            {
+            if (particle->timeToLive > 0) {
                 // This particle is active
 
-                if (--particle->timeToLive < 0)
-                {
+                if (--particle->timeToLive < 0) {
                     // This particle died
                     particle->timeToLive = 0;
-                }
-                else
-                {
+                } else {
                     // Evaluate against attractors
-                    if (particle->gravity)
-                    {
+                    if (particle->gravity) {
                         const Point3d speed = game::mAttractors.evaluateParticle(particle);
                         particle->speedX += speed.x;
                         particle->speedY += speed.y;
                     }
 
                     // Evaluate against black holes
-                    for (int j = blackHoleStart; j < blackHoleEnd; j++)
-                    {
+                    for (int j = blackHoleStart; j < blackHoleEnd; j++) {
                         auto blackHole = static_cast<entityBlackHole*>(theGame->mEnemies->mEnemies[j]);
-                        if (blackHole->getState() == entity::ENTITY_STATE_RUNNING && blackHole->mActivated)
-                        {
-                            if (mathutils::calculate2dDistance(particle->posStream[0], blackHole->getPos()) < blackHole->getRadius()*1.01)
-                            {
+                        if (blackHole->getState() == entity::ENTITY_STATE_RUNNING && blackHole->mActivated) {
+                            if (mathutils::calculate2dDistance(particle->posStream[0], blackHole->getPos()) < blackHole->getRadius() * 1.01) {
                                 // kill this particle
                                 particle->timeToLive *= .7;
                                 continue;
@@ -95,29 +84,24 @@ static int runThread(void * /*ptr*/)
                     particle->posStream[0].y += particle->speedY;
                     particle->posStream[0].z = 0;
 
-                    if (particle->gridBound)
-                    {
+                    if (particle->gridBound) {
                         // Keep it within the grid
 
-					    Point3d hitPoint;
+                        Point3d hitPoint;
                         Point3d speed(particle->speedX, particle->speedY);
-					    if (theGame->mGrid->hitTest(particle->posStream[0], 0, &hitPoint, &speed))
-					    {
+                        if (theGame->mGrid->hitTest(particle->posStream[0], 0, &hitPoint, &speed)) {
                             particle->hitGrid = true;
-						    particle->posStream[0] = hitPoint;
+                            particle->posStream[0] = hitPoint;
 
                             particle->speedX = speed.x;
                             particle->speedY = speed.y;
-					    }
-
+                        }
                     }
 
                     // Shift the position stream
-                    for (int p=NUM_POS_STREAM_ITEMS-2; p >= 0; p--)
-                    {
-                        particle->posStream[p+1] = particle->posStream[p];
+                    for (int p = NUM_POS_STREAM_ITEMS - 2; p >= 0; p--) {
+                        particle->posStream[p + 1] = particle->posStream[p];
                     }
-
                 }
             }
         }
@@ -137,15 +121,13 @@ particle::particle()
 
     mParticles.resize(mNumParticles);
 
-    for (int i=0; i<mNumParticles; i++)
-    {
+    for (int i = 0; i < mNumParticles; i++) {
         mParticles[i].timeToLive = 0;
     }
 
     // Thread stuff
     mRunThread = SDL_CreateThread(runThread, "particle", NULL);
-    if (!mRunThread)
-    {
+    if (!mRunThread) {
 #ifdef USE_SDL
         printf("Couldn't create particle run thread: %s\n", SDL_GetError());
 #else
@@ -163,8 +145,7 @@ particle::~particle()
 
     printf("Particle thread exited with status %d\n", status);
 
-    for (int i=0; i<mNumParticles; i++)
-    {
+    for (int i = 0; i < mNumParticles; i++) {
         mParticles[i].timeToLive = 0;
     }
 }
@@ -174,8 +155,7 @@ void particle::emitter(Point3d* position, Point3d* angle, float speed, float spr
 {
 
     // Emit a number of random thrust particles from the nozzle
-    for (int p=0; p<num; p++)
-    {
+    for (int p = 0; p < num; p++) {
         Point3d speedVertex, speedVector;
 
         speedVertex.x = 0;
@@ -186,7 +166,7 @@ void particle::emitter(Point3d* position, Point3d* angle, float speed, float spr
         mat.Identity();
         mat.Rotate(0,
                    0,
-                   angle->y + ((mathutils::frandFrom0To1()*spread)-spread/2));
+                   angle->y + ((mathutils::frandFrom0To1() * spread) - spread / 2));
 
         mat.TransformVertex(speedVertex, &speedVector);
 
@@ -201,23 +181,20 @@ void particle::assignParticle(Point3d* position,
                               int aTime, vector::pen* aColor, bool gravity, bool gridBound, float drag, bool glowPass)
 {
     PARTICLE* particle = &mParticles[mIndex++];
-    if (mIndex >= mNumParticles) mIndex = 0;
+    if (mIndex >= mNumParticles)
+        mIndex = 0;
 
-    if (particle)
-    {
+    if (particle) {
         Point3d pos = *position;
 
-        if (gridBound)
-        {
-			Point3d hitPoint;
-			if (theGame->mGrid->hitTest(pos, 0, &hitPoint))
-			{
-				pos = hitPoint;
-			}
+        if (gridBound) {
+            Point3d hitPoint;
+            if (theGame->mGrid->hitTest(pos, 0, &hitPoint)) {
+                pos = hitPoint;
+            }
         }
 
-        for (int p=0; p<NUM_POS_STREAM_ITEMS; p++)
-        {
+        for (int p = 0; p < NUM_POS_STREAM_ITEMS; p++) {
             particle->posStream[p] = pos;
         }
 
@@ -237,31 +214,29 @@ void particle::assignParticle(Point3d* position,
 
 void particle::draw()
 {
-    //std::unique_lock<std::mutex> lock(m);
-    for (int i=0; i<mNumParticles; i++)
-    {
+    // std::unique_lock<std::mutex> lock(m);
+    for (int i = 0; i < mNumParticles; i++) {
         PARTICLE* particle = &mParticles[i];
 
-        if (particle->timeToLive > 0)
-        {
+        if (particle->timeToLive > 0) {
             // This particle is active
 
-            const float speedNormal = mathutils::calculate2dDistance(Point3d(0,0,0), Point3d(particle->speedX, particle->speedY, particle->speedZ));
+            const float speedNormal = mathutils::calculate2dDistance(Point3d(0, 0, 0), Point3d(particle->speedX, particle->speedY, particle->speedZ));
             const float a = particle->color.a * (speedNormal * 0.8f);
 
-            if (a < 0.05f)
-            {
+            if (a < 0.05f) {
                 // This particle died
                 particle->timeToLive = 0;
                 continue;
             }
 
             float width = speedNormal * 8.0f;
-            if (width > 4.0f) width = 4.0f;
-            else if (width < 2.0f) width = 2.0f;
+            if (width > 4.0f)
+                width = 4.0f;
+            else if (width < 2.0f)
+                width = 2.0f;
 
-            if (scene::mPass == scene::RENDERPASS_BLUR)
-            {
+            if (scene::mPass == scene::RENDERPASS_BLUR) {
                 width *= 4.0f;
             }
 
@@ -275,11 +250,10 @@ void particle::draw()
             // TODO: use vertex arrays
             glBegin(GL_LINES);
 
-			float aa = (a > 1.0f) ? 1.0f : a;
+            float aa = (a > 1.0f) ? 1.0f : a;
 
-            for (int p=0; (p < NUM_POS_STREAM_ITEMS - 1) && (aa > 0.0f); p++)
-            {
-                //glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
+            for (int p = 0; (p < NUM_POS_STREAM_ITEMS - 1) && (aa > 0.0f); p++) {
+                // glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
 
                 const Point3d& from = particle->posStream[p];
                 const Point3d& to = particle->posStream[p + 1];
@@ -290,17 +264,16 @@ void particle::draw()
 
                 glColor4f(particle->color.r, particle->color.g, particle->color.b, aa); // RGBA
 
-                if ((from.x == to.x) && (from.y == to.y))
-				{
-					glVertex3d(to.x + 0.1f, to.y + 0.1f, 0);
-				} else {
-					glVertex3d(to.x, to.y, 0);
-				}
+                if ((from.x == to.x) && (from.y == to.y)) {
+                    glVertex3d(to.x + 0.1f, to.y + 0.1f, 0);
+                } else {
+                    glVertex3d(to.x, to.y, 0);
+                }
 
                 aa -= 0.1f;
             }
 
-    	    glEnd();
+            glEnd();
         }
     }
 }
@@ -312,10 +285,9 @@ void particle::run()
 
 void particle::killAll()
 {
-    //std::unique_lock<std::mutex> lock(m);
+    // std::unique_lock<std::mutex> lock(m);
 
-    for (int i=0; i<mNumParticles; i++)
-    {
+    for (int i = 0; i < mNumParticles; i++) {
         mParticles[i].timeToLive = 0;
     }
 }

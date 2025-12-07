@@ -6,7 +6,7 @@ class game;
 
 class entityGrunt : public entity
 {
-public:
+  public:
     entityGrunt(const game& gameRef);
 
     virtual void run();

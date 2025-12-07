@@ -1,12 +1,12 @@
 #pragma once
 
-#include "point3d.hpp"
 #include "particle.hpp"
+#include "point3d.hpp"
 #include <vector>
 
 class attractor
 {
-public:
+  public:
     attractor();
 
     void clearAll();
@@ -20,7 +20,7 @@ public:
         float radius;
         bool enabled;
         bool attractsParticles;
-    }Attractor;
+    } Attractor;
 
     attractor::Attractor* getAttractor();
 

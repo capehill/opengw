@@ -5,7 +5,7 @@
 
 class player : public entity
 {
-public:
+  public:
     player();
     ~player();
 
@@ -52,8 +52,7 @@ public:
     vector::pen getMissilesPen() const { return mMissilesPen; }
     vector::pen getFontPen() const { return mFontPen; }
 
-protected:
-
+  protected:
     void firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed);
     void firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed);
     void firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed);
@@ -81,7 +80,6 @@ protected:
     vector::pen mExhaustPen;
     vector::pen mMissilesPen;
     vector::pen mFontPen;
-
 };
 
 #define PLAYER_SHEILD_TIME 250

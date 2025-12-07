@@ -1,6 +1,6 @@
 #include "entityweaver.hpp"
-#include "game.hpp"
 #include "entityPlayer1.hpp"
+#include "game.hpp"
 #include "players.hpp"
 
 entityWeaver::entityWeaver()
@@ -36,40 +36,42 @@ entityWeaver::entityWeaver()
 
     mModel.mNumEdges = 8;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 0;
-    mModel.mEdgeList[i].from = 4; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 5; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 6; mModel.mEdgeList[i++].to = 7;
-    mModel.mEdgeList[i].from = 7; mModel.mEdgeList[i++].to = 4;
-
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 4;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 5;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 6;
+    mModel.mEdgeList[i++].to = 7;
+    mModel.mEdgeList[i].from = 7;
+    mModel.mEdgeList[i++].to = 4;
 }
 
 void entityWeaver::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         // Check for missiles around us
-        for (int i=0; i<entityPlayer1::mMaxMissiles; i++)
-        {
+        for (int i = 0; i < entityPlayer1::mMaxMissiles; i++) {
             entityPlayerMissile* missile = &((entityPlayer1*)theGame->mPlayers->mPlayer1)->missiles[i];
-            if (missile->getEnabled())
-            {
+            if (missile->getEnabled()) {
                 // Test this missile to see if it's aimed at us
 
                 float angle = mathutils::calculate2dAngle(missile->getPos(), mPos);
-                float missileAngle = mathutils::calculate2dAngle(Point3d(0,0,0), missile->getSpeed());
+                float missileAngle = mathutils::calculate2dAngle(Point3d(0, 0, 0), missile->getSpeed());
 
                 float diff = mathutils::diffAngles(angle, missileAngle);
 
-                if (fabs(diff) < 1)
-                {
+                if (fabs(diff) < 1) {
                     // And close to us
                     float distance = mathutils::calculate2dDistance(missile->getPos(), mPos);
-                    if (distance < 25)
-                    {
+                    if (distance < 25) {
                         // Run away from it
                         float angle = mathutils::calculate2dAngle(mPos, theGame->mPlayers->mPlayer1->getPos());
                         Point3d moveVector(.8, diff > 0 ? 1.1 : -1.1, 0);

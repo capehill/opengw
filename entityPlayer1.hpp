@@ -6,7 +6,7 @@ class game;
 
 class entityPlayer1 : public player
 {
-public:
+  public:
     entityPlayer1(const game& gameRef);
 
     virtual void initPlayerForGame();

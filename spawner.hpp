@@ -3,18 +3,17 @@
 #include "entity.hpp"
 
 const int NUM_WAVEITEMTRACKERS = 200; // Should be set to the maximum number of entities that can spawn during a way
-const int NUM_WAVEDATA = 200; // The maximum number of simultanious waves
+const int NUM_WAVEDATA = 200;         // The maximum number of simultanious waves
 
 class spawner
 {
-public:
-
+  public:
     typedef enum
     {
-        WAVETYPE_UNUSED=0,
+        WAVETYPE_UNUSED = 0,
         WAVETYPE_SWARM,
         WAVETYPE_RUSH
-    }WAVETYPE;
+    } WAVETYPE;
 
     typedef struct
     {
@@ -29,7 +28,7 @@ public:
         int spawnCount;
         int timer;
         WAVEITEMTRACKER mItemTrackers[NUM_WAVEITEMTRACKERS];
-    }WAVEDATA;
+    } WAVEDATA;
 
     spawner(void);
 
@@ -38,7 +37,7 @@ public:
 
     int getSpawnIndex() const;
 
-private:
+  private:
     void transition();
 
     void spawnEntities(entity::EntityType type, int numWanted);
@@ -59,5 +58,5 @@ private:
     int mSpawnWaitTimer { 0 };
 
     int mWaveStartTimer { 0 };
-    WAVEDATA mWaveData[NUM_WAVEDATA] { };
+    WAVEDATA mWaveData[NUM_WAVEDATA] {};
 };

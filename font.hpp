@@ -15,17 +15,22 @@
 namespace font
 {
 
-    enum { ALIGN_LEFT=-1, ALIGN_CENTER=0, ALIGN_RIGHT=1 };
+enum
+{
+    ALIGN_LEFT = -1,
+    ALIGN_CENTER = 0,
+    ALIGN_RIGHT = 1
+};
 
-    int AlphanumericsGetNumLines(const char* string);
-    void AlphanumericsMeasureString(const char* string, float scale, float* width, float* height);
-    int AlphanumericsGetLineLen(const char* string);
-    void AlphanumericsPrint(int alignment, float scale, float x, float y, vector::pen* color, const char *fmt, ...);
+int AlphanumericsGetNumLines(const char* string);
+void AlphanumericsMeasureString(const char* string, float scale, float* width, float* height);
+int AlphanumericsGetLineLen(const char* string);
+void AlphanumericsPrint(int alignment, float scale, float x, float y, vector::pen* color, const char* fmt, ...);
 
-    void AlphanumericsSetAngle(float topAscent, float bottomAscent);
+void AlphanumericsSetAngle(float topAscent, float bottomAscent);
 
-    char* formatStringWithCommas(char* string);
+char* formatStringWithCommas(char* string);
 
 //    extern float AlphanumericsPrintVScale;
 
-};
+}; // namespace font

@@ -6,7 +6,7 @@ class game;
 
 class camera
 {
-public:
+  public:
     camera(const game& gameRef);
 
     void center();

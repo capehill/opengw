@@ -38,35 +38,32 @@ entityMayfly::entityMayfly()
 
     mModel.mNumEdges = 3;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 4;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 4;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 5;
 }
 
 void entityMayfly::draw()
 {
-    if (this->getState() == entity::ENTITY_STATE_INDICATING)
-    {
-        if (((int)(mStateTimer/10)) & 1)
-        {
+    if (this->getState() == entity::ENTITY_STATE_INDICATING) {
+        if (((int)(mStateTimer / 10)) & 1) {
             vector::pen pen = mPen;
             mModel.draw(pen);
         }
-    }
-    else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION))
-    {
+    } else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION)) {
         vector::pen pen = mPen;
-        if (scene::mPass == scene::RENDERPASS_BLUR)
-        {
+        if (scene::mPass == scene::RENDERPASS_BLUR) {
             pen.r = .1;
             pen.g = .1;
             pen.b = 1;
             pen.a = 1;
-            pen.lineRadius = 18*2;
+            pen.lineRadius = 18 * 2;
         }
 
-        if (getState() == ENTITY_STATE_SPAWNING)
-        {
+        if (getState() == ENTITY_STATE_SPAWNING) {
             Point3d scale = mScale;
             Point3d trans = mPos;
 
@@ -75,14 +72,16 @@ void entityMayfly::draw()
 
             // *********************************************
 
-		    glLineWidth(pen.lineRadius*.3);
-			glBegin(GL_LINES);
+            glLineWidth(pen.lineRadius * .3);
+            glBegin(GL_LINES);
 
-            progress = 1-progress;
+            progress = 1 - progress;
 
             float a = progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -96,9 +95,11 @@ void entityMayfly::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -112,9 +113,11 @@ void entityMayfly::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -132,7 +135,7 @@ void entityMayfly::draw()
             mModel.Scale(scale);
             mModel.Translate(trans);
 
-			glEnd();
+            glEnd();
         }
 
         mModel.draw(pen);
@@ -141,13 +144,11 @@ void entityMayfly::draw()
 
 void entityMayfly::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         // Seek the player
 
         // Run animation
-        if (--mFlipTimer <= 0)
-        {
+        if (--mFlipTimer <= 0) {
             mFlipTimer = 15;
             mFlipDirection = -mFlipDirection;
 
@@ -158,7 +159,7 @@ void entityMayfly::run()
         }
 
         float desiredAngle = 1.2 * mFlipDirection;
-        float diff = desiredAngle-mAngle;
+        float diff = desiredAngle - mAngle;
         mRotationRate += diff * .03;
         mRotationRate *= .9;
 

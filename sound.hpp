@@ -2,14 +2,13 @@
 
 #include "SDL.h"
 
-
 class sound
 {
-public:
+  public:
     sound();
     ~sound();
 
-    void loadTrack(const char *file, int track, float volume, bool loop=false);
+    void loadTrack(const char* file, int track, float volume, bool loop = false);
     void playTrack(int track);
     void stopTrack(int track);
     void stopAllTracks();
@@ -27,12 +26,12 @@ public:
 
     void setTrackSpeed(int track, double speed);
 
-private:
+  private:
+    static void bufferCallback(void* unused, Uint8* stream, int len);
 
-    static void bufferCallback(void *unused, Uint8 *stream, int len);
-
-    typedef struct {
-        Uint8 *data;
+    typedef struct
+    {
+        Uint8* data;
         bool loop;
         bool playing;
         bool paused;

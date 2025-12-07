@@ -4,7 +4,7 @@
 
 class entityWeaver : public entity
 {
-public:
+  public:
     entityWeaver();
 
     virtual void run();

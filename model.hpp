@@ -1,23 +1,23 @@
 #pragma once
 
+#include "matrix.hpp"
 #include "point3d.hpp"
 #include "vector.hpp"
-#include "matrix.hpp"
 
 class model
 {
-public:
+  public:
     model();
-	~model();
+    ~model();
 
     void draw(const vector::pen& pen);
-	void emit(const vector::pen& pen);
+    void emit(const vector::pen& pen);
 
     typedef struct
     {
         int from;
         int to;
-    }Edge;
+    } Edge;
 
     void Identity() { mMatrix.Identity(); }
     void Scale(Point3d scale) { mMatrix.Scale(scale.x, scale.y, scale.z); }
@@ -34,5 +34,4 @@ public:
     matrix mMatrix;
 
     bool mIsLineLoop;
-
 };

@@ -4,7 +4,7 @@
 
 class entityPlayerMissile : public entity
 {
-public:
+  public:
     entityPlayerMissile();
 
     virtual void run();
@@ -17,7 +17,6 @@ public:
     int mPlayerSource;
     float mVelocity { 0.0f };
 
-private:
+  private:
     Point3d mLastPos;
-
 };

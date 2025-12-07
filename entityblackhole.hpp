@@ -6,7 +6,7 @@ class game;
 
 class entityBlackHole : public entity
 {
-public:
+  public:
     entityBlackHole(const game& gameRef);
 
     virtual void runTransition();
@@ -40,7 +40,7 @@ public:
 
     int mPoints { 0 };
 
-private:
+  private:
     void drawRing();
 
     float mHumSpeed { 0.0f };

@@ -5,81 +5,109 @@
 
 class matrix
 {
-public:
-
+  public:
     float _matrix[4][4];
 
-    matrix () { Identity(); }
+    matrix() { Identity(); }
 
-    matrix (const matrix& mat)
+    matrix(const matrix& mat)
     {
         Copy(mat);
     }
 
-    void Copy (const matrix& mat)
+    void Copy(const matrix& mat)
     {
 
-        _matrix[0][0] = mat._matrix[0][0];  _matrix[0][1] = mat._matrix[0][1];  _matrix[0][2] = mat._matrix[0][2];  _matrix[0][3] = mat._matrix[0][3];
-        _matrix[1][0] = mat._matrix[1][0];  _matrix[1][1] = mat._matrix[1][1];  _matrix[1][2] = mat._matrix[1][2];  _matrix[1][3] = mat._matrix[1][3];
-        _matrix[2][0] = mat._matrix[2][0];  _matrix[2][1] = mat._matrix[2][1];  _matrix[2][2] = mat._matrix[2][2];  _matrix[2][3] = mat._matrix[2][3];
-        _matrix[3][0] = mat._matrix[3][0];  _matrix[3][1] = mat._matrix[3][1];  _matrix[3][2] = mat._matrix[3][2];  _matrix[3][3] = mat._matrix[3][3];
+        _matrix[0][0] = mat._matrix[0][0];
+        _matrix[0][1] = mat._matrix[0][1];
+        _matrix[0][2] = mat._matrix[0][2];
+        _matrix[0][3] = mat._matrix[0][3];
+        _matrix[1][0] = mat._matrix[1][0];
+        _matrix[1][1] = mat._matrix[1][1];
+        _matrix[1][2] = mat._matrix[1][2];
+        _matrix[1][3] = mat._matrix[1][3];
+        _matrix[2][0] = mat._matrix[2][0];
+        _matrix[2][1] = mat._matrix[2][1];
+        _matrix[2][2] = mat._matrix[2][2];
+        _matrix[2][3] = mat._matrix[2][3];
+        _matrix[3][0] = mat._matrix[3][0];
+        _matrix[3][1] = mat._matrix[3][1];
+        _matrix[3][2] = mat._matrix[3][2];
+        _matrix[3][3] = mat._matrix[3][3];
     }
-
 
     inline void Identity()
     {
-        _matrix[0][0]=1;  _matrix[0][1]=0;  _matrix[0][2]=0;  _matrix[0][3]=0;
-        _matrix[1][0]=0;  _matrix[1][1]=1;  _matrix[1][2]=0;  _matrix[1][3]=0;
-        _matrix[2][0]=0;  _matrix[2][1]=0;  _matrix[2][2]=1;  _matrix[2][3]=0;
-        _matrix[3][0]=0;  _matrix[3][1]=0;  _matrix[3][2]=0;  _matrix[3][3]=1;
+        _matrix[0][0] = 1;
+        _matrix[0][1] = 0;
+        _matrix[0][2] = 0;
+        _matrix[0][3] = 0;
+        _matrix[1][0] = 0;
+        _matrix[1][1] = 1;
+        _matrix[1][2] = 0;
+        _matrix[1][3] = 0;
+        _matrix[2][0] = 0;
+        _matrix[2][1] = 0;
+        _matrix[2][2] = 1;
+        _matrix[2][3] = 0;
+        _matrix[3][0] = 0;
+        _matrix[3][1] = 0;
+        _matrix[3][2] = 0;
+        _matrix[3][3] = 1;
     }
 
-    inline void Multiply (const matrix& mat)
+    inline void Multiply(const matrix& mat)
     {
-        int i,j;
+        int i, j;
 
         matrix temp(*this);
 
-        for (i=0; i<4; i++)
-        {
-            for (j=0; j<4; j++)
-            {
-                _matrix[i][j] = ((temp._matrix[i][0] * mat._matrix[0][j])
-                                 + (temp._matrix[i][1] * mat._matrix[1][j])
-                                 + (temp._matrix[i][2] * mat._matrix[2][j])
-                                 + (temp._matrix[i][3] * mat._matrix[3][j]));
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                _matrix[i][j] = ((temp._matrix[i][0] * mat._matrix[0][j]) + (temp._matrix[i][1] * mat._matrix[1][j]) + (temp._matrix[i][2] * mat._matrix[2][j]) + (temp._matrix[i][3] * mat._matrix[3][j]));
             }
         }
     }
 
-    inline void Scale (float sx, float sy, float sz)
+    inline void Scale(float sx, float sy, float sz)
     {
-        _matrix[0][0] *= sx;  _matrix[1][1] *= sy;  _matrix[2][2] *= sz;
+        _matrix[0][0] *= sx;
+        _matrix[1][1] *= sy;
+        _matrix[2][2] *= sz;
     }
 
-    inline void Translate (float tx, float ty, float tz)
+    inline void Translate(float tx, float ty, float tz)
     {
-        _matrix[3][0] += tx;  _matrix[3][1] += ty;  _matrix[3][2] += tz;
+        _matrix[3][0] += tx;
+        _matrix[3][1] += ty;
+        _matrix[3][2] += tz;
     }
 
-    inline void Rotate (float rx, float ry, float rz)
+    inline void Rotate(float rx, float ry, float rz)
     {
         matrix xmat, ymat, zmat;
 
         // x axis
 
-        xmat._matrix[1][1]=get_cos(rx); xmat._matrix[1][2]=get_sin(rx);
-        xmat._matrix[2][0]=0;           xmat._matrix[2][1]=-get_sin(rx); xmat._matrix[2][2]=get_cos(rx);
+        xmat._matrix[1][1] = get_cos(rx);
+        xmat._matrix[1][2] = get_sin(rx);
+        xmat._matrix[2][0] = 0;
+        xmat._matrix[2][1] = -get_sin(rx);
+        xmat._matrix[2][2] = get_cos(rx);
 
         // y axis
 
-        ymat._matrix[0][0]=get_cos(ry);  ymat._matrix[0][2]=-get_sin(ry);
-        ymat._matrix[2][0]=get_sin(ry);  ymat._matrix[2][2]=get_cos(ry);
+        ymat._matrix[0][0] = get_cos(ry);
+        ymat._matrix[0][2] = -get_sin(ry);
+        ymat._matrix[2][0] = get_sin(ry);
+        ymat._matrix[2][2] = get_cos(ry);
 
         // z axis
 
-        zmat._matrix[0][0]=get_cos(rz);  zmat._matrix[0][1]=get_sin(rz);
-        zmat._matrix[1][0]=-get_sin(rz); zmat._matrix[1][1]=get_cos(rz);
+        zmat._matrix[0][0] = get_cos(rz);
+        zmat._matrix[0][1] = get_sin(rz);
+        zmat._matrix[1][0] = -get_sin(rz);
+        zmat._matrix[1][1] = get_cos(rz);
 
         matrix temp(xmat);
         temp.Multiply(ymat);
@@ -88,7 +116,7 @@ public:
         Multiply(temp);
     }
 
-    inline void TransformVertex (const Point3d &vertex, Point3d* result) const
+    inline void TransformVertex(const Point3d& vertex, Point3d* result) const
     {
         float x = vertex.x * _matrix[0][0] + vertex.y * _matrix[1][0] + vertex.z * _matrix[2][0] + _matrix[3][0];
         float y = vertex.x * _matrix[0][1] + vertex.y * _matrix[1][1] + vertex.z * _matrix[2][1] + _matrix[3][1];
@@ -99,23 +127,23 @@ public:
         result->z = z;
     }
 
-    inline void TranslateVertex (Point3d& result) const
+    inline void TranslateVertex(Point3d& result) const
     {
         result.x = _matrix[3][0];
         result.y = _matrix[3][1];
         result.z = _matrix[3][2];
     }
 
-    inline void ProjectVertex (Point3d &point, const Point3d &vertex, float distance) const
+    inline void ProjectVertex(Point3d& point, const Point3d& vertex, float distance) const
     {
         // avoid divide by zero error...
         float z = vertex.z;
-        if (z == 0) z = 0.00001;
+        if (z == 0)
+            z = 0.00001;
 
         // project
         point.x = distance * (vertex.x) / z;
         point.y = distance * (vertex.y) / z;
-//?????        point.distance = vertex.z;
+        //?????        point.distance = vertex.z;
     }
-
 };

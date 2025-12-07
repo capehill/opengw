@@ -1,22 +1,22 @@
 #include "entity.hpp"
 
-#include "game.hpp"
+#include "enemies.hpp"
 #include "entityPlayer1.hpp"
 #include "entityPlayer2.hpp"
-#include "entityplayermissile.hpp"
+#include "entityblackhole.hpp"
 #include "entitygrunt.hpp"
-#include "entitywanderer.hpp"
-#include "entityweaver.hpp"
+#include "entityline.hpp"
+#include "entitymayfly.hpp"
+#include "entityplayermissile.hpp"
+#include "entityproton.hpp"
+#include "entityrepulsor.hpp"
+#include "entitysnake.hpp"
 #include "entityspinner.hpp"
 #include "entitytinyspinner.hpp"
-#include "entitymayfly.hpp"
-#include "entitysnake.hpp"
-#include "entityblackhole.hpp"
-#include "entityrepulsor.hpp"
-#include "entityproton.hpp"
-#include "entityline.hpp"
+#include "entitywanderer.hpp"
+#include "entityweaver.hpp"
+#include "game.hpp"
 #include "players.hpp"
-#include "enemies.hpp"
 
 #include "SDL_opengl.h"
 
@@ -37,38 +37,37 @@ entity::entity()
 // Static class factory
 entity* entity::createEntity(EntityType _entity, const game& gameRef)
 {
-    switch (_entity)
-    {
-        case ENTITY_TYPE_PLAYER1:
-            return new entityPlayer1(gameRef);
-        case ENTITY_TYPE_PLAYER2:
-            return new entityPlayer2();
-        case ENTITY_TYPE_PLAYER_MISSILE:
-            return new entityPlayerMissile();
-        case ENTITY_TYPE_GRUNT:
-            return new entityGrunt(gameRef);
-        case ENTITY_TYPE_WANDERER:
-            return new entityWanderer();
-        case ENTITY_TYPE_WEAVER:
-            return new entityWeaver();
-        case ENTITY_TYPE_SPINNER:
-            return new entitySpinner(gameRef);
-        case ENTITY_TYPE_TINYSPINNER:
-            return new entityTinySpinner(gameRef);
-        case ENTITY_TYPE_MAYFLY:
-            return new entityMayfly();
-        case ENTITY_TYPE_SNAKE:
-            return new entitySnake();
-        case ENTITY_TYPE_BLACKHOLE:
-            return new entityBlackHole(gameRef);
-        case ENTITY_TYPE_REPULSOR:
-            return new entityRepulsor(gameRef);
-        case ENTITY_TYPE_PROTON:
-            return new entityProton();
-        case ENTITY_TYPE_LINE:
-            return new entityLine();
-        default:
-            return new entity();
+    switch (_entity) {
+    case ENTITY_TYPE_PLAYER1:
+        return new entityPlayer1(gameRef);
+    case ENTITY_TYPE_PLAYER2:
+        return new entityPlayer2();
+    case ENTITY_TYPE_PLAYER_MISSILE:
+        return new entityPlayerMissile();
+    case ENTITY_TYPE_GRUNT:
+        return new entityGrunt(gameRef);
+    case ENTITY_TYPE_WANDERER:
+        return new entityWanderer();
+    case ENTITY_TYPE_WEAVER:
+        return new entityWeaver();
+    case ENTITY_TYPE_SPINNER:
+        return new entitySpinner(gameRef);
+    case ENTITY_TYPE_TINYSPINNER:
+        return new entityTinySpinner(gameRef);
+    case ENTITY_TYPE_MAYFLY:
+        return new entityMayfly();
+    case ENTITY_TYPE_SNAKE:
+        return new entitySnake();
+    case ENTITY_TYPE_BLACKHOLE:
+        return new entityBlackHole(gameRef);
+    case ENTITY_TYPE_REPULSOR:
+        return new entityRepulsor(gameRef);
+    case ENTITY_TYPE_PROTON:
+        return new entityProton();
+    case ENTITY_TYPE_LINE:
+        return new entityLine();
+    default:
+        return new entity();
     }
 
     return 0;
@@ -81,20 +80,15 @@ void entity::draw()
     mModel.Rotate(mAngle);
     mModel.Translate(mPos);
 
-    if (this->getState() == entity::ENTITY_STATE_INDICATING)
-    {
-        if (((int)(mStateTimer/5)) & 1)
-        {
+    if (this->getState() == entity::ENTITY_STATE_INDICATING) {
+        if (((int)(mStateTimer / 5)) & 1) {
             vector::pen pen = mPen;
             mModel.draw(pen);
         }
-    }
-    else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION))
-    {
+    } else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION)) {
         vector::pen pen = mPen;
 
-        if (getState() == ENTITY_STATE_SPAWNING)
-        {
+        if (getState() == ENTITY_STATE_SPAWNING) {
             Point3d scale = mScale;
             Point3d trans = mPos;
 
@@ -103,14 +97,16 @@ void entity::draw()
 
             // *********************************************
 
-		    glLineWidth(pen.lineRadius*.3);
-			glBegin(GL_LINES);
+            glLineWidth(pen.lineRadius * .3);
+            glBegin(GL_LINES);
 
-            progress = 1-progress;
+            progress = 1 - progress;
 
             float a = progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -124,9 +120,11 @@ void entity::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -140,9 +138,11 @@ void entity::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -160,11 +160,10 @@ void entity::draw()
             mModel.Scale(scale);
             mModel.Translate(trans);
 
-			glEnd();
+            glEnd();
         }
 
         mModel.draw(pen);
-
     }
 }
 
@@ -180,21 +179,18 @@ void entity::run()
     mPos += mSpeed;
     mPos += mDrift;
     mAngle += mRotationRate;
-    mAngle = fmodf(mAngle, 2.0f*PI);
+    mAngle = fmodf(mAngle, 2.0f * PI);
 
     // Keep it on the grid
-    if (mGridBound)
-    {
-	    Point3d hitPoint;
-	    Point3d speed = mSpeed;
-	    if (theGame->mGrid->hitTest(mPos, mRadius, &hitPoint, &speed))
-	    {
-		    mPos = hitPoint;
-            if (mEdgeBounce)
-            {
+    if (mGridBound) {
+        Point3d hitPoint;
+        Point3d speed = mSpeed;
+        if (theGame->mGrid->hitTest(mPos, mRadius, &hitPoint, &speed)) {
+            mPos = hitPoint;
+            if (mEdgeBounce) {
                 mSpeed = speed;
             }
-	    }
+        }
     }
 
     // Update the model's matrix
@@ -210,8 +206,8 @@ void entity::spawnTransition()
 {
     setState(ENTITY_STATE_SPAWNING);
     mStateTimer = mSpawnTime;
-    mSpeed = Point3d(0,0,0);
-    mDrift = Point3d(0,0,0);
+    mSpeed = Point3d(0, 0, 0);
+    mDrift = Point3d(0, 0, 0);
     mAngle = 0;
     mRotationRate = 0;
     mAggression = 1;
@@ -227,8 +223,7 @@ void entity::spawnTransition()
 
 void entity::spawn()
 {
-    if (--mStateTimer <= 0)
-    {
+    if (--mStateTimer <= 0) {
         setState(ENTITY_STATE_RUNNING);
     }
 }
@@ -246,17 +241,16 @@ void entity::destroyTransition()
 
 void entity::destroy()
 {
-    if (--mStateTimer <= 0)
-    {
+    if (--mStateTimer <= 0) {
         setState(ENTITY_STATE_INACTIVE);
         return;
     }
 
     // Throw out some particles
     Point3d pos(this->mPos);
-    Point3d angle(0,0,0);
+    Point3d angle(0, 0, 0);
     float speed = 2.0;
-    float spread = 2*PI;
+    float spread = 2 * PI;
     int num = 20;
     int timeToLive = 200;
     vector::pen pen = mPen;
@@ -264,7 +258,7 @@ void entity::destroy()
     pen.g *= 1.2;
     pen.b *= 1.2;
     pen.a = 200;
-    pen.lineRadius=5;
+    pen.lineRadius = 5;
     theGame->mParticles->emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, true, true, .97, true);
 }
 
@@ -277,21 +271,17 @@ void entity::indicateTransition()
 
 void entity::indicating()
 {
-    if (--mStateTimer <= 0)
-    {
+    if (--mStateTimer <= 0) {
         setState(ENTITY_STATE_INACTIVE);
     }
 }
 
 void entity::hit(entity* aEntity)
 {
-    if (aEntity)
-    {
+    if (aEntity) {
         entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
-        if (missile)
-        {
-            if (mScoreValue)
-            {
+        if (missile) {
+            if (mScoreValue) {
                 // Add points and display them at the destruction point
                 if (missile->mPlayerSource == 0)
                     theGame->mPlayers->mPlayer1->addKillAtLocation(mScoreValue, getPos());
@@ -304,18 +294,12 @@ void entity::hit(entity* aEntity)
             }
 
             game::mSound.playTrack(SOUNDID_ENEMYHIT);
-        }
-        else if (aEntity && aEntity->getType() == entity::ENTITY_TYPE_BLACKHOLE)
-        {
+        } else if (aEntity && aEntity->getType() == entity::ENTITY_TYPE_BLACKHOLE) {
+            game::mSound.playTrack(SOUNDID_ENEMYHIT);
+        } else if ((aEntity && (aEntity->getType() == entity::ENTITY_TYPE_PLAYER1)) || (aEntity->getType() == entity::ENTITY_TYPE_PLAYER2)) {
             game::mSound.playTrack(SOUNDID_ENEMYHIT);
         }
-        else if ((aEntity && (aEntity->getType() == entity::ENTITY_TYPE_PLAYER1)) || (aEntity->getType() == entity::ENTITY_TYPE_PLAYER2))
-        {
-            game::mSound.playTrack(SOUNDID_ENEMYHIT);
-        }
-    }
-    else
-    {
+    } else {
         // It must be either a bomb or the player getting destroyed
     }
 
@@ -325,8 +309,8 @@ void entity::hit(entity* aEntity)
 entity* entity::hitTest(const Point3d& pos, float radius)
 {
     Point3d ourPos(0.0f, 0.0f, 0.0f);
-    //this->getModel()->mMatrix.TransformVertex(ourPos, &ourPos);
-	getModel()->mMatrix.TranslateVertex(ourPos);
+    // this->getModel()->mMatrix.TransformVertex(ourPos, &ourPos);
+    getModel()->mMatrix.TranslateVertex(ourPos);
 
 #if 0
     float distance = mathutils::calculate2dDistance(pos, ourPos);
@@ -338,8 +322,7 @@ entity* entity::hitTest(const Point3d& pos, float radius)
 #else
     float distance = mathutils::calculate2dDistanceSquared(pos, ourPos);
     float resultRadius = radius + getRadius();
-    if (distance < resultRadius * resultRadius)
-    {
+    if (distance < resultRadius * resultRadius) {
         return this;
     }
 #endif

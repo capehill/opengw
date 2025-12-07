@@ -8,7 +8,7 @@ class entitySnakeSegment;
 
 class entitySnake : public entity
 {
-public:
+  public:
     entitySnake();
 
     virtual void runTransition();
@@ -23,7 +23,7 @@ public:
 
     virtual void draw();
 
-private:
+  private:
     Point3d mTarget;
     std::vector<entitySnakeSegment> mSegments;
 

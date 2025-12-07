@@ -1,6 +1,6 @@
 #include "bomb.hpp"
-#include "game.hpp"
 #include "enemies.hpp"
+#include "game.hpp"
 
 #include "SDL_opengl.h"
 
@@ -9,10 +9,8 @@ bomb::bomb(void)
     mNumRings = 20;
 
     mRings = new RING[mNumRings];
-    if (mRings)
-    {
-        for (int i=0; i<mNumRings; i++)
-        {
+    if (mRings) {
+        for (int i = 0; i < mNumRings; i++) {
             mRings[i].timeToLive = 0;
         }
     }
@@ -20,37 +18,31 @@ bomb::bomb(void)
 
 bomb::~bomb(void)
 {
-    if (mRings)
-    {
-        for (int i=0; i<mNumRings; i++)
-        {
+    if (mRings) {
+        for (int i = 0; i < mNumRings; i++) {
             mRings[i].timeToLive = 0;
         }
 
-        delete [] mRings;
+        delete[] mRings;
     }
     mRings = NULL;
 }
 
 void bomb::run()
 {
-    for (int i=0; i<mNumRings; i++)
-    {
-        if (mRings[i].timeToLive > 0)
-        {
+    for (int i = 0; i < mNumRings; i++) {
+        if (mRings[i].timeToLive > 0) {
             mRings[i].radius += mRings[i].speed;
             mRings[i].thickness += .03;
             --mRings[i].timeToLive;
 
-            if (mRings[i].radius > 100)
-            {
+            if (mRings[i].radius > 100) {
                 mRings[i].timeToLive = 0;
             }
 
             // Push the grid out
             attractor::Attractor* att = game::mAttractors.getAttractor();
-            if (att)
-            {
+            if (att) {
                 att->strength = 200;
                 att->radius = mRings[i].radius;
 
@@ -60,43 +52,30 @@ void bomb::run()
             }
 
             // Look for any enemies within the blast radius and destroy them
-            for (int j=0; j<NUM_ENEMIES; j++)
-            {
-                if ((theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INACTIVE)
-                    && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INDICATING)
-                    && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INDICATE_TRANSITION)
-                    && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_DESTROY_TRANSITION)
-                    && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_DESTROYED))
-                {
+            for (int j = 0; j < NUM_ENEMIES; j++) {
+                if ((theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INACTIVE) && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INDICATING) && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_INDICATE_TRANSITION) && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_DESTROY_TRANSITION) && (theGame->mEnemies->mEnemies[j]->getState() != entity::ENTITY_STATE_DESTROYED)) {
                     float distance = mathutils::calculate2dDistance(mRings[i].pos, theGame->mEnemies->mEnemies[j]->getPos());
-                    if ((distance > mRings[i].radius-10) && (distance < mRings[i].radius))
-                    {
+                    if ((distance > mRings[i].radius - 10) && (distance < mRings[i].radius)) {
                         // Destroy it
                         theGame->mEnemies->mEnemies[j]->hit(NULL);
                     }
                 }
             }
-
         }
     }
 }
 
 void bomb::draw()
 {
-    for (int i=0; i<mNumRings; i++)
-    {
-        if (mRings[i].timeToLive > 0)
-        {
+    for (int i = 0; i < mNumRings; i++) {
+        if (mRings[i].timeToLive > 0) {
             RING* ring = &mRings[i];
 
             // Fade out
             ring->pen.a -= ring->fadeStep;
-            if (ring->pen.a <= 0)
-            {
+            if (ring->pen.a <= 0) {
                 ring->pen.a = 0;
-            }
-            else if (ring->pen.a > 1)
-            {
+            } else if (ring->pen.a > 1) {
                 ring->pen.a = 1;
             }
 
@@ -104,8 +83,7 @@ void bomb::draw()
             glColor4f(ring->pen.r, ring->pen.g, ring->pen.b, ring->pen.a);
             glBegin(GL_LINES);
 
-            for (float a=0; a<360; a+=.5)
-            {
+            for (float a = 0; a < 360; a += .5) {
                 float angle = mathutils::DegreesToRads(a);
 
                 Point3d from(0, ring->radius, 0);
@@ -122,7 +100,6 @@ void bomb::draw()
             }
 
             glEnd();
-
         }
     }
 }
@@ -130,16 +107,13 @@ void bomb::draw()
 void bomb::startBomb(Point3d pos, float radius, float thickness, float speed, int timeToLive, vector::pen pen)
 {
     RING* ring = NULL;
-    for (int i=0; i<mNumRings; i++)
-    {
-        if (mRings[i].timeToLive <= 0)
-        {
+    for (int i = 0; i < mNumRings; i++) {
+        if (mRings[i].timeToLive <= 0) {
             ring = &mRings[i];
         }
     }
 
-    if (ring)
-    {
+    if (ring) {
         ring->pos = pos;
         ring->radius = radius;
         ring->thickness = thickness;
@@ -148,23 +122,20 @@ void bomb::startBomb(Point3d pos, float radius, float thickness, float speed, in
         ring->fadeStep = 1.0f / ring->timeToLive;
         ring->pen = pen;
 
-        Point3d angle(0,0,0);
-        float spread = 2*PI;
+        Point3d angle(0, 0, 0);
+        float spread = 2 * PI;
         int num = 100;
         int timeToLive = ring->timeToLive;
-        pen.lineRadius=5;
+        pen.lineRadius = 5;
         pen.a = .3;
         theGame->mParticles->emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, false, false, 1, true);
-
     }
 }
 
 bool bomb::isBombing()
 {
-    for (int i=0; i<mNumRings; i++)
-    {
-        if (mRings[i].timeToLive > 0)
-        {
+    for (int i = 0; i < mNumRings; i++) {
+        if (mRings[i].timeToLive > 0) {
             return true;
         }
     }

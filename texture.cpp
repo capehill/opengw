@@ -26,8 +26,7 @@ void texture::load(const char* filename)
     unsigned error = lodepng::decode(image, mWidth, mHeight, filename);
 
     // If there's an error, display it.
-    if(error != 0)
-    {
+    if (error != 0) {
 #ifdef USE_SDL
         printf("texture::load(%s) error: %s\n", filename, lodepng_error_text(error));
 #else
@@ -58,34 +57,36 @@ void texture::draw(float x, float y, float width, float height)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     // Enable the texture for OpenGL
-    glEnable( GL_TEXTURE_2D );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     glBindTexture(GL_TEXTURE_2D, mTextureId);
 
     glColor4f(1, 1, 1, 1);
 
-
     glBegin(GL_QUADS);
-    glTexCoord2d(0, 1); glVertex2d(x-(width/2), y-(height/2));
-    glTexCoord2d(1, 1); glVertex2d(x+(width/2), y-(height/2));
-    glTexCoord2d(1, 0); glVertex2d(x+(width/2), y+(height/2));
-    glTexCoord2d(0, 0); glVertex2d(x-(width/2), y+(height/2));
+    glTexCoord2d(0, 1);
+    glVertex2d(x - (width / 2), y - (height / 2));
+    glTexCoord2d(1, 1);
+    glVertex2d(x + (width / 2), y - (height / 2));
+    glTexCoord2d(1, 0);
+    glVertex2d(x + (width / 2), y + (height / 2));
+    glTexCoord2d(0, 0);
+    glVertex2d(x - (width / 2), y + (height / 2));
     glEnd();
-
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glDisable(GL_TEXTURE_2D);
 
-	glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 }
 
 void texture::bind()
 {
-    glEnable( GL_TEXTURE_2D );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
 }
 

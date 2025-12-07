@@ -1,7 +1,6 @@
 #include "entityPlayer4.hpp"
-#include "game.hpp"
 #include "entityplayermissile.hpp"
-
+#include "game.hpp"
 
 entityPlayer4::entityPlayer4()
     : player()
@@ -18,7 +17,7 @@ entityPlayer4::entityPlayer4()
     mMissilesPen = vector::pen(.3, .8, .3, 40, 5);
     mFontPen = vector::pen(.3, .8, .3, 40, 5);
 
-    int i=0;
+    int i = 0;
 
     mModel.mNumVertex = 7;
     mModel.mVertexList = new Point3d[mModel.mNumVertex];
@@ -37,22 +36,29 @@ entityPlayer4::entityPlayer4()
 
     mModel.mNumEdges = 8;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 0;
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 4;
-    mModel.mEdgeList[i].from = 4; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 5; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 6; mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 4;
+    mModel.mEdgeList[i].from = 4;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 5;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 6;
+    mModel.mEdgeList[i++].to = 0;
 }
 
 void entityPlayer4::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    if (theGame->numPlayers() > 1)
-    {
+    if (theGame->numPlayers() > 1) {
         mPos.x = (theGame->mGrid->extentX() / 2) + 9;
         mPos.y = (theGame->mGrid->extentY() / 2) - 9;
         mPos.z = 0;

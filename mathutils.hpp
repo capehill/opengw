@@ -5,56 +5,56 @@
 
 namespace mathutils
 {
-    float wrapRadians(float radians);
+float wrapRadians(float radians);
 
-    float calculate2dDistance(const Point3d& p1, const Point3d& p2);
-    float calculate2dDistanceSquared(const Point3d& p1, const Point3d& p2);
+float calculate2dDistance(const Point3d& p1, const Point3d& p2);
+float calculate2dDistanceSquared(const Point3d& p1, const Point3d& p2);
 
-    float calculate2dAngle(Point3d from, Point3d to);
+float calculate2dAngle(Point3d from, Point3d to);
 
-    float diffAngles(float angle1, float angle2);
+float diffAngles(float angle1, float angle2);
 
-    Point3d clamp2dVector(const Point3d& vector, float max);
+Point3d clamp2dVector(const Point3d& vector, float max);
 
-    Point3d rotate2dPoint(const Point3d& point, float angle);
+Point3d rotate2dPoint(const Point3d& point, float angle);
 
-    Point3d translate2dPoint(const Point3d& point, float tx, float ty);
+Point3d translate2dPoint(const Point3d& point, float tx, float ty);
 
-    Point3d translate2dPoint(const Point3d& point, Point3d translation);
+Point3d translate2dPoint(const Point3d& point, Point3d translation);
 
-    Point3d translate2dPointFromPointByRadius(const Point3d& point, const Point3d& fromPoint, float distance);
+Point3d translate2dPointFromPointByRadius(const Point3d& point, const Point3d& fromPoint, float distance);
 
-    int randFromTo(int from, int to);
+int randFromTo(int from, int to);
 
-    //float frandFrom0To1();
+// float frandFrom0To1();
 
-	constexpr float onePerRandMax = 1.0f / static_cast<float>(RAND_MAX);
+constexpr float onePerRandMax = 1.0f / static_cast<float>(RAND_MAX);
 
-	inline float frandFrom0To1()
-    {
-		return rand() * onePerRandMax;
-    }
+inline float frandFrom0To1()
+{
+    return rand() * onePerRandMax;
+}
 
-    inline float RadsToDegrees(float radians)
-    {
-      return radians * 57.2957795786;
-    }
+inline float RadsToDegrees(float radians)
+{
+    return radians * 57.2957795786;
+}
 
-    inline float DegreesToRads(float degrees)
-    {
-      return degrees * 0.0174532925;
-    }
+inline float DegreesToRads(float degrees)
+{
+    return degrees * 0.0174532925;
+}
 
-	bool pointInPolygon(const Point3d& testPoint, Point3d poly[], int numPoints, float scale);
+bool pointInPolygon(const Point3d& testPoint, Point3d poly[], int numPoints, float scale);
 
-    Point3d closestPointOnLineSegment(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
+Point3d closestPointOnLineSegment(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
 
-    float pointLineDistance(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
+float pointLineDistance(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
 
-    bool isPointOnLine(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
+bool isPointOnLine(const Point3d& lineFrom, const Point3d& lineTo, const Point3d& testPoint);
 
-    bool approximatelyEqual(float testValue, float eval, float tolerance);
+bool approximatelyEqual(float testValue, float eval, float tolerance);
 
-    bool lineCircleIntersects(const Point3d& c, float r, const Point3d& p1, const Point3d& p2);
+bool lineCircleIntersects(const Point3d& c, float r, const Point3d& p1, const Point3d& p2);
 
-};
+}; // namespace mathutils

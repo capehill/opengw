@@ -1,7 +1,6 @@
 #include "entityPlayer2.hpp"
-#include "game.hpp"
 #include "entityplayermissile.hpp"
-
+#include "game.hpp"
 
 entityPlayer2::entityPlayer2()
     : player()
@@ -18,7 +17,7 @@ entityPlayer2::entityPlayer2()
     mMissilesPen = vector::pen(.3, .4, 1, 40, 5);
     mFontPen = vector::pen(.3, .4, 1, 40, 5);
 
-    int i=0;
+    int i = 0;
 
     mModel.mNumVertex = 13;
     mModel.mVertexList = new Point3d[mModel.mNumVertex];
@@ -43,29 +42,40 @@ entityPlayer2::entityPlayer2()
 
     mModel.mNumEdges = 12;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 0;
 
-    mModel.mEdgeList[i].from = 4; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 5; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 6; mModel.mEdgeList[i++].to = 4;
+    mModel.mEdgeList[i].from = 4;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 5;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 6;
+    mModel.mEdgeList[i++].to = 4;
 
-    mModel.mEdgeList[i].from = 7; mModel.mEdgeList[i++].to = 9;
-    mModel.mEdgeList[i].from = 9; mModel.mEdgeList[i++].to = 8;
-    mModel.mEdgeList[i].from = 8; mModel.mEdgeList[i++].to = 7;
+    mModel.mEdgeList[i].from = 7;
+    mModel.mEdgeList[i++].to = 9;
+    mModel.mEdgeList[i].from = 9;
+    mModel.mEdgeList[i++].to = 8;
+    mModel.mEdgeList[i].from = 8;
+    mModel.mEdgeList[i++].to = 7;
 
-    mModel.mEdgeList[i].from = 10; mModel.mEdgeList[i++].to = 11;
-    mModel.mEdgeList[i].from = 11; mModel.mEdgeList[i++].to = 12;
+    mModel.mEdgeList[i].from = 10;
+    mModel.mEdgeList[i++].to = 11;
+    mModel.mEdgeList[i].from = 11;
+    mModel.mEdgeList[i++].to = 12;
 }
 
 void entityPlayer2::initPlayerForGame()
 {
     player::initPlayerForGame();
 
-    if (theGame->numPlayers() == 2)
-    {
+    if (theGame->numPlayers() == 2) {
         mPos.x = (theGame->mGrid->extentX() / 2) + 9;
         mPos.y = (theGame->mGrid->extentY() / 2) + 9;
         mPos.z = 0;

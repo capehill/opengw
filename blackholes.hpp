@@ -2,9 +2,8 @@
 
 class blackholes
 {
-public:
+  public:
     blackholes();
 
     static void run();
-
 };

@@ -1,24 +1,22 @@
 #include "entitysnake.hpp"
-#include "game.hpp"
 #include "enemies.hpp"
+#include "game.hpp"
 
 #include "SDL_opengl.h"
 
-#define NUM_SEGMENTS 23
+#define NUM_SEGMENTS         23
 #define NUM_SEG_STREAM_ITEMS 5 // sets the spacing between segments
-
 
 // PERFORMANCE: ~Something~ about the snakes causes a huge slowdown. No idea if it's the drawing or something else in the run() code...
 
 class entitySnakeSegment : public entity
 {
-public:
-
+  public:
     typedef struct
     {
         Point3d pos;
         float angle;
-    }SegmentStreamItem;
+    } SegmentStreamItem;
 
     float mTail;
     entity* mParent { nullptr };
@@ -50,13 +48,15 @@ public:
 
         mModel.mNumEdges = 3;
         mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-		mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-		mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-		mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 0;
+        mModel.mEdgeList[i].from = 0;
+        mModel.mEdgeList[i++].to = 1;
+        mModel.mEdgeList[i].from = 1;
+        mModel.mEdgeList[i++].to = 2;
+        mModel.mEdgeList[i].from = 2;
+        mModel.mEdgeList[i++].to = 0;
 
         mSegmentStream.resize(NUM_SEG_STREAM_ITEMS);
-        for (int i=0; i<NUM_SEG_STREAM_ITEMS; i++)
-        {
+        for (int i = 0; i < NUM_SEG_STREAM_ITEMS; i++) {
             mSegmentStream[i].pos = mPos;
             mSegmentStream[i].angle = mAngle;
         }
@@ -90,13 +90,10 @@ public:
 
     void draw()
     {
-        if (this->getState() == entity::ENTITY_STATE_INDICATING)
-        {
-            if (((int)(mParent->getStateTimer()/10)) & 1)
-            {
+        if (this->getState() == entity::ENTITY_STATE_INDICATING) {
+            if (((int)(mParent->getStateTimer() / 10)) & 1) {
                 vector::pen pen = mPen;
-                if (scene::mPass == scene::RENDERPASS_BLUR)
-                {
+                if (scene::mPass == scene::RENDERPASS_BLUR) {
                     pen.r = 1;
                     pen.g = .5;
                     pen.b = .1;
@@ -104,12 +101,9 @@ public:
                 }
                 mModel.draw(pen);
             }
-        }
-        else if (getEnabled())
-        {
+        } else if (getEnabled()) {
             vector::pen pen = mPen;
-            if (scene::mPass == scene::RENDERPASS_BLUR)
-            {
+            if (scene::mPass == scene::RENDERPASS_BLUR) {
                 pen.r = 1;
                 pen.g = .5;
                 pen.b = .1;
@@ -132,11 +126,13 @@ public:
         // *********************************************
         {
 
-            progress = 1-progress;
+            progress = 1 - progress;
 
             float a = progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -146,7 +142,6 @@ public:
             mModel.Rotate(mAngle);
             mModel.Translate(trans);
             mModel.draw(pen);
-
         }
     }
 
@@ -158,35 +153,32 @@ public:
         setAngle(mSegmentStream[0].angle);
 
         // Shift the stream from head to tail
-        for (int i=NUM_SEG_STREAM_ITEMS-2; i>=0; i--)
-        {
-            mSegmentStream[i+1].pos = mSegmentStream[i].pos;
-            mSegmentStream[i+1].angle = mSegmentStream[i].angle;
+        for (int i = NUM_SEG_STREAM_ITEMS - 2; i >= 0; i--) {
+            mSegmentStream[i + 1].pos = mSegmentStream[i].pos;
+            mSegmentStream[i + 1].angle = mSegmentStream[i].angle;
         }
 
-        if (mTail < NUM_SEG_STREAM_ITEMS-1)
-        {
+        if (mTail < NUM_SEG_STREAM_ITEMS - 1) {
             mTail += .1;
-            if (mTail > NUM_SEG_STREAM_ITEMS-1)
-                mTail = NUM_SEG_STREAM_ITEMS-1;
+            if (mTail > NUM_SEG_STREAM_ITEMS - 1)
+                mTail = NUM_SEG_STREAM_ITEMS - 1;
         }
     }
 
     void spawnTransition()
     {
         entity::spawnTransition();
-		mTail = NUM_SEG_STREAM_ITEMS-1;
+        mTail = NUM_SEG_STREAM_ITEMS - 1;
     }
 
-	void postSpawnTransition()
-	{
+    void postSpawnTransition()
+    {
         // Set up all the segments
-        for (int i=0; i<NUM_SEG_STREAM_ITEMS; i++)
-        {
+        for (int i = 0; i < NUM_SEG_STREAM_ITEMS; i++) {
             mSegmentStream[i].pos = mPos;
             mSegmentStream[i].angle = mAngle;
         }
-	}
+    }
 
     void destroyTransition()
     {
@@ -195,9 +187,9 @@ public:
 
         // Throw out some particles
         Point3d pos(this->mPos);
-        Point3d angle(0,0,0);
+        Point3d angle(0, 0, 0);
         float speed = 1.2;
-        float spread = 2*PI;
+        float spread = 2 * PI;
         int num = 10;
         int timeToLive = 150;
         vector::pen pen = mPen;
@@ -205,7 +197,7 @@ public:
         pen.g *= 1.2;
         pen.b *= 1.2;
         pen.a = .8;
-        pen.lineRadius=5;
+        pen.lineRadius = 5;
         theGame->mParticles->emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, true, true, .98, true);
 
         // Explode the object into line entities
@@ -240,7 +232,7 @@ entitySnake::entitySnake()
     mPen = vector::pen(.5, .5, 1, 2, 12);
     mModel.mIsLineLoop = true;
 
-    int i=0;
+    int i = 0;
 
     mModel.mNumVertex = 14;
     mModel.mVertexList = new Point3d[mModel.mNumVertex];
@@ -264,35 +256,50 @@ entitySnake::entitySnake()
     mModel.mNumEdges = 15;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
 
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 4;
-    mModel.mEdgeList[i].from = 4; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 5; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 6; mModel.mEdgeList[i++].to = 7;
-    mModel.mEdgeList[i].from = 7; mModel.mEdgeList[i++].to = 8;
-    mModel.mEdgeList[i].from = 8; mModel.mEdgeList[i++].to = 9;
-    mModel.mEdgeList[i].from = 9; mModel.mEdgeList[i++].to = 10;
-    mModel.mEdgeList[i].from = 10; mModel.mEdgeList[i++].to = 11;
-    mModel.mEdgeList[i].from = 11; mModel.mEdgeList[i++].to = 12;
-    mModel.mEdgeList[i].from = 12; mModel.mEdgeList[i++].to = 13;
-    mModel.mEdgeList[i].from = 13; mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 4;
+    mModel.mEdgeList[i].from = 4;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 5;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 6;
+    mModel.mEdgeList[i++].to = 7;
+    mModel.mEdgeList[i].from = 7;
+    mModel.mEdgeList[i++].to = 8;
+    mModel.mEdgeList[i].from = 8;
+    mModel.mEdgeList[i++].to = 9;
+    mModel.mEdgeList[i].from = 9;
+    mModel.mEdgeList[i++].to = 10;
+    mModel.mEdgeList[i].from = 10;
+    mModel.mEdgeList[i++].to = 11;
+    mModel.mEdgeList[i].from = 11;
+    mModel.mEdgeList[i++].to = 12;
+    mModel.mEdgeList[i].from = 12;
+    mModel.mEdgeList[i++].to = 13;
+    mModel.mEdgeList[i].from = 13;
+    mModel.mEdgeList[i++].to = 0;
 
     // Create the tail segments
     mSegments.resize(NUM_SEGMENTS);
 
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].setState(ENTITY_STATE_INACTIVE);
 
         entitySnakeSegment::SegmentStreamItem item;
         item.pos = mPos;
         item.angle = mAngle;
         mSegments[i].setStreamHead(item);
-        Point3d scale((1-((float)i/NUM_SEGMENTS)) * 2, 1.4, 1);
-        if (scale.x > 1.1) scale.x = 1.1;
+        Point3d scale((1 - ((float)i / NUM_SEGMENTS)) * 2, 1.4, 1);
+        if (scale.x > 1.1)
+            scale.x = 1.1;
         mSegments[i].setScale(scale);
         mSegments[i].setParent(this);
     }
@@ -305,25 +312,19 @@ void entitySnake::runTransition()
 
 void entitySnake::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         float targetDistance = mathutils::calculate2dDistance(mPos, mTarget);
-        if (targetDistance < 10)
-        {
+        if (targetDistance < 10) {
             // Pick a new target
             updateTarget();
         }
 
         float diff = (mathutils::calculate2dAngle(mPos, mTarget) - mathutils::DegreesToRads(90));
 
-        if (fabs(diff) > .1)
-        {
-            if (mAngle < diff)
-            {
+        if (fabs(diff) > .1) {
+            if (mAngle < diff) {
                 mRotationRate += .005;
-            }
-            else if ((mAngle > diff))
-            {
+            } else if ((mAngle > diff)) {
                 mRotationRate -= .005;
             }
         }
@@ -336,7 +337,6 @@ void entitySnake::run()
             mRotationRate = maxRate;
         else if (mRotationRate < -maxRate)
             mRotationRate = -maxRate;
-
 
         Point3d moveVector(0, 1, 0);
         moveVector = mathutils::rotate2dPoint(moveVector, mAngle);
@@ -356,56 +356,49 @@ void entitySnake::run()
         }
 
         // Link them all together
-        for (int i=NUM_SEGMENTS-2; i>=0; i--)
-        {
+        for (int i = NUM_SEGMENTS - 2; i >= 0; i--) {
             entitySnakeSegment* segmentThis = &mSegments[i];
-            entitySnakeSegment* segmentNext = &mSegments[i+1];
+            entitySnakeSegment* segmentNext = &mSegments[i + 1];
             segmentNext->setStreamHead(segmentThis->getStreamTail());
         }
 
         // Run each
-        for (int i=0; i<NUM_SEGMENTS; i++)
-        {
+        for (int i = 0; i < NUM_SEGMENTS; i++) {
             mSegments[i].run();
         }
-
     }
     entity::run();
-
-
 }
 
 void entitySnake::spawnTransition()
 {
     entity::spawnTransition();
 
-	// Aim towards the closest player
-	mAngle = mathutils::frandFrom0To1() * 2 * PI;
+    // Aim towards the closest player
+    mAngle = mathutils::frandFrom0To1() * 2 * PI;
 
     updateTarget();
 
-	// Position and aim the tail segments correctly for a spawn
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    // Position and aim the tail segments correctly for a spawn
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].spawnTransition();
 
-		Point3d posVector(0, (i+1) * -.2, 0);
-		posVector = mathutils::rotate2dPoint(posVector, mAngle);
+        Point3d posVector(0, (i + 1) * -.2, 0);
+        posVector = mathutils::rotate2dPoint(posVector, mAngle);
         mSegments[i].setPos(mPos + posVector);
         mSegments[i].setAngle(mAngle);
 
-		mSegments[i].postSpawnTransition();
+        mSegments[i].postSpawnTransition();
     }
 
-	game::mSound.playTrack(SOUNDID_ENEMYSPAWN6);
+    game::mSound.playTrack(SOUNDID_ENEMYSPAWN6);
 }
 
 void entitySnake::spawn()
 {
     entity::spawn();
 
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].spawn();
     }
 }
@@ -414,8 +407,7 @@ void entitySnake::destroyTransition()
 {
     entity::destroyTransition();
 
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].destroyTransition();
     }
 }
@@ -424,8 +416,7 @@ void entitySnake::destroy()
 {
     entity::destroy();
 
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].destroy();
     }
 }
@@ -434,19 +425,18 @@ entity* entitySnake::hitTest(const Point3d& pos, float radius)
 {
     // First see if it hit the head
     entity* e = entity::hitTest(pos, radius);
-    if (e) return e;
+    if (e)
+        return e;
 
     // Nope, check the tail segments
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         entitySnakeSegment* segment = &mSegments[i];
-        Point3d ourPos(0,0,0);
+        Point3d ourPos(0, 0, 0);
         segment->getModel()->mMatrix.TransformVertex(ourPos, &ourPos);
 
         float distance = mathutils::calculate2dDistance(pos, ourPos);
         float resultRadius = radius + segment->getRadius();
-        if (distance < resultRadius)
-        {
+        if (distance < resultRadius) {
             return segment;
         }
     }
@@ -456,20 +446,15 @@ entity* entitySnake::hitTest(const Point3d& pos, float radius)
 
 void entitySnake::draw()
 {
-    if (this->getState() == entity::ENTITY_STATE_INDICATING)
-    {
-        if (((int)(mStateTimer/10)) & 1)
-        {
+    if (this->getState() == entity::ENTITY_STATE_INDICATING) {
+        if (((int)(mStateTimer / 10)) & 1) {
             vector::pen pen = mPen;
             mModel.draw(pen);
         }
-    }
-    else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION))
-    {
+    } else if (this->getEnabled() && (this->getState() != entity::ENTITY_STATE_SPAWN_TRANSITION)) {
         vector::pen pen = mPen;
 
-        if (getState() == ENTITY_STATE_SPAWNING)
-        {
+        if (getState() == ENTITY_STATE_SPAWNING) {
             Point3d scale = mScale;
             Point3d trans = mPos;
 
@@ -478,14 +463,16 @@ void entitySnake::draw()
 
             // *********************************************
 
-		    glLineWidth(pen.lineRadius*.3);
-			glBegin(GL_LINES);
+            glLineWidth(pen.lineRadius * .3);
+            glBegin(GL_LINES);
 
-            progress = 1-progress;
+            progress = 1 - progress;
 
             float a = progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -499,9 +486,11 @@ void entitySnake::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -515,9 +504,11 @@ void entitySnake::draw()
 
             progress = progress + .25;
 
-            a = 1-progress;
-            if (a<0) a = 0;
-            if (a>1) a = 1;
+            a = 1 - progress;
+            if (a < 0)
+                a = 0;
+            if (a > 1)
+                a = 1;
 
             pen.a = a;
 
@@ -535,45 +526,37 @@ void entitySnake::draw()
             mModel.Scale(scale);
             mModel.Translate(trans);
 
-			glEnd();
+            glEnd();
         }
 
         mModel.draw(pen);
     }
 
-    if (getState() == ENTITY_STATE_SPAWNING)
-    {
-        for (int i=0; i<NUM_SEGMENTS; i++)
-        {
+    if (getState() == ENTITY_STATE_SPAWNING) {
+        for (int i = 0; i < NUM_SEGMENTS; i++) {
             mSegments[i].drawSpawn(mStateTimer, mSpawnTime);
         }
-    }
-    else
-    {
-        for (int i=0; i<NUM_SEGMENTS; i++)
-        {
+    } else {
+        for (int i = 0; i < NUM_SEGMENTS; i++) {
             mSegments[i].draw();
         }
     }
-
 }
 
 void entitySnake::indicateTransition()
 {
     entity::indicateTransition();
-    for (int i=0; i<NUM_SEGMENTS; i++)
-    {
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
         mSegments[i].setState(ENTITY_STATE_INDICATING);
     }
 }
-
 
 void entitySnake::updateTarget()
 {
     // Pick a random point around us
     const float distance = 40;
 
-    float angle = mathutils::frandFrom0To1() * (2*PI);
+    float angle = mathutils::frandFrom0To1() * (2 * PI);
     mTarget = Point3d(distance, 0, 0);
     mTarget = mathutils::rotate2dPoint(mTarget, angle);
     mTarget += mPos;
@@ -581,8 +564,8 @@ void entitySnake::updateTarget()
     const float margin = 15;
     const float leftEdge = margin;
     const float bottomEdge = margin;
-    const float rightEdge = (theGame->mGrid->extentX()-1)-margin;
-    const float topEdge = (theGame->mGrid->extentY()-1)-margin;
+    const float rightEdge = (theGame->mGrid->extentX() - 1) - margin;
+    const float topEdge = (theGame->mGrid->extentY() - 1) - margin;
 
     if (mTarget.x < leftEdge)
         mTarget.x = leftEdge;

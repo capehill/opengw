@@ -15,19 +15,14 @@ entityTinySpinner::entityTinySpinner(const game& gameRef)
     mType = ENTITY_TYPE_TINYSPINNER;
 }
 
-
 void entityTinySpinner::draw()
 {
-    if (this->getState() == entity::ENTITY_STATE_INDICATING)
-    {
-        if (((int)(mStateTimer/10)) & 1)
-        {
+    if (this->getState() == entity::ENTITY_STATE_INDICATING) {
+        if (((int)(mStateTimer / 10)) & 1) {
             vector::pen pen = mPen;
             mModel.draw(pen);
         }
-    }
-    else if (this->getEnabled())
-    {
+    } else if (this->getEnabled()) {
         mModel.Identity();
         mModel.Scale(mScale);
         mModel.Rotate(mAngle);
@@ -37,11 +32,9 @@ void entityTinySpinner::draw()
     }
 }
 
-
 void entityTinySpinner::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         // Seek the player
 
         float angle = mathutils::calculate2dAngle(mPos, mGame.mPlayers->getPlayerClosestToPosition(mPos)->getPos());
@@ -54,17 +47,20 @@ void entityTinySpinner::run()
         // Run circling animation
 
         mAnimationIndex += .12;
-        Point3d offset(5,0,0);
+        Point3d offset(5, 0, 0);
         offset = mathutils::rotate2dPoint(offset, mAnimationIndex);
         mVirtualPos = mPos + offset;
-        mAngle = mAnimationIndex*2;
+        mAngle = mAnimationIndex * 2;
 
-        if (mVirtualPos.x < 0) mVirtualPos.x = 0;
-        else if (mVirtualPos.x > theGame->mGrid->extentX()-1) mVirtualPos.x = theGame->mGrid->extentX()-1;
+        if (mVirtualPos.x < 0)
+            mVirtualPos.x = 0;
+        else if (mVirtualPos.x > theGame->mGrid->extentX() - 1)
+            mVirtualPos.x = theGame->mGrid->extentX() - 1;
 
-        if (mVirtualPos.y < 0) mVirtualPos.y = 0;
-        else if (mVirtualPos.y > theGame->mGrid->extentY()-1) mVirtualPos.y = theGame->mGrid->extentY()-1;
-
+        if (mVirtualPos.y < 0)
+            mVirtualPos.y = 0;
+        else if (mVirtualPos.y > theGame->mGrid->extentY() - 1)
+            mVirtualPos.y = theGame->mGrid->extentY() - 1;
     }
     entity::run();
 }
@@ -73,25 +69,23 @@ void entityTinySpinner::spawnTransition()
 {
     entity::spawnTransition();
     mDrift = mInitialSpeed;
-    mInitialSpeed = Point3d(0,0,0);
+    mInitialSpeed = Point3d(0, 0, 0);
 }
 
 void entityTinySpinner::spawn()
 {
     entity::spawn();
 
-    if (mStateTimer > 0)
-    {
+    if (mStateTimer > 0) {
         // Make them invincible (and brighter) for a short period of time
         // so we don't just pick them off as soon as they spawn
         float c = mStateTimer / mSpawnTime;
-        c = (1 * c) + (.5 * (1-c));
+        c = (1 * c) + (.5 * (1 - c));
         mPen = vector::pen(1, c, 1, .5, 12);
         mStateTimer -= 1;
         run();
     }
-    if (mStateTimer <= 0)
-    {
+    if (mStateTimer <= 0) {
         mPen = vector::pen(1, .5, 1, .5, 12);
     }
 }
@@ -112,8 +106,7 @@ entity* entityTinySpinner::hitTest(const Point3d& pos, float radius)
 
     float distance = mathutils::calculate2dDistance(pos, ourPos);
     float resultRadius = radius + getRadius();
-    if (distance < resultRadius)
-    {
+    if (distance < resultRadius) {
         return this;
     }
     return NULL;

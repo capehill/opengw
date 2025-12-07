@@ -1,21 +1,21 @@
 #pragma once
 
-#include "defines.hpp"
-#include "sound.hpp"
-#include "scene.hpp"
-#include "point3d.hpp"
-#include "grid.hpp"
-#include "particle.hpp"
 #include "attractor.hpp"
-#include "controls.hpp"
-#include "mathutils.hpp"
-#include "entity.hpp"
 #include "blackholes.hpp"
-#include "font.hpp"
-#include "spawner.hpp"
 #include "bomb.hpp"
+#include "controls.hpp"
+#include "defines.hpp"
+#include "entity.hpp"
+#include "font.hpp"
+#include "grid.hpp"
 #include "highscore.hpp"
+#include "mathutils.hpp"
+#include "particle.hpp"
+#include "point3d.hpp"
+#include "scene.hpp"
 #include "settings.hpp"
+#include "sound.hpp"
+#include "spawner.hpp"
 
 #include <memory>
 
@@ -26,7 +26,7 @@ class enemies;
 
 enum
 {
-    SOUNDID_MUSICLOOP=0,
+    SOUNDID_MUSICLOOP = 0,
 
     SOUNDID_MENU_MUSICLOOP,
 
@@ -85,29 +85,27 @@ enum
     SOUNDID_LAST
 };
 
-
 class game
 {
-public:
-
+  public:
     typedef enum
     {
-        GAMEMODE_ATTRACT=0,
+        GAMEMODE_ATTRACT = 0,
         GAMEMODE_CREDITED,
         GAMEMODE_CHOOSE_GAMETYPE,
         GAMEMODE_PLAYING,
-		GAMEMODE_HIGHSCORES_CHECK,
+        GAMEMODE_HIGHSCORES_CHECK,
         GAMEMODE_HIGHSCORES,
         GAMEMODE_GAMEOVER_TRANSITION,
         GAMEMODE_GAMEOVER
-    }GameMode;
+    } GameMode;
 
     typedef enum
     {
-        GAMETYPE_SINGLEPLAYER=0,
+        GAMETYPE_SINGLEPLAYER = 0,
         GAMETYPE_MULTIPLAYER_COOP,
         GAMETYPE_MULTIPLAYER_VS
-    }GameType;
+    } GameType;
 
     game();
     ~game();
@@ -138,7 +136,7 @@ public:
     static blackholes mBlackHoles;
     static spawner mSpawner;
     static bomb mBomb;
-	static highscore mHighscore;
+    static highscore mHighscore;
 
     static int mSkillLevel;
 
@@ -154,7 +152,7 @@ public:
     static int m2PlayerNumLives;
     static int m2PlayerNumBombs;
 
-private:
+  private:
     typedef struct
     {
         Point3d pos;
@@ -162,7 +160,7 @@ private:
         char message[128];
         int timer;
         bool enabled;
-    }PointDisplay;
+    } PointDisplay;
 
     static PointDisplay* mPointDisplays;
 

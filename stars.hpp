@@ -8,7 +8,7 @@ class game;
 
 class stars
 {
-public:
+  public:
     stars(const game& gameRef);
     ~stars();
 
@@ -20,7 +20,7 @@ public:
         Point3d pos;
         float radius;
         float brightness;
-		float twinkle;
+        float twinkle;
     } STAR;
 
     STAR* mStars;

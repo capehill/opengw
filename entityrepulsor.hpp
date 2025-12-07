@@ -9,7 +9,7 @@ class game;
 
 class entityRepulsor : public entity
 {
-public:
+  public:
     entityRepulsor(const game& gameRef);
 
     virtual void run();
@@ -25,11 +25,11 @@ public:
         State_Thinking = 0,
         State_Aiming,
         State_Charging
-    }State;
+    } State;
 
     bool mShieldsEnabled;
 
-protected:
+  protected:
     State mAIState;
     int mTimer;
     int mLoopSoundId;

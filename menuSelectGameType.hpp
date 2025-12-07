@@ -5,7 +5,7 @@
 
 class menuSelectGameType
 {
-public:
+  public:
     static void init(int player);
     static void run();
     static void draw();

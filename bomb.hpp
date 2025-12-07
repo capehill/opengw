@@ -5,8 +5,7 @@
 
 class bomb
 {
-public:
-
+  public:
     typedef struct
     {
         Point3d pos;
@@ -16,7 +15,7 @@ public:
         int timeToLive;
         float fadeStep;
         vector::pen pen;
-    }RING;
+    } RING;
 
     bomb(void);
     ~bomb(void);
@@ -30,5 +29,4 @@ public:
 
     RING* mRings;
     int mNumRings;
-
 };

@@ -2,8 +2,7 @@
 
 class settings
 {
-public:
-
+  public:
     settings();
     ~settings();
 

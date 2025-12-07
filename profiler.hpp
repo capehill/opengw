@@ -6,15 +6,14 @@
 
 class profiler
 {
-public:
-
+  public:
     profiler(const std::string& name);
     ~profiler();
 
     void start();
     void stop();
 
-private:
+  private:
     std::string name;
     Uint64 performanceCounter = 0;
     Uint64 started = 0;

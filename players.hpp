@@ -6,7 +6,7 @@ class game;
 
 class players
 {
-public:
+  public:
     players(const game& gameRef);
     ~players();
 

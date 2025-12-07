@@ -1,7 +1,7 @@
 #include "entitygrunt.hpp"
 #include "game.hpp"
-#include "sincos.hpp"
 #include "players.hpp"
+#include "sincos.hpp"
 
 entityGrunt::entityGrunt(const game& gameRef)
     : entity(), mGame(gameRef)
@@ -31,16 +31,19 @@ entityGrunt::entityGrunt(const game& gameRef)
 
     mModel.mNumEdges = 4;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 0;
 }
 
 void entityGrunt::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         // Seek the player
 
         float angle = mathutils::calculate2dAngle(mPos, mGame.mPlayers->getPlayerClosestToPosition(mPos)->getPos());
@@ -55,7 +58,6 @@ void entityGrunt::run()
         mAnimationIndex += .07;
         mScale.x = 2 + (get_sin(mAnimationIndex) * .4);
         mScale.y = 2.5 + (get_sin(-mAnimationIndex) * .4);
-
     }
     entity::run();
 }

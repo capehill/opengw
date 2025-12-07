@@ -6,7 +6,7 @@ class game;
 
 class entitySpinner : public entity
 {
-public:
+  public:
     entitySpinner(const game& constRef);
 
     virtual void run();
@@ -17,7 +17,7 @@ public:
 
     float mAnimationIndex;
 
-private:
+  private:
     Point3d mHitSpeed;
     const game& mGame;
 };

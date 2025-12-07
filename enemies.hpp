@@ -1,37 +1,36 @@
 #pragma once
 
-#include "defines.hpp"
-#include "point3d.hpp"
-#include "grid.hpp"
-#include "particle.hpp"
-#include "camera.hpp"
 #include "attractor.hpp"
+#include "camera.hpp"
 #include "controls.hpp"
-#include "mathutils.hpp"
+#include "defines.hpp"
 #include "entity.hpp"
 #include "entityline.hpp"
+#include "grid.hpp"
+#include "mathutils.hpp"
+#include "particle.hpp"
 #include "player.hpp"
+#include "point3d.hpp"
 
 class game;
 
-const int numEnemyWanderer    = 100;
-const int numEnemyGrunt       = 200;
-const int numEnemySpinner     = 100;
+const int numEnemyWanderer = 100;
+const int numEnemyGrunt = 200;
+const int numEnemySpinner = 100;
 const int numEnemyTinySpinner = 100;
-const int numEnemyWeaver      = 200;
-const int numEnemySnake       = 50;
-const int numEnemyBlackHole   = 8;
-const int numEnemyRepulsor    = 4;
-const int numEnemyMayfly      = 400;
-const int numEnemyProton      = 200;
-
+const int numEnemyWeaver = 200;
+const int numEnemySnake = 50;
+const int numEnemyBlackHole = 8;
+const int numEnemyRepulsor = 4;
+const int numEnemyMayfly = 400;
+const int numEnemyProton = 200;
 
 #define NUM_ENEMIES (numEnemyWanderer + numEnemyGrunt + numEnemySpinner + numEnemyTinySpinner + numEnemyWeaver + numEnemySnake + numEnemyBlackHole + numEnemyRepulsor + numEnemyMayfly + numEnemyProton)
-#define NUM_LINES 250
+#define NUM_LINES   250
 
 class enemies
 {
-public:
+  public:
     enemies(const game& gameRef);
     ~enemies();
 
@@ -42,7 +41,7 @@ public:
 
     int getNumActiveEnemiesOfType(const entity::EntityType& type);
 
-    entity* hitTestEnemiesAtPosition(const Point3d& point, float radius, bool includeSpawning=false);
+    entity* hitTestEnemiesAtPosition(const Point3d& point, float radius, bool includeSpawning = false);
 
     void disableAllEnemies();
     void disableAllLines();

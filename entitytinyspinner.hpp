@@ -6,7 +6,7 @@ class game;
 
 class entityTinySpinner : public entitySpinner
 {
-public:
+  public:
     entityTinySpinner(const game& gameRef);
 
     virtual void run();
@@ -21,7 +21,7 @@ public:
 
     void setInitialSpeed(const Point3d& speed) { mInitialSpeed = speed; }
 
-private:
+  private:
     Point3d mVirtualPos { 0, 0, 0 };
     Point3d mInitialSpeed;
 

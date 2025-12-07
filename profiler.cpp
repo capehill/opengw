@@ -4,9 +4,8 @@
 
 #include "SDL2/SDL.h"
 
-profiler::profiler(const std::string& name): name(name)
+profiler::profiler(const std::string& name) : name(name)
 {
-
 }
 
 profiler::~profiler()

@@ -2,10 +2,9 @@
 
 #include "entity.hpp"
 
-class entityLine :
-    public entity
+class entityLine : public entity
 {
-public:
+  public:
     entityLine(void);
 
     virtual void run();

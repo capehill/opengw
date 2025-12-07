@@ -4,7 +4,7 @@
 
 class entityWanderer : public entity
 {
-public:
+  public:
     entityWanderer();
 
     virtual void run();

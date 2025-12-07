@@ -6,8 +6,7 @@
 
 class controls
 {
-public:
-
+  public:
     controls();
     ~controls();
 
@@ -18,8 +17,7 @@ public:
     bool getBackButton(int player);
     bool getPauseButton(int player);
 
-private:
-
+  private:
     // Keyboard
     Point3d readKeyboardLeftStick(int player);
     Point3d readKeyboardRightStick(int player);
@@ -39,5 +37,4 @@ private:
     SDL_Joystick* mControllers[4];
 
     int mNumJoysticks;
-
 };

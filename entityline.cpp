@@ -23,7 +23,8 @@ entityLine::entityLine(void)
 
     mModel.mNumEdges = 1;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[0].from = 0; mModel.mEdgeList[0].to = 1;
+    mModel.mEdgeList[0].from = 0;
+    mModel.mEdgeList[0].to = 1;
 }
 
 void entityLine::spawnTransition()
@@ -37,8 +38,7 @@ void entityLine::run()
 {
     mPen.a *= .9;
 
-    if (--mTimeToLive <= 0)
-    {
+    if (--mTimeToLive <= 0) {
         mTimeToLive = 0;
         this->setState(entity::ENTITY_STATE_DESTROYED);
     }

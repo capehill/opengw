@@ -1,10 +1,10 @@
 #pragma once
 
-#include "mathutils.hpp"
 #include "defines.hpp"
+#include "mathutils.hpp"
+#include "model.hpp"
 #include "point3d.hpp"
 #include "vector.hpp"
-#include "model.hpp"
 
 #include "point3d.hpp"
 
@@ -12,11 +12,10 @@ class game;
 
 class entity
 {
-public:
-
+  public:
     typedef enum
     {
-        ENTITY_TYPE_UNDEF=0,
+        ENTITY_TYPE_UNDEF = 0,
         ENTITY_TYPE_PLAYER1,
         ENTITY_TYPE_PLAYER2,
         ENTITY_TYPE_PLAYER3,
@@ -36,11 +35,11 @@ public:
         ENTITY_TYPE_PROTON,
         ENTITY_TYPE_LINE,
         ENTITY_NUM_TYPES // Must be last
-    }EntityType;
+    } EntityType;
 
     typedef enum
     {
-        ENTITY_STATE_INACTIVE=0,
+        ENTITY_STATE_INACTIVE = 0,
         ENTITY_STATE_SPAWN_TRANSITION,
         ENTITY_STATE_SPAWNING,
         ENTITY_STATE_RUN_TRANSITION,
@@ -49,10 +48,10 @@ public:
         ENTITY_STATE_DESTROYED,
         ENTITY_STATE_INDICATE_TRANSITION,
         ENTITY_STATE_INDICATING
-    }EntityState;
+    } EntityState;
 
     entity();
-	virtual ~entity() = default;
+    virtual ~entity() = default;
 
     static entity* createEntity(EntityType _entity, const game& gameRef); // Static class factory
 
@@ -120,8 +119,7 @@ public:
     int getGenId() const { return mGenId; }
     void incGenId() { ++mGenId; }
 
-protected:
-
+  protected:
     EntityType mType;
     Point3d mPos;
     Point3d mSpeed;

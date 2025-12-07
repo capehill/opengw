@@ -2,10 +2,9 @@
 
 #include "entity.hpp"
 
-class entityMayfly :
-    public entity
+class entityMayfly : public entity
 {
-public:
+  public:
     entityMayfly();
 
     virtual void run();

@@ -2,7 +2,7 @@
 
 class texture
 {
-public:
+  public:
     texture(void);
     ~texture(void);
 
@@ -17,6 +17,6 @@ public:
 
     bool mLoaded;
 
-private:
+  private:
     unsigned int mTextureId;
 };

@@ -1,8 +1,8 @@
-#include "game.hpp"
 #include "camera.hpp"
+#include "game.hpp"
 #include "players.hpp"
 
-static const int zoomedIn = 46; // 50
+static const int zoomedIn = 46;  // 50
 static const int zoomedOut = 72; // 66
 
 camera::camera(const game& gameRef) : mGame(gameRef)
@@ -15,7 +15,7 @@ void camera::center()
 {
     mCurrentZoom = zoomedIn;
     mTargetZoom = zoomedIn;
-    mTargetPos = Point3d((mGame.mGrid->extentX()-1)/2, (mGame.mGrid->extentY()-1)/2, mTargetZoom);
+    mTargetPos = Point3d((mGame.mGrid->extentX() - 1) / 2, (mGame.mGrid->extentY() - 1) / 2, mTargetZoom);
 }
 
 void camera::followPlayer()
@@ -24,43 +24,36 @@ void camera::followPlayer()
     Point3d playerPos;
     bool firstPlayer = true;
     int targets = 0;
-    for (int i=0; i<4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         player* player;
-        switch(i)
-        {
-            case 0:
-                player = mGame.mPlayers->mPlayer1;
-                break;
-            case 1:
-                player = mGame.mPlayers->mPlayer2;
-                break;
-            case 2:
-                player = mGame.mPlayers->mPlayer3;
-                break;
-            case 3:
-                player = mGame.mPlayers->mPlayer4;
-                break;
+        switch (i) {
+        case 0:
+            player = mGame.mPlayers->mPlayer1;
+            break;
+        case 1:
+            player = mGame.mPlayers->mPlayer2;
+            break;
+        case 2:
+            player = mGame.mPlayers->mPlayer3;
+            break;
+        case 3:
+            player = mGame.mPlayers->mPlayer4;
+            break;
         }
 
-        if (player->getState() != entity::ENTITY_STATE_INACTIVE)
-        {
+        if (player->getState() != entity::ENTITY_STATE_INACTIVE) {
             ++targets;
-            if (firstPlayer)
-            {
+            if (firstPlayer) {
                 firstPlayer = false;
                 playerPos = player->getPos();
-            }
-            else
-            {
+            } else {
                 playerPos.x = (playerPos.x + player->getPos().x) / 2;
                 playerPos.y = (playerPos.y + player->getPos().y) / 2;
             }
         }
     }
 
-    if (targets == 0)
-    {
+    if (targets == 0) {
         // Nothing to follow
         return;
     }
@@ -68,49 +61,44 @@ void camera::followPlayer()
     // Figure out our largest distance between players
     float playerDistance = 0;
 
-    for (int i=0; i<4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         player* playerA;
-        switch(i)
-        {
-            case 0:
-                playerA = mGame.mPlayers->mPlayer1;
-                break;
-            case 1:
-                playerA = mGame.mPlayers->mPlayer2;
-                break;
-            case 2:
-                playerA = mGame.mPlayers->mPlayer3;
-                break;
-            case 3:
-                playerA = mGame.mPlayers->mPlayer4;
-                break;
+        switch (i) {
+        case 0:
+            playerA = mGame.mPlayers->mPlayer1;
+            break;
+        case 1:
+            playerA = mGame.mPlayers->mPlayer2;
+            break;
+        case 2:
+            playerA = mGame.mPlayers->mPlayer3;
+            break;
+        case 3:
+            playerA = mGame.mPlayers->mPlayer4;
+            break;
         }
 
-        if (playerA->getState() != entity::ENTITY_STATE_INACTIVE)
-        {
-            for (int j=0; j<4; j++)
-            {
+        if (playerA->getState() != entity::ENTITY_STATE_INACTIVE) {
+            for (int j = 0; j < 4; j++) {
                 player* playerB;
-                switch(j)
-                {
-                    case 0:
-                        playerB = mGame.mPlayers->mPlayer1;
-                        break;
-                    case 1:
-                        playerB = mGame.mPlayers->mPlayer2;
-                        break;
-                    case 2:
-                        playerB = mGame.mPlayers->mPlayer3;
-                        break;
-                    case 3:
-                        playerB = mGame.mPlayers->mPlayer4;
-                        break;
+                switch (j) {
+                case 0:
+                    playerB = mGame.mPlayers->mPlayer1;
+                    break;
+                case 1:
+                    playerB = mGame.mPlayers->mPlayer2;
+                    break;
+                case 2:
+                    playerB = mGame.mPlayers->mPlayer3;
+                    break;
+                case 3:
+                    playerB = mGame.mPlayers->mPlayer4;
+                    break;
                 }
 
-                if (playerA == playerB) continue;
-                if (playerB->getState() != entity::ENTITY_STATE_INACTIVE)
-                {
+                if (playerA == playerB)
+                    continue;
+                if (playerB->getState() != entity::ENTITY_STATE_INACTIVE) {
                     float abDistance = mathutils::calculate2dDistance(playerA->getPos(), playerB->getPos());
                     if (abDistance > playerDistance)
                         playerDistance = abDistance;
@@ -119,9 +107,9 @@ void camera::followPlayer()
         }
     }
 
-    static const float hypotenuse = sqrt((float)(mGame.mGrid->extentX()*mGame.mGrid->extentX()) + (mGame.mGrid->extentY()*mGame.mGrid->extentY()));
+    static const float hypotenuse = sqrt((float)(mGame.mGrid->extentX() * mGame.mGrid->extentX()) + (mGame.mGrid->extentY() * mGame.mGrid->extentY()));
 
-    mTargetZoom = (zoomedIn + (zoomedOut-zoomedIn)) * ((playerDistance*3) / hypotenuse);
+    mTargetZoom = (zoomedIn + (zoomedOut - zoomedIn)) * ((playerDistance * 3) / hypotenuse);
 
     if (mTargetZoom < zoomedIn)
         mTargetZoom = zoomedIn;
@@ -133,8 +121,8 @@ void camera::followPlayer()
 
     const int border = -20;
 
-    mTargetPos.x = (ax * (mGame.mGrid->extentX() + (border*2))) - border;
-    mTargetPos.y = (ay * (mGame.mGrid->extentY() + (border*2))) - border;
+    mTargetPos.x = (ax * (mGame.mGrid->extentX() + (border * 2))) - border;
+    mTargetPos.y = (ay * (mGame.mGrid->extentY() + (border * 2))) - border;
 }
 
 void camera::run()

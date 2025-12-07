@@ -9,7 +9,7 @@
 
 class particle
 {
-public:
+  public:
     struct PARTICLE
     {
         Point3d posStream[NUM_POS_STREAM_ITEMS];
@@ -37,7 +37,7 @@ public:
     void run();
 
     void emitter(Point3d* position, Point3d* angle, float speed, float spread, int num, vector::pen* color, int timeToLive,
-        bool gravity=true, bool gridBound=true, float drag=.93, bool glowPass=true);
+                 bool gravity = true, bool gridBound = true, float drag = .93, bool glowPass = true);
 
     void killAll();
 
@@ -45,10 +45,8 @@ public:
     static int mNumParticles;
     static int mIndex;
 
-private:
-
+  private:
     void assignParticle(Point3d* position,
-                                  const Point3d& speedVector,
-                                  int aTime, vector::pen* aColor, bool gravity, bool gridBound, float drag, bool glowPass);
-
+                        const Point3d& speedVector,
+                        int aTime, vector::pen* aColor, bool gravity, bool gridBound, float drag, bool glowPass);
 };

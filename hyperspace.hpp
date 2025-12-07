@@ -3,11 +3,11 @@
 #include "point3d.hpp"
 #include "vector.hpp"
 
-#define NUM_HS_STARS    2000
+#define NUM_HS_STARS 2000
 
 class hyperspace
 {
-public:
+  public:
     hyperspace(void);
     ~hyperspace(void);
 
@@ -19,11 +19,11 @@ public:
         Point3d pos;
         Point3d lastPos;
         vector::pen color;
-    }Star;
+    } Star;
 
     float mTargetBrightness;
 
-private:
+  private:
     float mCurrentBrightness;
 
     Star mStars[NUM_HS_STARS];

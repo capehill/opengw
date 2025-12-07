@@ -1,8 +1,8 @@
 #include "game.hpp"
 #include "camera.hpp"
-#include "stars.hpp"
-#include "players.hpp"
 #include "enemies.hpp"
+#include "players.hpp"
+#include "stars.hpp"
 
 #include "menuSelectGameType.hpp"
 
@@ -14,14 +14,14 @@
 //
 settings game::mSettings;
 sound game::mSound;
-//particle game::mParticles;
+// particle game::mParticles;
 attractor game::mAttractors;
 controls game::mControls;
 blackholes game::mBlackHoles;
 spawner game::mSpawner;
 bomb game::mBomb;
 highscore game::mHighscore;
-//grid game::mGrid;
+// grid game::mGrid;
 
 #define NUM_POINT_DISPLAYS 40
 #define TIME_POINT_DISPLAY 50
@@ -37,7 +37,6 @@ int game::mCredits = 0;
 int game::mLevel = 0;
 int game::m2PlayerNumLives = 0;
 int game::m2PlayerNumBombs = 0;
-
 
 game::game()
 {
@@ -110,26 +109,23 @@ game::game()
     mCamera->center();
 
     mPointDisplays = new PointDisplay[NUM_POINT_DISPLAYS];
-    for (int i=0; i<NUM_POINT_DISPLAYS; i++)
-    {
+    for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
         mPointDisplays[i].enabled = false;
     }
 
     // Tag 4 black holes for attract mode
-    for (int i=0; i<4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         mAttractModeBlackHoles[i] = std::make_unique<entity>();
         mAttractModeBlackHoles[i]->setPos(Point3d(mathutils::frandFrom0To1() * mGrid->extentX(), mathutils::frandFrom0To1() * mGrid->extentY(), 0));
         mAttractModeBlackHoles[i]->setEdgeBounce(false);
 
-        static float heading=mathutils::frandFrom0To1() * (2*PI);
-        if ((mathutils::frandFrom0To1() * 40) < 1)
-        {
+        static float heading = mathutils::frandFrom0To1() * (2 * PI);
+        if ((mathutils::frandFrom0To1() * 40) < 1) {
             // Pick a random direction
-            heading += mathutils::frandFrom0To1() * (2*PI);
+            heading += mathutils::frandFrom0To1() * (2 * PI);
         }
 
-        Point3d speedVector = Point3d(1,0,0);
+        Point3d speedVector = Point3d(1, 0, 0);
         speedVector = mathutils::rotate2dPoint(speedVector, heading);
         mAttractModeBlackHoles[i]->setDrift(speedVector);
     }
@@ -145,11 +141,11 @@ game::game()
 
 game::~game()
 {
-    delete [] mPointDisplays;
+    delete[] mPointDisplays;
 
     // TODO: mParticles uses theGame pointer, which would be nil now.
-    //mParticles.reset();
-    //mGrid.reset();
+    // mParticles.reset();
+    // mGrid.reset();
 }
 
 void game::quitThreads()
@@ -164,38 +160,30 @@ void game::run()
     // Credits
     static bool creditButtonLast = false;
     bool creditButton = false; // mControls.getCreditButton();
-    if (creditButton && !creditButtonLast)
-    {
+    if (creditButton && !creditButtonLast) {
         ++mCredits;
     }
     creditButtonLast = creditButton;
 
-    if (mSettings.mCreditsPerGame == 0)
-    {
+    if (mSettings.mCreditsPerGame == 0) {
         mCredits = 4;
     }
 
     // Pause functionality
-    if (mGameMode == GAMEMODE_PLAYING)
-    {
+    if (mGameMode == GAMEMODE_PLAYING) {
         static bool pauseLast = false;
         bool pause = mControls.getPauseButton(0) || mControls.getPauseButton(1) || mControls.getPauseButton(2) || mControls.getPauseButton(3);
-        if (pause && !pauseLast)
-        {
+        if (pause && !pauseLast) {
             game::mSound.playTrack(SOUNDID_MENU_SELECT);
             mPaused = !mPaused;
-            if (mPaused)
-            {
+            if (mPaused) {
                 mSound.pauseAllTracksBut(SOUNDID_MENU_SELECT);
-            }
-            else
-            {
+            } else {
                 mSound.unpauseAllTracks();
             }
         }
         pauseLast = pause;
-        if (mPaused)
-        {
+        if (mPaused) {
             return;
         }
     }
@@ -209,215 +197,172 @@ void game::run()
     // Run the enemies
     mEnemies->run();
 
-    switch(mGameMode)
+    switch (mGameMode) {
+    case GAMEMODE_ATTRACT:
     {
-        case GAMEMODE_ATTRACT:
-            {
-                if (mCredits > 0)
-                {
-                    mGameMode = GAMEMODE_CREDITED;
-                    mDebounce = true;
-                }
+        if (mCredits > 0) {
+            mGameMode = GAMEMODE_CREDITED;
+            mDebounce = true;
+        }
+    } break;
+    case GAMEMODE_CREDITED:
+    {
+        if (mControls.getStartButton(0) || mControls.getStartButton(1) || mControls.getStartButton(2) || mControls.getStartButton(3)) {
+        } else {
+            mDebounce = false;
+        }
+        if (!mDebounce) {
+            if (mControls.getStartButton(0)) {
+                // Go to game type selection screen
+                menuSelectGameType::init(0);
+                mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                mDebounce = true;
+            } else if (mControls.getStartButton(1)) {
+                // Go to game type selection screen
+                menuSelectGameType::init(1);
+                mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                mDebounce = true;
+            } else if (mControls.getStartButton(2)) {
+                // Go to game type selection screen
+                menuSelectGameType::init(2);
+                mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                mDebounce = true;
+            } else if (mControls.getStartButton(3)) {
+                // Go to game type selection screen
+                menuSelectGameType::init(3);
+                mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
+                mDebounce = true;
             }
-            break;
-        case GAMEMODE_CREDITED:
-            {
-                if (mControls.getStartButton(0)
-                    || mControls.getStartButton(1)
-                    || mControls.getStartButton(2)
-                    || mControls.getStartButton(3))
-                {
-                }
-                else
-                {
-                    mDebounce = false;
-                }
-                if (!mDebounce)
-                {
-                    if (mControls.getStartButton(0))
-                    {
-                        // Go to game type selection screen
-                        menuSelectGameType::init(0);
-                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
-                        mDebounce = true;
-                    }
-                    else if (mControls.getStartButton(1))
-                    {
-                        // Go to game type selection screen
-                        menuSelectGameType::init(1);
-                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
-                        mDebounce = true;
-                    }
-                    else if (mControls.getStartButton(2))
-                    {
-                        // Go to game type selection screen
-                        menuSelectGameType::init(2);
-                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
-                        mDebounce = true;
-                    }
-                    else if (mControls.getStartButton(3))
-                    {
-                        // Go to game type selection screen
-                        menuSelectGameType::init(3);
-                        mGameMode = GAMEMODE_CHOOSE_GAMETYPE;
-                        mDebounce = true;
-                    }
-                }
+        }
+    } break;
+    case GAMEMODE_CHOOSE_GAMETYPE:
+        // Handled in menuSelectGameType.cpp
+        break;
+    case GAMEMODE_PLAYING:
+    {
+        if ((numPlayers() > 1) && (m2PlayerNumLives > 0)) {
+            if (mControls.getStartButton(0) && !mPlayers->mPlayer1->mJoined) {
+                mPlayers->mPlayer1->takeLife();
+                mPlayers->mPlayer1->initPlayerForGame();
             }
-            break;
-        case GAMEMODE_CHOOSE_GAMETYPE:
-            // Handled in menuSelectGameType.cpp
-            break;
-        case GAMEMODE_PLAYING:
-            {
-                if ((numPlayers() > 1) && (m2PlayerNumLives > 0))
-                {
-                    if (mControls.getStartButton(0) && !mPlayers->mPlayer1->mJoined)
-                    {
-                        mPlayers->mPlayer1->takeLife();
-                        mPlayers->mPlayer1->initPlayerForGame();
-                    }
-                    if (mControls.getStartButton(1) && !mPlayers->mPlayer2->mJoined)
-                    {
-                        mPlayers->mPlayer2->takeLife();
-                        mPlayers->mPlayer2->initPlayerForGame();
-                    }
-                    if (mControls.getStartButton(2) && !mPlayers->mPlayer3->mJoined)
-                    {
-                        mPlayers->mPlayer3->takeLife();
-                        mPlayers->mPlayer3->initPlayerForGame();
-                    }
-                    if (mControls.getStartButton(3) && !mPlayers->mPlayer4->mJoined)
-                    {
-                        mPlayers->mPlayer4->takeLife();
-                        mPlayers->mPlayer4->initPlayerForGame();
-                    }
-                }
-
-                mCamera->followPlayer();
-                mStars->run();
-                mBlackHoles.run();
-                mPlayers->run();
-                mBomb.run();
-                mSpawner.run();
-
-                // Brightness
-                if (mBrightness < 1)
-                {
-                    mBrightness += .05;
-                }
-
-                // Music speed
-
-                mMusicSpeedTarget = 1;
-
-                // Slow the music down when someone is respawning
-                if (mPlayers->mPlayer1->mJoined && (mPlayers->mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED))
-                {
-                    mMusicSpeedTarget = 0;
-                    mMusicSpeed = .5;
-                }
-                if (mPlayers->mPlayer2->mJoined && (game::mPlayers->mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED))
-                {
-                    mMusicSpeedTarget = 0;
-                    mMusicSpeed = .5;
-                }
-                if (mPlayers->mPlayer3->mJoined && (mPlayers->mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED))
-                {
-                    mMusicSpeedTarget = 0;
-                    mMusicSpeed = .5;
-                }
-                if (mPlayers->mPlayer4->mJoined && (mPlayers->mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED))
-                {
-                    mMusicSpeedTarget = 0;
-                    mMusicSpeed = .5;
-                }
-
-                if (mMusicSpeed < mMusicSpeedTarget)
-				{
-                    mMusicSpeed += .005;
-					if (mMusicSpeed > mMusicSpeedTarget)
-						mMusicSpeed = mMusicSpeedTarget;
-				}
-                else if (mMusicSpeed > mMusicSpeedTarget)
-				{
-                    mMusicSpeed -= .01;
-					if (mMusicSpeed < mMusicSpeedTarget)
-						mMusicSpeed = mMusicSpeedTarget;
-				}
-
-                mSound.setTrackSpeed(SOUNDID_MUSICLOOP, mMusicSpeed);
+            if (mControls.getStartButton(1) && !mPlayers->mPlayer2->mJoined) {
+                mPlayers->mPlayer2->takeLife();
+                mPlayers->mPlayer2->initPlayerForGame();
             }
-            break;
-        case GAMEMODE_HIGHSCORES:
-			mHighscore.run();
-			break;
-        case GAMEMODE_HIGHSCORES_CHECK:
-			if (mHighscore.isHighScore(mPlayers->mPlayer1->mScore) == true)
-			{
-				mGameMode = GAMEMODE_HIGHSCORES;
-				mHighscore.init();
-				break;
-			}
-            oglScene.showHighScores();
-            break;
-        case GAMEMODE_GAMEOVER_TRANSITION:
-			mGameMode = GAMEMODE_GAMEOVER;
-            mGameOverTimer = 0;
-            break;
-        case GAMEMODE_GAMEOVER:
-
-            if (mBrightness > 0)
-            {
-                mBrightness *= .98;
+            if (mControls.getStartButton(2) && !mPlayers->mPlayer3->mJoined) {
+                mPlayers->mPlayer3->takeLife();
+                mPlayers->mPlayer3->initPlayerForGame();
             }
-
-            ++mGameOverTimer;
-            if (mGameOverTimer > 180)
-            {
-/*
-                // TURNING OFF HIGH SCORES FOR NOW UNTIL I FIGURE OUT A WAY TO DO THEM WITH MULTIPLAYER
-
-    			if (numPlayers() == 1)
-					game::mGameMode = game::GAMEMODE_HIGHSCORES_CHECK;
-                else // TODO - MULTIPLAYER HIGH SCORES?????
-*/
-                mGameMode = GAMEMODE_ATTRACT;
-                mCamera->mCurrentZoom = 1;
+            if (mControls.getStartButton(3) && !mPlayers->mPlayer4->mJoined) {
+                mPlayers->mPlayer4->takeLife();
+                mPlayers->mPlayer4->initPlayerForGame();
             }
-            break;
-    }
+        }
 
-	if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED)
-	{
-        if (mBrightness > 0)
-        {
+        mCamera->followPlayer();
+        mStars->run();
+        mBlackHoles.run();
+        mPlayers->run();
+        mBomb.run();
+        mSpawner.run();
+
+        // Brightness
+        if (mBrightness < 1) {
+            mBrightness += .05;
+        }
+
+        // Music speed
+
+        mMusicSpeedTarget = 1;
+
+        // Slow the music down when someone is respawning
+        if (mPlayers->mPlayer1->mJoined && (mPlayers->mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED)) {
+            mMusicSpeedTarget = 0;
+            mMusicSpeed = .5;
+        }
+        if (mPlayers->mPlayer2->mJoined && (game::mPlayers->mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED)) {
+            mMusicSpeedTarget = 0;
+            mMusicSpeed = .5;
+        }
+        if (mPlayers->mPlayer3->mJoined && (mPlayers->mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED)) {
+            mMusicSpeedTarget = 0;
+            mMusicSpeed = .5;
+        }
+        if (mPlayers->mPlayer4->mJoined && (mPlayers->mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED)) {
+            mMusicSpeedTarget = 0;
+            mMusicSpeed = .5;
+        }
+
+        if (mMusicSpeed < mMusicSpeedTarget) {
+            mMusicSpeed += .005;
+            if (mMusicSpeed > mMusicSpeedTarget)
+                mMusicSpeed = mMusicSpeedTarget;
+        } else if (mMusicSpeed > mMusicSpeedTarget) {
+            mMusicSpeed -= .01;
+            if (mMusicSpeed < mMusicSpeedTarget)
+                mMusicSpeed = mMusicSpeedTarget;
+        }
+
+        mSound.setTrackSpeed(SOUNDID_MUSICLOOP, mMusicSpeed);
+    } break;
+    case GAMEMODE_HIGHSCORES:
+        mHighscore.run();
+        break;
+    case GAMEMODE_HIGHSCORES_CHECK:
+        if (mHighscore.isHighScore(mPlayers->mPlayer1->mScore) == true) {
+            mGameMode = GAMEMODE_HIGHSCORES;
+            mHighscore.init();
+            break;
+        }
+        oglScene.showHighScores();
+        break;
+    case GAMEMODE_GAMEOVER_TRANSITION:
+        mGameMode = GAMEMODE_GAMEOVER;
+        mGameOverTimer = 0;
+        break;
+    case GAMEMODE_GAMEOVER:
+
+        if (mBrightness > 0) {
             mBrightness *= .98;
         }
-	}
 
-	if ((game::mGameMode == game::GAMEMODE_HIGHSCORES_CHECK) || (game::mGameMode == game::GAMEMODE_HIGHSCORES))
-	{
-	}
-    else if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED || mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
-    {
+        ++mGameOverTimer;
+        if (mGameOverTimer > 180) {
+            /*
+                            // TURNING OFF HIGH SCORES FOR NOW UNTIL I FIGURE OUT A WAY TO DO THEM WITH MULTIPLAYER
+
+                                    if (numPlayers() == 1)
+                                                    game::mGameMode = game::GAMEMODE_HIGHSCORES_CHECK;
+                            else // TODO - MULTIPLAYER HIGH SCORES?????
+            */
+            mGameMode = GAMEMODE_ATTRACT;
+            mCamera->mCurrentZoom = 1;
+        }
+        break;
+    }
+
+    if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED) {
+        if (mBrightness > 0) {
+            mBrightness *= .98;
+        }
+    }
+
+    if ((game::mGameMode == game::GAMEMODE_HIGHSCORES_CHECK) || (game::mGameMode == game::GAMEMODE_HIGHSCORES)) {
+    } else if (mGameMode == GAMEMODE_ATTRACT || mGameMode == GAMEMODE_CREDITED || mGameMode == GAMEMODE_CHOOSE_GAMETYPE) {
         static int explosionTimer = 0;
 
         ++explosionTimer;
-        if (explosionTimer > 1000)
-        {
+        if (explosionTimer > 1000) {
             explosionTimer = 0;
         }
-        if (explosionTimer == 980)
-        {
+        if (explosionTimer == 980) {
             game::mSound.playTrack(SOUNDID_GRAVITYWELLEXPLODE);
         }
 
         mCamera->center();
 
         // Run the game selection menu
-        if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
-        {
+        if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE) {
             menuSelectGameType::run();
         }
 
@@ -426,48 +371,44 @@ void game::run()
         int sizex = mGrid->extentX();
         int sizey = mGrid->extentY();
 
-        for (int i=0; i<4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             mAttractModeBlackHoles[i]->setState(entity::ENTITY_STATE_RUNNING);
             mAttractModeBlackHoles[i]->run();
 
             Point3d pos = mAttractModeBlackHoles[i]->getPos();
 
             attractor::Attractor* att = game::mAttractors.getAttractor();
-            if (att)
-            {
+            if (att) {
                 att->strength = (explosionTimer > 980) ? 1000 : -40;
                 att->radius = 40;
                 att->pos = pos;
                 att->enabled = true;
                 att->attractsParticles = true;
 
-                if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
-                {
-                    //static float breathValue = 0;
-                    att->strength = 200;//sin(breathValue) * 10;
-                    //breathValue += .002;
+                if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE) {
+                    // static float breathValue = 0;
+                    att->strength = 200; // sin(breathValue) * 10;
+                    // breathValue += .002;
                 }
             }
 
-            for (int j=0; j<4; j++)
-            {
-                if (i == j) continue;
+            for (int j = 0; j < 4; j++) {
+                if (i == j)
+                    continue;
 
                 float angle = mathutils::calculate2dAngle(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
                 float distance = mathutils::calculate2dDistance(mAttractModeBlackHoles[j]->getPos(), mAttractModeBlackHoles[i]->getPos());
 
                 float strength = 2;
-                if (distance < mAttractModeBlackHoles[i]->getRadius())
-                {
+                if (distance < mAttractModeBlackHoles[i]->getRadius()) {
                     distance = mAttractModeBlackHoles[i]->getRadius();
                 }
 
-                float r = 1.0/(distance*distance);
+                float r = 1.0 / (distance * distance);
 
                 // Add a slight curving vector to the gravity
                 Point3d gravityVector(r * strength, 0, 0);
-                Point3d g = mathutils::rotate2dPoint(gravityVector, angle+.4);
+                Point3d g = mathutils::rotate2dPoint(gravityVector, angle + .4);
 
                 Point3d speed = mAttractModeBlackHoles[j]->getDrift();
                 speed.x += g.x;
@@ -475,11 +416,10 @@ void game::run()
                 mAttractModeBlackHoles[j]->setDrift(speed);
             }
 
-            //float heading;
-            if ((mathutils::frandFrom0To1() * 40) < 1)
-            {
+            // float heading;
+            if ((mathutils::frandFrom0To1() * 40) < 1) {
                 // Pick a random direction
-                //heading + mathutils::frandFrom0To1() * (2*PI);
+                // heading + mathutils::frandFrom0To1() * (2*PI);
             }
 
             // Change direction when we hit the grid edges
@@ -489,26 +429,20 @@ void game::run()
 
             const float leftEdge = 2;
             const float bottomEdge = 2;
-            const float rightEdge = (sizex - 2)-1;
-            const float topEdge = (sizey - 2)-1;
+            const float rightEdge = (sizex - 2) - 1;
+            const float topEdge = (sizey - 2) - 1;
 
-            if (mPos.x <= leftEdge)
-            {
+            if (mPos.x <= leftEdge) {
                 mSpeed.x = -mSpeed.x;
                 mPos.x = leftEdge;
-            }
-            else if (mPos.x >= rightEdge)
-            {
+            } else if (mPos.x >= rightEdge) {
                 mSpeed.x = -mSpeed.x;
                 mPos.x = rightEdge;
             }
-            if (mPos.y <= bottomEdge)
-            {
+            if (mPos.y <= bottomEdge) {
                 mSpeed.y = -mSpeed.y;
                 mPos.y = bottomEdge;
-            }
-            else if (mPos.y >= topEdge)
-            {
+            } else if (mPos.y >= topEdge) {
                 mSpeed.y = -mSpeed.y;
                 mPos.y = topEdge;
             }
@@ -517,15 +451,13 @@ void game::run()
             mAttractModeBlackHoles[i]->setPos(mPos);
         }
 
-        if (mGameMode != GAMEMODE_CHOOSE_GAMETYPE)
-        {
+        if (mGameMode != GAMEMODE_CHOOSE_GAMETYPE) {
             // Fireworks display
             static int fw = 99999;
             ++fw;
-            if (fw >= 5)
-            {
-                fw= 0;
-                static float colorTimer=0;
+            if (fw >= 5) {
+                fw = 0;
+                static float colorTimer = 0;
                 colorTimer += .08;
 
                 Point3d pos(mathutils::frandFrom0To1() * sizex, mathutils::frandFrom0To1() * sizey);
@@ -533,25 +465,28 @@ void game::run()
                 {
                     Point3d angle(0, 0, 0);
                     float speed = mathutils::frandFrom0To1() * 4;
-                    float spread = (2*PI);
+                    float spread = (2 * PI);
                     int num = 50;
                     int timeToLive = 500;
                     vector::pen pen;
 
-                    pen.r = get_sin(colorTimer+((2*PI)/1));
-                    pen.g = get_sin(colorTimer+((2*PI)/2));
-                    pen.b = get_sin(colorTimer+((2*PI)/3));
+                    pen.r = get_sin(colorTimer + ((2 * PI) / 1));
+                    pen.g = get_sin(colorTimer + ((2 * PI) / 2));
+                    pen.b = get_sin(colorTimer + ((2 * PI) / 3));
 
-                    if (pen.r < 0) pen.r = 0;
-                    if (pen.g < 0) pen.g = 0;
-                    if (pen.b < 0) pen.b = 0;
+                    if (pen.r < 0)
+                        pen.r = 0;
+                    if (pen.g < 0)
+                        pen.g = 0;
+                    if (pen.b < 0)
+                        pen.b = 0;
 
                     pen.r += .2;
                     pen.g += .2;
                     pen.b += .2;
 
                     pen.a = 100;
-                    pen.lineRadius=4;
+                    pen.lineRadius = 4;
                     mParticles->emitter(&pos, &angle, speed, spread, num, &pen, timeToLive, true, false, .98, true);
                 }
             }
@@ -562,7 +497,7 @@ void game::run()
     mParticles->run();
 }
 
-//#define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
+// #define GRID_GLOW // PERFORMANCE: Making the grid glow causes us to have to draw it twice, which is slower
 #define PARTICLE_GLOW // PERFORMANCE: Uncomment to get glowing particles, but it has a performance hit!
 
 void game::draw(int pass)
@@ -578,10 +513,8 @@ void game::draw(int pass)
 #ifndef GRID_GLOW
             && (pass == scene::RENDERPASS_PRIMARY)
 #endif
-            )
-        {
-            if (mSettings.mGridSmoothing)
-            {
+        ) {
+            if (mSettings.mGridSmoothing) {
                 glEnable(GL_LINE_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
             }
@@ -590,18 +523,15 @@ void game::draw(int pass)
             mGrid->brightness = mBrightness;
             mGrid->draw();
 
-            if (mSettings.mGridSmoothing)
-            {
+            if (mSettings.mGridSmoothing) {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_LINE_SMOOTH);
             }
         }
 
         // Particles
-        if (pass == scene::RENDERPASS_PRIMARY)
-        {
-            if (mSettings.mParticleSmoothing)
-            {
+        if (pass == scene::RENDERPASS_PRIMARY) {
+            if (mSettings.mParticleSmoothing) {
                 glEnable(GL_LINE_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
             }
@@ -610,14 +540,11 @@ void game::draw(int pass)
 
             mParticles->draw();
 
-            if (mSettings.mParticleSmoothing)
-            {
+            if (mSettings.mParticleSmoothing) {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_LINE_SMOOTH);
             }
-        }
-        else
-        {
+        } else {
 #ifdef PARTICLE_GLOW
             glLineWidth(10);
             mParticles->draw();
@@ -628,73 +555,57 @@ void game::draw(int pass)
         {
             glLineWidth(4);
 
-            if (pass == scene::RENDERPASS_PRIMARY)
-            {
-                if (mSettings.mEnemySmoothing)
-                {
+            if (pass == scene::RENDERPASS_PRIMARY) {
+                if (mSettings.mEnemySmoothing) {
                     glEnable(GL_LINE_SMOOTH);
                     glEnable(GL_MULTISAMPLE);
                 }
 
                 mEnemies->draw();
 
-                if (mSettings.mEnemySmoothing)
-                {
+                if (mSettings.mEnemySmoothing) {
                     glDisable(GL_MULTISAMPLE);
                     glDisable(GL_LINE_SMOOTH);
                 }
-            }
-            else
-            {
+            } else {
                 mEnemies->draw();
             }
         }
 
         // Players
-        if (mGameMode == GAMEMODE_PLAYING)
-        {
+        if (mGameMode == GAMEMODE_PLAYING) {
             glLineWidth(4);
-            glPointSize(4/2);
+            glPointSize(4 / 2);
 
-            if (pass == scene::RENDERPASS_PRIMARY)
-            {
-                if (mSettings.mPlayerSmoothing)
-                {
+            if (pass == scene::RENDERPASS_PRIMARY) {
+                if (mSettings.mPlayerSmoothing) {
                     glEnable(GL_LINE_SMOOTH);
                     glEnable(GL_MULTISAMPLE);
                 }
 
                 mPlayers->draw();
 
-                if (mSettings.mPlayerSmoothing)
-                {
+                if (mSettings.mPlayerSmoothing) {
                     glDisable(GL_MULTISAMPLE);
                     glDisable(GL_LINE_SMOOTH);
                 }
-            }
-            else
-            {
+            } else {
                 mPlayers->draw();
             }
-        }
-        else if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE)
-        {
+        } else if (mGameMode == GAMEMODE_CHOOSE_GAMETYPE) {
             menuSelectGameType::draw();
         }
 
         // Stars
-        if (pass == scene::RENDERPASS_PRIMARY)
-        {
-            if (mSettings.mStarSmoothing)
-            {
+        if (pass == scene::RENDERPASS_PRIMARY) {
+            if (mSettings.mStarSmoothing) {
                 glEnable(GL_POINT_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
             }
 
             mStars->draw();
 
-            if (mSettings.mStarSmoothing)
-            {
+            if (mSettings.mStarSmoothing) {
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_POINT_SMOOTH);
             }
@@ -710,8 +621,7 @@ void game::draw(int pass)
         {
             glLineWidth(4);
 
-            if (pass == scene::RENDERPASS_PRIMARY)
-            {
+            if (pass == scene::RENDERPASS_PRIMARY) {
                 glEnable(GL_LINE_SMOOTH);
                 glEnable(GL_MULTISAMPLE);
 
@@ -719,13 +629,11 @@ void game::draw(int pass)
 
                 glDisable(GL_MULTISAMPLE);
                 glDisable(GL_LINE_SMOOTH);
-            }
-            else
-            {
+            } else {
                 drawPointDisplays();
             }
         }
-	}
+    }
 }
 
 void game::startGame(GameType gameType)
@@ -744,25 +652,20 @@ void game::startGame(GameType gameType)
     mSpawner.init();
 
     // Fire up the players
-    if (mPlayers->mPlayer1->mJoined)
-    {
+    if (mPlayers->mPlayer1->mJoined) {
         mPlayers->mPlayer1->initPlayerForGame();
     }
-    if (mPlayers->mPlayer2->mJoined)
-    {
+    if (mPlayers->mPlayer2->mJoined) {
         mPlayers->mPlayer2->initPlayerForGame();
     }
-    if (mPlayers->mPlayer3->mJoined)
-    {
+    if (mPlayers->mPlayer3->mJoined) {
         mPlayers->mPlayer3->initPlayerForGame();
     }
-    if (mPlayers->mPlayer4->mJoined)
-    {
+    if (mPlayers->mPlayer4->mJoined) {
         mPlayers->mPlayer4->initPlayerForGame();
     }
 
-    if (numPlayers() > 1)
-    {
+    if (numPlayers() > 1) {
         // Shared lives and bombs
         m2PlayerNumLives = 10;
         m2PlayerNumBombs = 0;
@@ -818,10 +721,8 @@ void game::endGame()
 void game::showMessageAtLocation(char* message, const Point3d& pos, const vector::pen& pen)
 {
     // Find an empty diplay
-    for (int i=0; i<NUM_POINT_DISPLAYS; i++)
-    {
-        if (!mPointDisplays[i].enabled)
-        {
+    for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
+        if (!mPointDisplays[i].enabled) {
             mPointDisplays[i].enabled = true;
             mPointDisplays[i].pos = pos;
             mPointDisplays[i].pen = pen;
@@ -838,13 +739,10 @@ void game::startBomb()
 
 void game::runPointDisplays()
 {
-    for (int i=0; i<NUM_POINT_DISPLAYS; i++)
-    {
-        if (mPointDisplays[i].enabled)
-        {
+    for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
+        if (mPointDisplays[i].enabled) {
             mPointDisplays[i].timer--;
-            if (mPointDisplays[i].timer <= 0)
-            {
+            if (mPointDisplays[i].timer <= 0) {
                 mPointDisplays[i].enabled = false;
             }
         }
@@ -853,20 +751,19 @@ void game::runPointDisplays()
 
 void game::drawPointDisplays()
 {
-    for (int i=0; i<NUM_POINT_DISPLAYS; i++)
-    {
-        if (mPointDisplays[i].enabled)
-        {
+    for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
+        if (mPointDisplays[i].enabled) {
             float percent = (float)mPointDisplays[i].timer / TIME_POINT_DISPLAY;
             percent *= 2;
-            if (percent > 1) percent = 1;
+            if (percent > 1)
+                percent = 1;
 
             float scale = .9 * percent;
             float alpha = 1 * percent;
 
             vector::pen pen = mPointDisplays[i].pen;
-            pen.a=alpha;
-            pen.lineRadius=3;
+            pen.a = alpha;
+            pen.lineRadius = 3;
 
             font::AlphanumericsPrint(font::ALIGN_CENTER, scale, mPointDisplays[i].pos.x, mPointDisplays[i].pos.y, &pen, mPointDisplays[i].message);
         }
@@ -875,8 +772,7 @@ void game::drawPointDisplays()
 
 void game::clearPointDisplays()
 {
-    for (int i=0; i<NUM_POINT_DISPLAYS; i++)
-    {
+    for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
         mPointDisplays[i].enabled = false;
     }
 }
@@ -885,20 +781,16 @@ int game::numPlayers() const
 {
     int numPlayers = 0;
 
-    if (mPlayers->mPlayer1->mJoined)
-    {
+    if (mPlayers->mPlayer1->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer2->mJoined)
-    {
+    if (mPlayers->mPlayer2->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer3->mJoined)
-    {
+    if (mPlayers->mPlayer3->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer4->mJoined)
-    {
+    if (mPlayers->mPlayer4->mJoined) {
         ++numPlayers;
     }
 

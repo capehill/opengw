@@ -1,13 +1,13 @@
 #include "entityrepulsor.hpp"
-#include "game.hpp"
-#include "entityline.hpp"
-#include "entityPlayer1.hpp"
-#include "players.hpp"
 #include "enemies.hpp"
+#include "entityPlayer1.hpp"
+#include "entityline.hpp"
+#include "game.hpp"
+#include "players.hpp"
 
 class entityRepulsorShieldLine : public entity
 {
-public:
+  public:
     entityRepulsorShieldLine()
     {
         mScale = .12;
@@ -28,14 +28,15 @@ public:
         // The shield
         mModel.mNumVertex = 2;
         mModel.mVertexList = new Point3d[mModel.mNumVertex];
-        mModel.mVertexList[i++] = Point3d(-12,20);
-        mModel.mVertexList[i++] = Point3d(12,20);
+        mModel.mVertexList[i++] = Point3d(-12, 20);
+        mModel.mVertexList[i++] = Point3d(12, 20);
 
         i = 0;
 
         mModel.mNumEdges = 1;
         mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-        mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
+        mModel.mEdgeList[i].from = 0;
+        mModel.mEdgeList[i++].to = 1;
     }
 
     void hit(entity* /*aEntity*/)
@@ -50,12 +51,10 @@ public:
 
         ++mGenId;
 
-        if (mValue >= 1)
-        {
+        if (mValue >= 1) {
             // Create line entities for the shield lines
             entityLine* line = theGame->mEnemies->getUnusedLine();
-            if (line)
-            {
+            if (line) {
                 line->setEdgeBounce(false);
                 line->setGridBound(false);
 
@@ -85,12 +84,12 @@ public:
     void run()
     {
         // Animate the shield line
-        const Point3d p1(-8,20);
-        const Point3d p2(8,20);
+        const Point3d p1(-8, 20);
+        const Point3d p2(8, 20);
 
-        mLine.from.x = p1.x * mValue;//(mValue * ((mValue*.4) + .6));
+        mLine.from.x = p1.x * mValue; //(mValue * ((mValue*.4) + .6));
         mLine.from.y = p1.y * mValue;
-        mLine.to.x = p2.x * mValue;//(mValue * ((mValue*.4) + .6));
+        mLine.to.x = p2.x * mValue; //(mValue * ((mValue*.4) + .6));
         mLine.to.y = p2.y * mValue;
 
         mModel.mVertexList[0].x = mLine.from.x;
@@ -99,13 +98,13 @@ public:
         mModel.mVertexList[1].y = mLine.to.y;
 
         mValue += .1;
-        if (mValue >= 6) mValue -= 6;
+        if (mValue >= 6)
+            mValue -= 6;
     }
 
     void draw()
     {
-        if (mValue >= 1)
-        {
+        if (mValue >= 1) {
             entity::draw();
         }
     }
@@ -113,7 +112,6 @@ public:
     float mValue;
     vector::vector mLine;
 };
-
 
 entityRepulsor::entityRepulsor(const game& gameRef)
     : entity(), mGame(gameRef)
@@ -141,61 +139,72 @@ entityRepulsor::entityRepulsor(const game& gameRef)
 
     mModel.mNumVertex = 12;
     mModel.mVertexList = new Point3d[mModel.mNumVertex];
-    mModel.mVertexList[i++] = Point3d(8,-1);
-    mModel.mVertexList[i++] = Point3d(8,8);
-    mModel.mVertexList[i++] = Point3d(11.5,12);
-    mModel.mVertexList[i++] = Point3d(15,8);
-    mModel.mVertexList[i++] = Point3d(15,-5);
-    mModel.mVertexList[i++] = Point3d(5,-14);
-    mModel.mVertexList[i++] = Point3d(-5,-14);
-    mModel.mVertexList[i++] = Point3d(-15,-5);
-    mModel.mVertexList[i++] = Point3d(-15,8);
-    mModel.mVertexList[i++] = Point3d(-11.5,12);
-    mModel.mVertexList[i++] = Point3d(-8,8);
-    mModel.mVertexList[i++] = Point3d(-8,-1);
+    mModel.mVertexList[i++] = Point3d(8, -1);
+    mModel.mVertexList[i++] = Point3d(8, 8);
+    mModel.mVertexList[i++] = Point3d(11.5, 12);
+    mModel.mVertexList[i++] = Point3d(15, 8);
+    mModel.mVertexList[i++] = Point3d(15, -5);
+    mModel.mVertexList[i++] = Point3d(5, -14);
+    mModel.mVertexList[i++] = Point3d(-5, -14);
+    mModel.mVertexList[i++] = Point3d(-15, -5);
+    mModel.mVertexList[i++] = Point3d(-15, 8);
+    mModel.mVertexList[i++] = Point3d(-11.5, 12);
+    mModel.mVertexList[i++] = Point3d(-8, 8);
+    mModel.mVertexList[i++] = Point3d(-8, -1);
 
     i = 0;
 
     mModel.mNumEdges = 16;
     mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 1;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 2;
-    mModel.mEdgeList[i].from = 2; mModel.mEdgeList[i++].to = 3;
-    mModel.mEdgeList[i].from = 3; mModel.mEdgeList[i++].to = 4;
-    mModel.mEdgeList[i].from = 4; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 5; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 6; mModel.mEdgeList[i++].to = 7;
-    mModel.mEdgeList[i].from = 7; mModel.mEdgeList[i++].to = 8;
-    mModel.mEdgeList[i].from = 8; mModel.mEdgeList[i++].to = 9;
-    mModel.mEdgeList[i].from = 9; mModel.mEdgeList[i++].to = 10;
-    mModel.mEdgeList[i].from = 10; mModel.mEdgeList[i++].to = 11;
-    mModel.mEdgeList[i].from = 11; mModel.mEdgeList[i++].to = 0;
-    mModel.mEdgeList[i].from = 0; mModel.mEdgeList[i++].to = 6;
-    mModel.mEdgeList[i].from = 11; mModel.mEdgeList[i++].to = 5;
-    mModel.mEdgeList[i].from = 8; mModel.mEdgeList[i++].to = 10;
-    mModel.mEdgeList[i].from = 1; mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 1;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 2;
+    mModel.mEdgeList[i].from = 2;
+    mModel.mEdgeList[i++].to = 3;
+    mModel.mEdgeList[i].from = 3;
+    mModel.mEdgeList[i++].to = 4;
+    mModel.mEdgeList[i].from = 4;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 5;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 6;
+    mModel.mEdgeList[i++].to = 7;
+    mModel.mEdgeList[i].from = 7;
+    mModel.mEdgeList[i++].to = 8;
+    mModel.mEdgeList[i].from = 8;
+    mModel.mEdgeList[i++].to = 9;
+    mModel.mEdgeList[i].from = 9;
+    mModel.mEdgeList[i++].to = 10;
+    mModel.mEdgeList[i].from = 10;
+    mModel.mEdgeList[i++].to = 11;
+    mModel.mEdgeList[i].from = 11;
+    mModel.mEdgeList[i++].to = 0;
+    mModel.mEdgeList[i].from = 0;
+    mModel.mEdgeList[i++].to = 6;
+    mModel.mEdgeList[i].from = 11;
+    mModel.mEdgeList[i++].to = 5;
+    mModel.mEdgeList[i].from = 8;
+    mModel.mEdgeList[i++].to = 10;
+    mModel.mEdgeList[i].from = 1;
+    mModel.mEdgeList[i++].to = 3;
 
     mShield1 = std::make_unique<entityRepulsorShieldLine>();
     mShield2 = std::make_unique<entityRepulsorShieldLine>();
     mShield3 = std::make_unique<entityRepulsorShieldLine>();
 }
 
-
 void entityRepulsor::run()
 {
-    if (this->getEnabled())
-    {
+    if (this->getEnabled()) {
         // Check for missiles around us to see if we need to activate our shield lines
         bool enable = false;
-        for (int i=0; (i<entityPlayer1::mMaxMissiles) && !enable; i++)
-        {
+        for (int i = 0; (i < entityPlayer1::mMaxMissiles) && !enable; i++) {
             entityPlayerMissile* missile = &((entityPlayer1*)mGame.mPlayers->mPlayer1)->missiles[i];
-            if (missile->getEnabled())
-            {
+            if (missile->getEnabled()) {
                 // Test this missile to see if it's close to us
                 float distance = mathutils::calculate2dDistance(missile->getPos(), mPos);
-                if (distance < 40)
-                {
+                if (distance < 40) {
                     enable = true;
                 }
             }
@@ -203,15 +212,12 @@ void entityRepulsor::run()
 
         mShieldsEnabled = enable;
 
-        if (mShieldsEnabled)
-        {
+        if (mShieldsEnabled) {
             // Run the shield lines
             mShield1->run();
             mShield2->run();
             mShield3->run();
-        }
-        else
-        {
+        } else {
             mShield1->mValue = 0;
             mShield2->mValue = -2;
             mShield3->mValue = -4;
@@ -222,29 +228,23 @@ void entityRepulsor::run()
         float angleDiff = mathutils::diffAngles(mAngle, angle);
 
         // Do the sound loop
-        if (mAIState == State_Charging)
-        {
+        if (mAIState == State_Charging) {
             if (mLoopSoundId == -1)
                 mLoopSoundId = game::mSound.playTrackGroup(SOUNDID_REPULSORA, SOUNDID_REPULSORD);
-        }
-        else
-        {
+        } else {
             if (mLoopSoundId != -1)
                 game::mSound.stopTrack(mLoopSoundId);
             mLoopSoundId = -1;
         }
 
-        if (mAIState == State_Charging)
-        {
+        if (mAIState == State_Charging) {
             // Accelerate towards the players
-            Point3d speed = Point3d(0,1,0);
+            Point3d speed = Point3d(0, 1, 0);
             speed = mathutils::rotate2dPoint(speed, mAngle);
             mSpeed += speed * .07;
 
-            if (fabs(angleDiff) > mathutils::DegreesToRads(60))
-            {
-                if (--mTimer <= 0)
-                {
+            if (fabs(angleDiff) > mathutils::DegreesToRads(60)) {
+                if (--mTimer <= 0) {
                     mAIState = State_Thinking;
                     mTimer = 10;
                 }
@@ -252,43 +252,33 @@ void entityRepulsor::run()
 
             // Rotate towards the player
             mAngle -= angleDiff * .035;
-        }
-        else if (mAIState == State_Aiming)
-        {
+        } else if (mAIState == State_Aiming) {
             // Rotate towards the player
-            if (fabs(angleDiff) < .2)
-            {
+            if (fabs(angleDiff) < .2) {
                 // Start charging
                 mAIState = State_Charging;
                 mTimer = 20;
-            }
-            else
-            {
+            } else {
                 mAngle -= angleDiff * .05;
             }
-        }
-        else // mAIState == State_Thinking
+        } else // mAIState == State_Thinking
         {
-            if (--mTimer <= 0)
-            {
+            if (--mTimer <= 0) {
                 mAIState = State_Aiming;
             }
         }
 
         mSpeed *= .95;
-
     }
     entity::run();
 
     // If we hit the grid, stop
-	Point3d hitPoint;
-	Point3d speed = mSpeed;
-	if (theGame->mGrid->hitTest(mPos, mRadius, &hitPoint, &speed))
-	{
-		mPos = hitPoint;
+    Point3d hitPoint;
+    Point3d speed = mSpeed;
+    if (theGame->mGrid->hitTest(mPos, mRadius, &hitPoint, &speed)) {
+        mPos = hitPoint;
         mSpeed = speed * .5;
-	}
-
+    }
 
     // Align the shield lines with ourselves and run them
     mShield1->setEnabled(true);
@@ -317,14 +307,13 @@ void entityRepulsor::run()
     mShield3->setRotationRate(mRotationRate);
     mShield3->setDrift(mDrift);
     mShield3->run();
-
 }
 
 void entityRepulsor::spawnTransition()
 {
     entity::spawnTransition();
 
-    mSpeed = Point3d(0,0,0);
+    mSpeed = Point3d(0, 0, 0);
     mRotationRate = 0;
 
     mShield1->mValue = 0;
@@ -332,7 +321,7 @@ void entityRepulsor::spawnTransition()
     mShield3->mValue = -4;
 
     // Pick a random direction
-    mAngle = mathutils::frandFrom0To1() * (2*PI);
+    mAngle = mathutils::frandFrom0To1() * (2 * PI);
 
     mAIState = State_Aiming;
 
@@ -344,8 +333,7 @@ void entityRepulsor::draw()
     entity::draw();
 
     // Draw the shield lines
-    if (mShieldsEnabled && (mState == entity::ENTITY_STATE_RUNNING))
-    {
+    if (mShieldsEnabled && (mState == entity::ENTITY_STATE_RUNNING)) {
         mShield1->draw();
         mShield2->draw();
         mShield3->draw();
@@ -375,16 +363,13 @@ void entityRepulsor::destroyTransition()
 
 void entityRepulsor::repelEntity(entity* e)
 {
-    if ((mState == entity::ENTITY_STATE_RUNNING) && mShieldsEnabled)
-    {
+    if ((mState == entity::ENTITY_STATE_RUNNING) && mShieldsEnabled) {
         // Here we just see if the missile is within a certain distance and within a certain range of angles
         float distance = mathutils::calculate2dDistance(mPos, e->getPos());
-        if (distance < 25)
-        {
+        if (distance < 25) {
             float angle = mathutils::calculate2dAngle(mPos, e->getPos());
             float diff = mathutils::diffAngles(mAngle + mathutils::DegreesToRads(90), angle);
-            if (fabs(diff) < .75)
-            {
+            if (fabs(diff) < .75) {
                 // Push the missile away
                 const float amount = 200;
                 Point3d moveVector(0, diff > 0 ? amount : -amount, 0);
@@ -393,6 +378,5 @@ void entityRepulsor::repelEntity(entity* e)
                 e->setDrift(e->getDrift() + moveVector);
             }
         }
-
     }
 }
