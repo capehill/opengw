@@ -148,4 +148,4 @@ void extendVector(Point3d* from, Point3d* to, double amount)
     to->y = vector2.y;
 }
 
-}; // namespace vector
+} // namespace vector

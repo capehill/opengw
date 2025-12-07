@@ -57,4 +57,4 @@ bool approximatelyEqual(float testValue, float eval, float tolerance);
 
 bool lineCircleIntersects(const Point3d& c, float r, const Point3d& p1, const Point3d& p2);
 
-}; // namespace mathutils
+} // namespace mathutils

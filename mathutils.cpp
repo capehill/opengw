@@ -242,4 +242,4 @@ bool approximatelyEqual(float testValue, float eval, float tolerance)
 {
     return ((eval > (testValue - tolerance)) && (eval < (testValue + tolerance)));
 }
-}; // namespace mathutils
+} // namespace mathutils

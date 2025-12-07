@@ -33,4 +33,4 @@ char* formatStringWithCommas(char* string);
 
 //    extern float AlphanumericsPrintVScale;
 
-}; // namespace font
+} // namespace font

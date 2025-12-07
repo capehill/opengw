@@ -41,4 +41,4 @@ class vector
 
 void drawVector(const Point3d& from, const Point3d& to, const pen& penStyle);
 void extendVector(Point3d* from, Point3d* to, double amount);
-}; // namespace vector
+} // namespace vector
