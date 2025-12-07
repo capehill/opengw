@@ -66,9 +66,8 @@ static bool handleEvents()
 			case SDL_WINDOWEVENT:
 		    {
     		    if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-    			    SDL_WindowEvent* we = reinterpret_cast<SDL_WindowEvent*>(&e);
-    			    //printf("%d %d\n", we->data1, we->data2);
-    			    OGLSize(we->data1, we->data2);
+    			    //printf("%d %d\n", e.window.data1, e.window.data2);
+    			    OGLSize(e.window.data1, e.window.data2);
     			    break;
     			}
 			}
