@@ -859,7 +859,8 @@ void AlphanumericsPrint(int alignment, float scale, float x, float y, vector::pe
 
     int len = strlen(text);
     for (int i = 0; i < len; i++) {
-        if (text[i] == '\n') {
+        const char c = text[i];
+        if (c == '\n') {
             if (alignment == ALIGN_LEFT) {
                 cursorX = x;
             }
@@ -870,138 +871,112 @@ void AlphanumericsPrint(int alignment, float scale, float x, float y, vector::pe
 
             cursorY -= ycell * scale;
         } else {
-            bool lower = false;
+            const bool lower = (c >= 'a' && c <= 'z');
 
             switch (text[i]) {
             case ' ':
                 break;
             case 'a':
-                lower = true;
             case 'A':
                 drawText(scale, &charA[0], color, lower);
                 break;
             case 'b':
-                lower = true;
             case 'B':
                 drawText(scale, &charB[0], color, lower);
                 break;
             case 'c':
-                lower = true;
             case 'C':
                 drawText(scale, &charC[0], color, lower);
                 break;
             case 'd':
-                lower = true;
             case 'D':
                 drawText(scale, &charD[0], color, lower);
                 break;
             case 'e':
-                lower = true;
             case 'E':
                 drawText(scale, &charE[0], color, lower);
                 break;
             case 'f':
-                lower = true;
             case 'F':
                 drawText(scale, &charF[0], color, lower);
                 break;
             case 'g':
-                lower = true;
             case 'G':
                 drawText(scale, &charG[0], color, lower);
                 break;
             case 'h':
-                lower = true;
             case 'H':
                 drawText(scale, &charH[0], color, lower);
                 break;
             case 'i':
-                lower = true;
             case 'I':
                 drawText(scale, &charI[0], color, lower);
                 break;
             case 'j':
-                lower = true;
             case 'J':
                 drawText(scale, &charJ[0], color, lower);
                 break;
             case 'k':
-                lower = true;
             case 'K':
                 drawText(scale, &charK[0], color, lower);
                 break;
             case 'l':
-                lower = true;
             case 'L':
                 drawText(scale, &charL[0], color, lower);
                 break;
             case 'm':
-                lower = true;
             case 'M':
                 drawText(scale, &charM[0], color, lower);
                 break;
             case 'n':
-                lower = true;
             case 'N':
                 drawText(scale, &charN[0], color, lower);
                 break;
             case 'o':
-                lower = true;
             case 'O':
                 drawText(scale, &charO[0], color, lower);
                 break;
             case 'p':
-                lower = true;
             case 'P':
                 drawText(scale, &charP[0], color, lower);
                 break;
             case 'q':
-                lower = true;
             case 'Q':
                 drawText(scale, &charQ[0], color, lower);
                 break;
             case 'r':
-                lower = true;
             case 'R':
                 drawText(scale, &charR[0], color, lower);
                 break;
             case 's':
-                lower = true;
             case 'S':
                 drawText(scale, &charS[0], color, lower);
                 break;
             case 't':
-                lower = true;
             case 'T':
                 drawText(scale, &charT[0], color, lower);
                 break;
             case 'u':
-                lower = true;
             case 'U':
                 drawText(scale, &charU[0], color, lower);
                 break;
             case 'v':
-                lower = true;
             case 'V':
                 drawText(scale, &charV[0], color, lower);
                 break;
             case 'w':
-                lower = true;
             case 'W':
                 drawText(scale, &charW[0], color, lower);
                 break;
             case 'x':
-                lower = true;
             case 'X':
                 drawText(scale, &charX[0], color, lower);
                 break;
             case 'y':
-                lower = true;
             case 'Y':
                 drawText(scale, &charY[0], color, lower);
                 break;
             case 'z':
-                lower = true;
             case 'Z':
                 drawText(scale, &charZ[0], color, lower);
                 break;
