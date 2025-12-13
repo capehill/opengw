@@ -24,20 +24,14 @@ const int grid::resolution_y = ((22 * 4) + 1);
 
 // Stuff for our OpenGL grid arrays
 
-struct Vertex3f
+struct Vertex
 {
-    GLfloat x, y, z;
-};
-
-struct Color4f
-{
+    GLfloat x, y;
     GLfloat r, g, b, a;
 };
 
-static std::vector<Vertex3f> gridVertexArrayX;
-static std::vector<Vertex3f> gridVertexArrayY;
-static std::vector<Color4f> gridColorArrayX;
-static std::vector<Color4f> gridColorArrayY;
+static std::vector<Vertex> gridVertexArray;
+
 static unsigned int numGridLinesX;
 static unsigned int numGridLinesY;
 
@@ -205,11 +199,8 @@ grid::grid()
         }
     }
 
-    // Create our OpenGL vertex and color arrays
-    gridVertexArrayX.resize(numGridLinesX * 2);
-    gridVertexArrayY.resize(numGridLinesY * 2);
-    gridColorArrayX.resize(numGridLinesX * 2);
-    gridColorArrayY.resize(numGridLinesY * 2);
+    // Create our OpenGL vertex and color array
+    gridVertexArray.resize((numGridLinesX + numGridLinesY) * 2);
 
     // Init the grid line colors up front so it only has to happen once
 
@@ -227,68 +218,66 @@ grid::grid()
     for (int y = 0; y < resolution_y; ++y) {
         for (int x = 0; x < resolution_x - 1; ++x) {
             if (y % 4 == 0) {
-                gridColorArrayX[i].r = lightColor.r;
-                gridColorArrayX[i].g = lightColor.g;
-                gridColorArrayX[i].b = lightColor.b;
-                gridColorArrayX[i].a = lightColor.a;
+                gridVertexArray[i].r = lightColor.r;
+                gridVertexArray[i].g = lightColor.g;
+                gridVertexArray[i].b = lightColor.b;
+                gridVertexArray[i].a = lightColor.a;
 
                 i++;
 
-                gridColorArrayX[i].r = lightColor.r;
-                gridColorArrayX[i].g = lightColor.g;
-                gridColorArrayX[i].b = lightColor.b;
-                gridColorArrayX[i].a = lightColor.a;
+                gridVertexArray[i].r = lightColor.r;
+                gridVertexArray[i].g = lightColor.g;
+                gridVertexArray[i].b = lightColor.b;
+                gridVertexArray[i].a = lightColor.a;
 
                 i++;
             } else {
-                gridColorArrayX[i].r = darkColor.r;
-                gridColorArrayX[i].g = darkColor.g;
-                gridColorArrayX[i].b = darkColor.b;
-                gridColorArrayX[i].a = darkColor.a;
+                gridVertexArray[i].r = darkColor.r;
+                gridVertexArray[i].g = darkColor.g;
+                gridVertexArray[i].b = darkColor.b;
+                gridVertexArray[i].a = darkColor.a;
 
                 i++;
 
-                gridColorArrayX[i].r = darkColor.r;
-                gridColorArrayX[i].g = darkColor.g;
-                gridColorArrayX[i].b = darkColor.b;
-                gridColorArrayX[i].a = darkColor.a;
+                gridVertexArray[i].r = darkColor.r;
+                gridVertexArray[i].g = darkColor.g;
+                gridVertexArray[i].b = darkColor.b;
+                gridVertexArray[i].a = darkColor.a;
 
                 i++;
             }
         }
     }
 
-    i = 0;
-
     // Vertical lines
     for (int x = 0; x < resolution_x; ++x) {
         for (int y = 0; y < resolution_y - 1; ++y) {
             if (x % 4 == 0) {
-                gridColorArrayY[i].r = lightColor.r;
-                gridColorArrayY[i].g = lightColor.g;
-                gridColorArrayY[i].b = lightColor.b;
-                gridColorArrayY[i].a = lightColor.a;
+                gridVertexArray[i].r = lightColor.r;
+                gridVertexArray[i].g = lightColor.g;
+                gridVertexArray[i].b = lightColor.b;
+                gridVertexArray[i].a = lightColor.a;
 
                 i++;
 
-                gridColorArrayY[i].r = lightColor.r;
-                gridColorArrayY[i].g = lightColor.g;
-                gridColorArrayY[i].b = lightColor.b;
-                gridColorArrayY[i].a = lightColor.a;
+                gridVertexArray[i].r = lightColor.r;
+                gridVertexArray[i].g = lightColor.g;
+                gridVertexArray[i].b = lightColor.b;
+                gridVertexArray[i].a = lightColor.a;
 
                 i++;
             } else {
-                gridColorArrayY[i].r = darkColor.r;
-                gridColorArrayY[i].g = darkColor.g;
-                gridColorArrayY[i].b = darkColor.b;
-                gridColorArrayY[i].a = darkColor.a;
+                gridVertexArray[i].r = darkColor.r;
+                gridVertexArray[i].g = darkColor.g;
+                gridVertexArray[i].b = darkColor.b;
+                gridVertexArray[i].a = darkColor.a;
 
                 i++;
 
-                gridColorArrayY[i].r = darkColor.r;
-                gridColorArrayY[i].g = darkColor.g;
-                gridColorArrayY[i].b = darkColor.b;
-                gridColorArrayY[i].a = darkColor.a;
+                gridVertexArray[i].r = darkColor.r;
+                gridVertexArray[i].g = darkColor.g;
+                gridVertexArray[i].b = darkColor.b;
+                gridVertexArray[i].a = darkColor.a;
 
                 i++;
             }
@@ -321,12 +310,16 @@ void grid::run()
     mRunFlag = true;
 }
 
+static profiler prof1("grid_draw");
+static profiler prof2("grid_draw2");
+
 void grid::draw()
 {
     if (brightness <= 0.05f)
         return;
 
     // std::unique_lock<std::mutex> lock(m);
+    prof1.start();
 
     glLineWidth(5.0f);
 
@@ -340,22 +333,17 @@ void grid::draw()
             const Point3d& from = p->pos;
             const Point3d& to = (p + 1)->pos;
 
-            // TODO: z coordinate seems unused
             // TODO: it would be nice to assign whole struct directly
-            gridVertexArrayX[idxVertex].x = from.x;
-            gridVertexArrayX[idxVertex].y = from.y;
-            gridVertexArrayX[idxVertex].z = 0.0f;
+            gridVertexArray[idxVertex].x = from.x;
+            gridVertexArray[idxVertex].y = from.y;
             ++idxVertex;
 
-            gridVertexArrayX[idxVertex].x = to.x;
-            gridVertexArrayX[idxVertex].y = to.y;
-            gridVertexArrayX[idxVertex].z = 0.0f;
+            gridVertexArray[idxVertex].x = to.x;
+            gridVertexArray[idxVertex].y = to.y;
             ++idxVertex;
             p++;
         }
     }
-
-    idxVertex = 0;
 
     // Vertical lines
     for (int x = 0; x < resolution_x; ++x) {
@@ -365,37 +353,34 @@ void grid::draw()
             const Point3d& from = p->pos;
             const Point3d& to = (p + grid::resolution_x)->pos;
 
-            gridVertexArrayY[idxVertex].x = from.x;
-            gridVertexArrayY[idxVertex].y = from.y;
-            gridVertexArrayY[idxVertex].z = 0.0f;
+            gridVertexArray[idxVertex].x = from.x;
+            gridVertexArray[idxVertex].y = from.y;
             ++idxVertex;
 
-            gridVertexArrayY[idxVertex].x = to.x;
-            gridVertexArrayY[idxVertex].y = to.y;
-            gridVertexArrayY[idxVertex].z = 0.0f;
+            gridVertexArray[idxVertex].x = to.x;
+            gridVertexArray[idxVertex].y = to.y;
             ++idxVertex;
 
             p += grid::resolution_x;
         }
     }
 
+    prof1.stop();
+    prof2.start();
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
-    // TODO: compiled vertex arrays?
-
     // Draw horizontal lines array
-    glVertexPointer(3, GL_FLOAT, 0, gridVertexArrayX.data());
-    glColorPointer(4, GL_FLOAT, 0, gridColorArrayX.data());
-    glDrawArrays(GL_LINES, 0, numGridLinesX * 2);
+    glVertexPointer(2, GL_FLOAT, sizeof(Vertex), gridVertexArray.data());
+    glColorPointer(4, GL_FLOAT, sizeof(Vertex), ((char*)gridVertexArray.data() + 2 * sizeof(GLfloat)));
 
-    // Draw vertical lines array
-    glVertexPointer(3, GL_FLOAT, 0, gridVertexArrayY.data());
-    glColorPointer(4, GL_FLOAT, 0, gridColorArrayY.data());
-    glDrawArrays(GL_LINES, 0, numGridLinesY * 2);
+    glDrawArrays(GL_LINES, 0, (numGridLinesX + numGridLinesY) * 2);
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
+
+    prof2.stop();
 
     // Grid outline
 
