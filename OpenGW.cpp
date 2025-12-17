@@ -12,18 +12,16 @@
 #include <memory>
 
 // declare image buffers
-static const int blurBufferWidth = 500;
-static const int blurBufferHeight = 250;
+#ifdef __amigaos4__
+// MiniGL / Warp3D requires power of two size
+static constexpr int blurBufferWidth = 256;
+static constexpr int blurBufferHeight = 256;
+#else
+static constexpr int blurBufferWidth = 500;
+static constexpr int blurBufferHeight = 250;
+#endif
 
-typedef struct
-{
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-} ColorRGBA;
-
-static ColorRGBA blurBuffer[blurBufferWidth][blurBufferHeight];
+static std::vector<ColorRGB> blurBuffer(blurBufferWidth * blurBufferHeight);
 
 static SDL_Window* window;
 static SDL_GLContext context;
@@ -201,15 +199,15 @@ static void drawOffscreens()
 
         // Bind the blur texture and copy the screen bits to it
         glBindTexture(GL_TEXTURE_2D, texOffscreen);
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer.data());
 
         const int blurRadius = (game::mGameMode == game::GAMEMODE_ATTRACT || game::mGameMode == game::GAMEMODE_CREDITED) ? 8 : 4;
 
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, blurRadius);
-        superFastBlur((unsigned char*)&blurBuffer[0][0], blurBufferWidth, blurBufferHeight, blurRadius);
+        superFastBlur(blurBuffer.data(), blurBufferWidth, blurBufferHeight, blurRadius);
+        superFastBlur(blurBuffer.data(), blurBufferWidth, blurBufferHeight, blurRadius);
 
         // Bind the blur result back to our texture
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, blurBufferWidth, blurBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, blurBufferWidth, blurBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, blurBuffer.data());
 
         ////////////////////////////////////////////////
         // Draw the blur texture on top of the existing scene
