@@ -16,18 +16,14 @@ class particle
 
         float speedX;
         float speedY;
-        float speedZ;
 
         vector::pen color;
 
         int timeToLive;
-        float fadeStep;
         float drag;
 
         bool gravity;
         bool gridBound;
-        bool hitGrid;
-        bool glowPass;
     };
 
     particle();
@@ -37,13 +33,12 @@ class particle
     void run();
 
     void emitter(Point3d* position, Point3d* angle, float speed, float spread, int num, vector::pen* color, int timeToLive,
-                 bool gravity = true, bool gridBound = true, float drag = .93, bool glowPass = true);
+                 bool gravity = true, bool gridBound = true, float drag = .93f, bool glowPass = true);
 
     void killAll();
 
     static std::vector<PARTICLE> mParticles;
-    static int mNumParticles;
-    static int mIndex;
+    static std::size_t mIndex;
 
   private:
     void assignParticle(Point3d* position,
