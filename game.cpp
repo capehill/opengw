@@ -31,7 +31,7 @@ extern scene oglScene;
 int game::mSkillLevel;
 game::GameMode game::mGameMode;
 game::GameType game::mGameType;
-game::PointDisplay* game::mPointDisplays;
+std::vector<game::PointDisplay> game::mPointDisplays;
 bool game::mPaused = false;
 int game::mCredits = 0;
 int game::mLevel = 0;
@@ -108,7 +108,7 @@ game::game()
     mCamera = std::make_unique<camera>(*this);
     mCamera->center();
 
-    mPointDisplays = new PointDisplay[NUM_POINT_DISPLAYS];
+    mPointDisplays.resize(NUM_POINT_DISPLAYS);
     for (int i = 0; i < NUM_POINT_DISPLAYS; i++) {
         mPointDisplays[i].enabled = false;
     }
@@ -141,8 +141,6 @@ game::game()
 
 game::~game()
 {
-    delete[] mPointDisplays;
-
     // TODO: mParticles uses theGame pointer, which would be nil now.
     // mParticles.reset();
     // mGrid.reset();

@@ -22,7 +22,7 @@ entityWanderer::entityWanderer()
     int i = 0;
 
     mModel.mNumVertex = 9;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
     mModel.mVertexList[i++] = Point3d(0, 0);
     mModel.mVertexList[i++] = Point3d(0, 1);
     mModel.mVertexList[i++] = Point3d(1, 1);
@@ -45,7 +45,7 @@ entityWanderer::entityWanderer()
     i = 0;
 
     mModel.mNumEdges = 12;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 1;
     mModel.mEdgeList[i].from = 1;

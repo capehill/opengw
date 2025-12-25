@@ -23,7 +23,7 @@ entityMayfly::entityMayfly()
     int i = 0;
 
     mModel.mNumVertex = 6;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
 
     mModel.mVertexList[i++] = Point3d(-.25, 1.25);
     mModel.mVertexList[i++] = Point3d(.25, 1.25);
@@ -37,7 +37,7 @@ entityMayfly::entityMayfly()
     i = 0;
 
     mModel.mNumEdges = 3;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 3;
     mModel.mEdgeList[i].from = 1;

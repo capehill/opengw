@@ -2,6 +2,8 @@
 
 #include "player.hpp"
 
+#include <memory>
+
 class game;
 
 class players
@@ -16,10 +18,10 @@ class players
     player* getPlayerClosestToPosition(const Point3d& point);
     player* getRandomActivePlayer();
 
-    static player* mPlayer1;
-    static player* mPlayer2;
-    static player* mPlayer3;
-    static player* mPlayer4;
+    static std::unique_ptr<player> mPlayer1;
+    static std::unique_ptr<player> mPlayer2;
+    static std::unique_ptr<player> mPlayer3;
+    static std::unique_ptr<player> mPlayer4;
 
     const game& mGame;
 };

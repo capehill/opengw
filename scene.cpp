@@ -37,7 +37,7 @@ scene::scene()
     int i = 0;
 
     mShieldSymbol.mNumVertex = 12;
-    mShieldSymbol.mVertexList = new Point3d[mShieldSymbol.mNumVertex];
+    mShieldSymbol.mVertexList.resize(mShieldSymbol.mNumVertex);
     mShieldSymbol.mVertexList[i++] = Point3d(0, 11.5);
     mShieldSymbol.mVertexList[i++] = Point3d(8.1, 8.1);
     mShieldSymbol.mVertexList[i++] = Point3d(11.5, 0);
@@ -54,7 +54,7 @@ scene::scene()
     i = 0;
 
     mShieldSymbol.mNumEdges = 10;
-    mShieldSymbol.mEdgeList = new model::Edge[mShieldSymbol.mNumEdges];
+    mShieldSymbol.mEdgeList.resize(mShieldSymbol.mNumEdges);
     mShieldSymbol.mEdgeList[i].from = 0;
     mShieldSymbol.mEdgeList[i++].to = 1;
     mShieldSymbol.mEdgeList[i].from = 1;
@@ -499,19 +499,19 @@ void scene::drawScores()
             player* player;
             switch (i) {
             case 0:
-                player = theGame->mPlayers->mPlayer1;
+                player = theGame->mPlayers->mPlayer1.get();
                 pos = Point3d(-.7, .9, 0);
                 break;
             case 1:
-                player = theGame->mPlayers->mPlayer2;
+                player = theGame->mPlayers->mPlayer2.get();
                 pos = Point3d(.3, .9, 0);
                 break;
             case 2:
-                player = theGame->mPlayers->mPlayer3;
+                player = theGame->mPlayers->mPlayer3.get();
                 pos = Point3d(-.7, -.9, 0);
                 break;
             case 3:
-                player = theGame->mPlayers->mPlayer4;
+                player = theGame->mPlayers->mPlayer4.get();
                 pos = Point3d(.3, -.9, 0);
                 break;
             }

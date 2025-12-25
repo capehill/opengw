@@ -21,7 +21,7 @@ void blackholes::run()
                 //
                 // Players
                 for (int p = 0; p < 2; p++) {
-                    entity* player = (p == 0) ? theGame->mPlayers->mPlayer1 : theGame->mPlayers->mPlayer2;
+                    entity* player = (p == 0) ? theGame->mPlayers->mPlayer1.get() : theGame->mPlayers->mPlayer2.get();
                     if (player->getEnabled()) {
                         float angle = mathutils::calculate2dAngle(player->getPos(), blackHole->getPos());
                         float distance = mathutils::calculate2dDistance(player->getPos(), blackHole->getPos());

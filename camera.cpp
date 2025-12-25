@@ -28,16 +28,16 @@ void camera::followPlayer()
         player* player;
         switch (i) {
         case 0:
-            player = mGame.mPlayers->mPlayer1;
+            player = mGame.mPlayers->mPlayer1.get();
             break;
         case 1:
-            player = mGame.mPlayers->mPlayer2;
+            player = mGame.mPlayers->mPlayer2.get();
             break;
         case 2:
-            player = mGame.mPlayers->mPlayer3;
+            player = mGame.mPlayers->mPlayer3.get();
             break;
         case 3:
-            player = mGame.mPlayers->mPlayer4;
+            player = mGame.mPlayers->mPlayer4.get();
             break;
         }
 
@@ -65,16 +65,16 @@ void camera::followPlayer()
         player* playerA;
         switch (i) {
         case 0:
-            playerA = mGame.mPlayers->mPlayer1;
+            playerA = mGame.mPlayers->mPlayer1.get();
             break;
         case 1:
-            playerA = mGame.mPlayers->mPlayer2;
+            playerA = mGame.mPlayers->mPlayer2.get();
             break;
         case 2:
-            playerA = mGame.mPlayers->mPlayer3;
+            playerA = mGame.mPlayers->mPlayer3.get();
             break;
         case 3:
-            playerA = mGame.mPlayers->mPlayer4;
+            playerA = mGame.mPlayers->mPlayer4.get();
             break;
         }
 
@@ -83,16 +83,16 @@ void camera::followPlayer()
                 player* playerB;
                 switch (j) {
                 case 0:
-                    playerB = mGame.mPlayers->mPlayer1;
+                    playerB = mGame.mPlayers->mPlayer1.get();
                     break;
                 case 1:
-                    playerB = mGame.mPlayers->mPlayer2;
+                    playerB = mGame.mPlayers->mPlayer2.get();
                     break;
                 case 2:
-                    playerB = mGame.mPlayers->mPlayer3;
+                    playerB = mGame.mPlayers->mPlayer3.get();
                     break;
                 case 3:
-                    playerB = mGame.mPlayers->mPlayer4;
+                    playerB = mGame.mPlayers->mPlayer4.get();
                     break;
                 }
 

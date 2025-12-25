@@ -18,6 +18,7 @@
 #include "spawner.hpp"
 
 #include <memory>
+#include <vector>
 
 class camera;
 class stars;
@@ -162,7 +163,7 @@ class game
         bool enabled;
     } PointDisplay;
 
-    static PointDisplay* mPointDisplays;
+    static std::vector<PointDisplay> mPointDisplays;
 
     void runPointDisplays();
     void drawPointDisplays();

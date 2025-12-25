@@ -80,19 +80,19 @@ void spawner::run(void)
         int* timer;
         switch (i) {
         case 0:
-            player = theGame->mPlayers->mPlayer1;
+            player = theGame->mPlayers->mPlayer1.get();
             timer = &player1SpawnTimer;
             break;
         case 1:
-            player = theGame->mPlayers->mPlayer2;
+            player = theGame->mPlayers->mPlayer2.get();
             timer = &player2SpawnTimer;
             break;
         case 2:
-            player = theGame->mPlayers->mPlayer3;
+            player = theGame->mPlayers->mPlayer3.get();
             timer = &player3SpawnTimer;
             break;
         case 3:
-            player = theGame->mPlayers->mPlayer4;
+            player = theGame->mPlayers->mPlayer4.get();
             timer = &player4SpawnTimer;
             break;
         }

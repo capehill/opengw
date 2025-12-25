@@ -3,6 +3,8 @@
 #include "entity.hpp"
 #include "entityplayermissile.hpp"
 
+#include <vector>
+
 class player : public entity
 {
   public:
@@ -21,8 +23,8 @@ class player : public entity
 
     virtual void draw();
 
-    entityPlayerMissile* missiles;
-    static const int mMaxMissiles;
+    std::vector<entityPlayerMissile> missiles;
+    static const int mMaxMissiles; // TODO
 
     int mScore;
     int mMultiplier;

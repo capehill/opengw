@@ -6,32 +6,28 @@
 #include "entityPlayer4.hpp"
 #include "game.hpp"
 
-player* players::mPlayer1;
-player* players::mPlayer2;
-player* players::mPlayer3;
-player* players::mPlayer4;
+std::unique_ptr<player> players::mPlayer1;
+std::unique_ptr<player> players::mPlayer2;
+std::unique_ptr<player> players::mPlayer3;
+std::unique_ptr<player> players::mPlayer4;
 
 players::players(const game& gameRef) : mGame(gameRef)
 {
-    mPlayer1 = new entityPlayer1(gameRef);
+    mPlayer1 = std::make_unique<entityPlayer1>(gameRef);
     mPlayer1->setState(entity::ENTITY_STATE_INACTIVE);
 
-    mPlayer2 = new entityPlayer2;
+    mPlayer2 = std::make_unique<entityPlayer2>();
     mPlayer2->setState(entity::ENTITY_STATE_INACTIVE);
 
-    mPlayer3 = new entityPlayer3;
+    mPlayer3 = std::make_unique<entityPlayer3>();
     mPlayer3->setState(entity::ENTITY_STATE_INACTIVE);
 
-    mPlayer4 = new entityPlayer4;
+    mPlayer4 = std::make_unique<entityPlayer4>();
     mPlayer4->setState(entity::ENTITY_STATE_INACTIVE);
 }
 
 players::~players()
 {
-    delete mPlayer1;
-    delete mPlayer2;
-    delete mPlayer3;
-    delete mPlayer4;
 }
 
 void players::run()
@@ -41,16 +37,16 @@ void players::run()
 
         switch (i) {
         case 0:
-            currentPlayer = mPlayer1;
+            currentPlayer = mPlayer1.get();
             break;
         case 1:
-            currentPlayer = mPlayer2;
+            currentPlayer = mPlayer2.get();
             break;
         case 2:
-            currentPlayer = mPlayer3;
+            currentPlayer = mPlayer3.get();
             break;
         case 3:
-            currentPlayer = mPlayer4;
+            currentPlayer = mPlayer4.get();
             break;
         }
 
@@ -132,7 +128,7 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
 {
     // The enemies use this function to determine which player to chase (mostly in the case of a non-single player game) :-)
     if (mGame.numPlayers() == 1) {
-        return mPlayer1;
+        return mPlayer1.get();
     } else {
         float distancePlayer1 = 999999;
         float distancePlayer2 = 999999;
@@ -157,22 +153,22 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
 
         if (distancePlayer1 < minDistance) {
             minDistance = distancePlayer1;
-            closePlayer = mGame.mPlayers->mPlayer1;
+            closePlayer = mGame.mPlayers->mPlayer1.get();
         }
         if (distancePlayer2 < minDistance) {
             minDistance = distancePlayer2;
-            closePlayer = mGame.mPlayers->mPlayer2;
+            closePlayer = mGame.mPlayers->mPlayer2.get();
         }
         if (distancePlayer3 < minDistance) {
             minDistance = distancePlayer3;
-            closePlayer = mGame.mPlayers->mPlayer3;
+            closePlayer = mGame.mPlayers->mPlayer3.get();
         }
         if (distancePlayer4 < minDistance) {
             // minDistance = distancePlayer4;
-            closePlayer = mGame.mPlayers->mPlayer4;
+            closePlayer = mGame.mPlayers->mPlayer4.get();
         }
 
-        return closePlayer ? closePlayer : mPlayer1; // just in case
+        return closePlayer ? closePlayer : mPlayer1.get(); // just in case
     }
 }
 
@@ -207,30 +203,30 @@ player* players::getRandomActivePlayer()
         return nullptr;
     }
     if (p1 && !p2 && !p3 && !p4) {
-        return mPlayer1;
+        return mPlayer1.get();
     }
     if (!p1 && p2 && !p3 && !p4) {
-        return mPlayer2;
+        return mPlayer2.get();
     }
     if (!p1 && !p2 && p3 && !p4) {
-        return mPlayer3;
+        return mPlayer3.get();
     }
     if (!p1 && !p2 && !p3 && p4) {
-        return mPlayer4;
+        return mPlayer4.get();
     } else {
         while (1) {
             int player = ceil(mathutils::frandFrom0To1() * 4);
             if ((player == 0) && p1) {
-                return mPlayer1;
+                return mPlayer1.get();
             }
             if ((player == 1) && p2) {
-                return mPlayer2;
+                return mPlayer2.get();
             }
             if ((player == 2) && p3) {
-                return mPlayer3;
+                return mPlayer3.get();
             }
             if ((player == 3) && p4) {
-                return mPlayer4;
+                return mPlayer4.get();
             }
         }
     }

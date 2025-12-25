@@ -4,6 +4,8 @@
 #include "point3d.hpp"
 #include "vector.hpp"
 
+#include <vector>
+
 class model
 {
   public:
@@ -25,10 +27,10 @@ class model
     void Rotate(float angle) { mMatrix.Rotate(0, 0, angle); }
     void Rotate(float x, float y, float z) { mMatrix.Rotate(x, y, z); }
 
-    Point3d* mVertexList;
-    Edge* mEdgeList;
+    std::vector<Point3d> mVertexList;
+    std::vector<Edge> mEdgeList;
 
-    int mNumVertex;
+    int mNumVertex; //TODO
     int mNumEdges;
 
     matrix mMatrix;

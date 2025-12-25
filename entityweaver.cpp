@@ -22,7 +22,7 @@ entityWeaver::entityWeaver()
     int i = 0;
 
     mModel.mNumVertex = 8;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
     mModel.mVertexList[i++] = Point3d(0, 1);
     mModel.mVertexList[i++] = Point3d(1, 0);
     mModel.mVertexList[i++] = Point3d(0, -1);
@@ -35,7 +35,7 @@ entityWeaver::entityWeaver()
     i = 0;
 
     mModel.mNumEdges = 8;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 1;
     mModel.mEdgeList[i].from = 1;
@@ -59,7 +59,7 @@ void entityWeaver::run()
     if (this->getEnabled()) {
         // Check for missiles around us
         for (int i = 0; i < entityPlayer1::mMaxMissiles; i++) {
-            entityPlayerMissile* missile = &((entityPlayer1*)theGame->mPlayers->mPlayer1)->missiles[i];
+            entityPlayerMissile* missile = &((entityPlayer1*)theGame->mPlayers->mPlayer1.get())->missiles[i];
             if (missile->getEnabled()) {
                 // Test this missile to see if it's aimed at us
 

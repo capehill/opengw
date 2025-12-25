@@ -7,8 +7,6 @@ model::model()
 {
     mMatrix.Identity();
 
-    mVertexList = 0;
-    mEdgeList = 0;
     mNumVertex = 0;
     mNumEdges = 0;
 
@@ -17,8 +15,6 @@ model::model()
 
 model::~model()
 {
-    delete[] mVertexList;
-    delete[] mEdgeList;
 }
 
 void model::draw(const vector::pen& pen)

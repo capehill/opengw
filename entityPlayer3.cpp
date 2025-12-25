@@ -20,7 +20,7 @@ entityPlayer3::entityPlayer3()
     int i = 0;
 
     mModel.mNumVertex = 12;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
 
     mModel.mVertexList[i++] = Point3d(0, 15);
     mModel.mVertexList[i++] = Point3d(5, -2);
@@ -40,7 +40,7 @@ entityPlayer3::entityPlayer3()
     i = 0;
 
     mModel.mNumEdges = 12;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 1;
     mModel.mEdgeList[i].from = 1;

@@ -27,14 +27,14 @@ class entityRepulsorShieldLine : public entity
 
         // The shield
         mModel.mNumVertex = 2;
-        mModel.mVertexList = new Point3d[mModel.mNumVertex];
+        mModel.mVertexList.resize(mModel.mNumVertex);
         mModel.mVertexList[i++] = Point3d(-12, 20);
         mModel.mVertexList[i++] = Point3d(12, 20);
 
         i = 0;
 
         mModel.mNumEdges = 1;
-        mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+        mModel.mEdgeList.resize(mModel.mNumEdges);
         mModel.mEdgeList[i].from = 0;
         mModel.mEdgeList[i++].to = 1;
     }
@@ -138,7 +138,7 @@ entityRepulsor::entityRepulsor(const game& gameRef)
     int i = 0;
 
     mModel.mNumVertex = 12;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
     mModel.mVertexList[i++] = Point3d(8, -1);
     mModel.mVertexList[i++] = Point3d(8, 8);
     mModel.mVertexList[i++] = Point3d(11.5, 12);
@@ -155,7 +155,7 @@ entityRepulsor::entityRepulsor(const game& gameRef)
     i = 0;
 
     mModel.mNumEdges = 16;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 1;
     mModel.mEdgeList[i].from = 1;
@@ -200,7 +200,7 @@ void entityRepulsor::run()
         // Check for missiles around us to see if we need to activate our shield lines
         bool enable = false;
         for (int i = 0; (i < entityPlayer1::mMaxMissiles) && !enable; i++) {
-            entityPlayerMissile* missile = &((entityPlayer1*)mGame.mPlayers->mPlayer1)->missiles[i];
+            entityPlayerMissile* missile = &((entityPlayer1*)mGame.mPlayers->mPlayer1.get())->missiles[i];
             if (missile->getEnabled()) {
                 // Test this missile to see if it's close to us
                 float distance = mathutils::calculate2dDistance(missile->getPos(), mPos);

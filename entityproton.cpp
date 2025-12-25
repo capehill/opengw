@@ -22,7 +22,7 @@ entityProton::entityProton(void)
     setState(ENTITY_STATE_INACTIVE);
 
     mModel.mNumVertex = 16;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
 
     float delta_theta = (2 * PI) / mModel.mNumVertex;
     float r = mScale.x * mRadius;
@@ -33,7 +33,7 @@ entityProton::entityProton(void)
     }
 
     mModel.mNumEdges = mModel.mNumVertex;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
 
     for (i = 0; i < mModel.mNumEdges - 1; ++i) {
         mModel.mEdgeList[i].from = i;

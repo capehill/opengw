@@ -21,7 +21,7 @@ entityGrunt::entityGrunt(const game& gameRef)
     int i = 0;
 
     mModel.mNumVertex = 4;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
     mModel.mVertexList[i++] = Point3d(0, 1);
     mModel.mVertexList[i++] = Point3d(1, 0);
     mModel.mVertexList[i++] = Point3d(0, -1);
@@ -30,7 +30,7 @@ entityGrunt::entityGrunt(const game& gameRef)
     i = 0;
 
     mModel.mNumEdges = 4;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[i].from = 0;
     mModel.mEdgeList[i++].to = 1;
     mModel.mEdgeList[i].from = 1;

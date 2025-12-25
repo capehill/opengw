@@ -17,12 +17,12 @@ entityLine::entityLine(void)
     setState(ENTITY_STATE_INACTIVE);
 
     mModel.mNumVertex = 2;
-    mModel.mVertexList = new Point3d[mModel.mNumVertex];
+    mModel.mVertexList.resize(mModel.mNumVertex);
     mModel.mVertexList[0] = Point3d(0, 0);
     mModel.mVertexList[1] = Point3d(0, 0);
 
     mModel.mNumEdges = 1;
-    mModel.mEdgeList = new model::Edge[mModel.mNumEdges];
+    mModel.mEdgeList.resize(mModel.mNumEdges);
     mModel.mEdgeList[0].from = 0;
     mModel.mEdgeList[0].to = 1;
 }

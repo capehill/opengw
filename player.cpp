@@ -27,7 +27,7 @@ player::player()
     setState(ENTITY_STATE_INACTIVE);
 
     // Create our missiles
-    missiles = new entityPlayerMissile[mMaxMissiles];
+    missiles.resize(mMaxMissiles);
     for (int i = 0; i < mMaxMissiles; i++) {
         entityPlayerMissile* missile = &missiles[i];
         missile->setEnabled(false);
@@ -38,7 +38,6 @@ player::player()
 
 player::~player()
 {
-    delete[] missiles;
 }
 
 void player::initPlayerForGame()
