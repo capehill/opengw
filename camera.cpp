@@ -28,16 +28,16 @@ void camera::followPlayer()
         player* player;
         switch (i) {
         case 0:
-            player = mGame.mPlayers->mPlayer1.get();
+            player = mGame.getPlayer1();
             break;
         case 1:
-            player = mGame.mPlayers->mPlayer2.get();
+            player = mGame.getPlayer2();
             break;
         case 2:
-            player = mGame.mPlayers->mPlayer3.get();
+            player = mGame.getPlayer3();
             break;
         case 3:
-            player = mGame.mPlayers->mPlayer4.get();
+            player = mGame.getPlayer4();
             break;
         }
 
@@ -65,16 +65,16 @@ void camera::followPlayer()
         player* playerA;
         switch (i) {
         case 0:
-            playerA = mGame.mPlayers->mPlayer1.get();
+            playerA = mGame.getPlayer1();
             break;
         case 1:
-            playerA = mGame.mPlayers->mPlayer2.get();
+            playerA = mGame.getPlayer2();
             break;
         case 2:
-            playerA = mGame.mPlayers->mPlayer3.get();
+            playerA = mGame.getPlayer3();
             break;
         case 3:
-            playerA = mGame.mPlayers->mPlayer4.get();
+            playerA = mGame.getPlayer4();
             break;
         }
 
@@ -83,16 +83,16 @@ void camera::followPlayer()
                 player* playerB;
                 switch (j) {
                 case 0:
-                    playerB = mGame.mPlayers->mPlayer1.get();
+                    playerB = mGame.getPlayer1();
                     break;
                 case 1:
-                    playerB = mGame.mPlayers->mPlayer2.get();
+                    playerB = mGame.getPlayer2();
                     break;
                 case 2:
-                    playerB = mGame.mPlayers->mPlayer3.get();
+                    playerB = mGame.getPlayer3();
                     break;
                 case 3:
-                    playerB = mGame.mPlayers->mPlayer4.get();
+                    playerB = mGame.getPlayer4();
                     break;
                 }
 

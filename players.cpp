@@ -136,16 +136,16 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
         float distancePlayer4 = 999999;
 
         if (mPlayer1->getEnabled()) {
-            distancePlayer1 = mathutils::calculate2dDistance(point, mGame.mPlayers->mPlayer1->getPos());
+            distancePlayer1 = mathutils::calculate2dDistance(point, mPlayer1->getPos());
         }
         if (mPlayer2->getEnabled()) {
-            distancePlayer2 = mathutils::calculate2dDistance(point, mGame.mPlayers->mPlayer2->getPos());
+            distancePlayer2 = mathutils::calculate2dDistance(point, mPlayer2->getPos());
         }
         if (mPlayer3->getEnabled()) {
-            distancePlayer3 = mathutils::calculate2dDistance(point, mGame.mPlayers->mPlayer3->getPos());
+            distancePlayer3 = mathutils::calculate2dDistance(point, mPlayer3->getPos());
         }
         if (mPlayer4->getEnabled()) {
-            distancePlayer4 = mathutils::calculate2dDistance(point, mGame.mPlayers->mPlayer4->getPos());
+            distancePlayer4 = mathutils::calculate2dDistance(point, mPlayer4->getPos());
         }
 
         float minDistance = 999999;
@@ -153,19 +153,19 @@ player* players::getPlayerClosestToPosition(const Point3d& point)
 
         if (distancePlayer1 < minDistance) {
             minDistance = distancePlayer1;
-            closePlayer = mGame.mPlayers->mPlayer1.get();
+            closePlayer = mPlayer1.get();
         }
         if (distancePlayer2 < minDistance) {
             minDistance = distancePlayer2;
-            closePlayer = mGame.mPlayers->mPlayer2.get();
+            closePlayer = mPlayer2.get();
         }
         if (distancePlayer3 < minDistance) {
             minDistance = distancePlayer3;
-            closePlayer = mGame.mPlayers->mPlayer3.get();
+            closePlayer = mPlayer3.get();
         }
         if (distancePlayer4 < minDistance) {
             // minDistance = distancePlayer4;
-            closePlayer = mGame.mPlayers->mPlayer4.get();
+            closePlayer = mPlayer4.get();
         }
 
         return closePlayer ? closePlayer : mPlayer1.get(); // just in case

@@ -191,16 +191,16 @@ void entityPlayerMissile::draw()
         // Set the proper color for the player
         switch (mPlayerSource) {
         case 0:
-            mPen = theGame->mPlayers->mPlayer1->getMissilesPen();
+            mPen = theGame->getPlayer1()->getMissilesPen();
             break;
         case 1:
-            mPen = theGame->mPlayers->mPlayer2->getMissilesPen();
+            mPen = theGame->getPlayer2()->getMissilesPen();
             break;
         case 2:
-            mPen = theGame->mPlayers->mPlayer3->getMissilesPen();
+            mPen = theGame->getPlayer3()->getMissilesPen();
             break;
         case 3:
-            mPen = theGame->mPlayers->mPlayer4->getMissilesPen();
+            mPen = theGame->getPlayer4()->getMissilesPen();
             break;
         }
 

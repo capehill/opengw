@@ -5,8 +5,6 @@
 
 #include "SDL_opengl.h"
 
-const int player::mMaxMissiles = 500;
-
 player::player()
     : entity()
 {
@@ -27,8 +25,8 @@ player::player()
     setState(ENTITY_STATE_INACTIVE);
 
     // Create our missiles
-    missiles.resize(mMaxMissiles);
-    for (int i = 0; i < mMaxMissiles; i++) {
+    missiles.resize(500);
+    for (std::size_t i = 0; i < missiles.size(); i++) {
         entityPlayerMissile* missile = &missiles[i];
         missile->setEnabled(false);
     }
@@ -63,7 +61,7 @@ void player::initPlayerForGame()
     mAngle = 0;
 
     // Set all missiles to inactive
-    for (int i = 0; i < mMaxMissiles; i++) {
+    for (std::size_t i = 0; i < missiles.size(); i++) {
         entityPlayerMissile* missile = &missiles[i];
         missile->setEnabled(false);
     }
@@ -259,7 +257,7 @@ void player::indicating()
 
 void player::runMissiles()
 {
-    for (int i = 0; i < mMaxMissiles; i++) {
+    for (std::size_t i = 0; i < missiles.size(); i++) {
         entityPlayerMissile* missile = &missiles[i];
         if (missile->getEnabled()) {
             switch (missile->getState()) {
@@ -292,7 +290,7 @@ void player::runMissiles()
 void player::draw()
 {
     // Draw the missiles
-    for (int i = 0; i < mMaxMissiles; i++) {
+    for (std::size_t i = 0; i < missiles.size(); i++) {
         entityPlayerMissile* missile = &missiles[i];
         if (missile->getEnabled())
             missile->draw();
@@ -368,7 +366,7 @@ void player::firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed)
 
         // Find an unused missile
         entityPlayerMissile* missile1 = nullptr;
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile1 = &missiles[i];
                 missile1->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -378,7 +376,7 @@ void player::firePattern1(const Point3d& fireAngle, const Point3d& playerSpeed)
             }
         }
         entityPlayerMissile* missile2 = nullptr;
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile2 = &missiles[i];
                 missile2->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -447,7 +445,7 @@ void player::firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed)
 
         // Find an unused missile
         if (alternate) {
-            for (int i = 0; i < mMaxMissiles; i++) {
+            for (std::size_t i = 0; i < missiles.size(); i++) {
                 if (!missiles[i].getEnabled()) {
                     missile1 = &missiles[i];
                     missile1->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -456,7 +454,7 @@ void player::firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed)
                     break;
                 }
             }
-            for (int i = 0; i < mMaxMissiles; i++) {
+            for (std::size_t i = 0; i < missiles.size(); i++) {
                 if (!missiles[i].getEnabled()) {
                     missile2 = &missiles[i];
                     missile2->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -466,7 +464,7 @@ void player::firePattern2(const Point3d& fireAngle, const Point3d& playerSpeed)
                 }
             }
         } else {
-            for (int i = 0; i < mMaxMissiles; i++) {
+            for (std::size_t i = 0; i < missiles.size(); i++) {
                 if (!missiles[i].getEnabled()) {
                     missile3 = &missiles[i];
                     missile3->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -542,7 +540,7 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
         entityPlayerMissile* missile3 = nullptr;
         entityPlayerMissile* missile4 = nullptr;
 
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile0 = &missiles[i];
                 missile0->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -551,7 +549,7 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
                 break;
             }
         }
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile1 = &missiles[i];
                 missile1->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -560,7 +558,7 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
                 break;
             }
         }
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile2 = &missiles[i];
                 missile2->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -569,7 +567,7 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
                 break;
             }
         }
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile3 = &missiles[i];
                 missile3->setState(ENTITY_STATE_SPAWN_TRANSITION);
@@ -578,7 +576,7 @@ void player::firePattern3(const Point3d& fireAngle, const Point3d& playerSpeed)
                 break;
             }
         }
-        for (int i = 0; i < mMaxMissiles; i++) {
+        for (std::size_t i = 0; i < missiles.size(); i++) {
             if (!missiles[i].getEnabled()) {
                 missile4 = &missiles[i];
                 missile4->setState(ENTITY_STATE_SPAWN_TRANSITION);

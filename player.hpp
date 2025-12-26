@@ -24,7 +24,6 @@ class player : public entity
     virtual void draw();
 
     std::vector<entityPlayerMissile> missiles;
-    static const int mMaxMissiles; // TODO
 
     int mScore;
     int mMultiplier;

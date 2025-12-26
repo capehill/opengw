@@ -78,7 +78,7 @@ void entitySpinner::destroyTransition()
 
     // Spawn them at opposing right angles to the player
     Point3d spawnPoint(12, 0, 0);
-    float angleToPlayer = mathutils::calculate2dAngle(pos, mGame.mPlayers->mPlayer1->getPos());
+    float angleToPlayer = mathutils::calculate2dAngle(pos, mGame.getPlayer1()->getPos());
     spawnPoint = mathutils::rotate2dPoint(spawnPoint, angleToPlayer + mathutils::DegreesToRads(90));
 
     entityTinySpinner* miniSpinner = dynamic_cast<entityTinySpinner*>(mGame.mEnemies->getUnusedEnemyOfType(entity::ENTITY_TYPE_TINYSPINNER));

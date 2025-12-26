@@ -56,8 +56,9 @@ void entityWeaver::run()
 {
     if (this->getEnabled()) {
         // Check for missiles around us
-        for (int i = 0; i < entityPlayer1::mMaxMissiles; i++) {
-            entityPlayerMissile* missile = &((entityPlayer1*)theGame->mPlayers->mPlayer1.get())->missiles[i];
+        const auto& missiles = theGame->getPlayer1()->missiles;
+        for (std::size_t i = 0; i < missiles.size(); i++) {
+            const entityPlayerMissile* missile = &missiles[i];
             if (missile->getEnabled()) {
                 // Test this missile to see if it's aimed at us
 
@@ -71,7 +72,7 @@ void entityWeaver::run()
                     float distance = mathutils::calculate2dDistance(missile->getPos(), mPos);
                     if (distance < 25) {
                         // Run away from it
-                        float angle = mathutils::calculate2dAngle(mPos, theGame->mPlayers->mPlayer1->getPos());
+                        float angle = mathutils::calculate2dAngle(mPos, theGame->getPlayer1()->getPos());
                         Point3d moveVector(.8, diff > 0 ? 1.1 : -1.1, 0);
                         moveVector = mathutils::rotate2dPoint(moveVector, angle + mathutils::DegreesToRads(180));
                         moveVector = mathutils::clamp2dVector(moveVector, .06);

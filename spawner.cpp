@@ -50,20 +50,20 @@ void spawner::run(void)
     }
 
     int numPlayersActive = 0;
-    if (theGame->mPlayers->mPlayer1->mJoined) {
-        if (theGame->mPlayers->mPlayer1->getState() == entity::ENTITY_STATE_RUNNING)
+    if (theGame->getPlayer1()->mJoined) {
+        if (theGame->getPlayer1()->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (theGame->mPlayers->mPlayer2->mJoined) {
-        if (theGame->mPlayers->mPlayer2->getState() == entity::ENTITY_STATE_RUNNING)
+    if (theGame->getPlayer2()->mJoined) {
+        if (theGame->getPlayer2()->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (theGame->mPlayers->mPlayer3->mJoined) {
-        if (theGame->mPlayers->mPlayer3->getState() == entity::ENTITY_STATE_RUNNING)
+    if (theGame->getPlayer3()->mJoined) {
+        if (theGame->getPlayer3()->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
-    if (theGame->mPlayers->mPlayer4->mJoined) {
-        if (theGame->mPlayers->mPlayer4->getState() == entity::ENTITY_STATE_RUNNING)
+    if (theGame->getPlayer4()->mJoined) {
+        if (theGame->getPlayer4()->getState() == entity::ENTITY_STATE_RUNNING)
             ++numPlayersActive;
     }
 
@@ -80,19 +80,19 @@ void spawner::run(void)
         int* timer;
         switch (i) {
         case 0:
-            player = theGame->mPlayers->mPlayer1.get();
+            player = theGame->getPlayer1();
             timer = &player1SpawnTimer;
             break;
         case 1:
-            player = theGame->mPlayers->mPlayer2.get();
+            player = theGame->getPlayer2();
             timer = &player2SpawnTimer;
             break;
         case 2:
-            player = theGame->mPlayers->mPlayer3.get();
+            player = theGame->getPlayer3();
             timer = &player3SpawnTimer;
             break;
         case 3:
-            player = theGame->mPlayers->mPlayer4.get();
+            player = theGame->getPlayer4();
             timer = &player4SpawnTimer;
             break;
         }
@@ -307,7 +307,7 @@ void spawner::spawnEntities(entity::EntityType type, int numWanted)
 
             // TODO - FIX THIS SO ENEMIES ARE SPAWNED OFF A RADIAL AT A MIN DISTANCE RATHER THAN
             // JUST USING RANDOM XY COORDS ON THE GRID?
-            // float distance = mathutils::calculate2dDistance(spawnPoint, game::mPlayers.mPlayer1->getPos());
+            // float distance = mathutils::calculate2dDistance(spawnPoint, game::getPlayer1()->getPos());
 
             enemy->setState(entity::ENTITY_STATE_SPAWN_TRANSITION);
         }

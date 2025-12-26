@@ -239,21 +239,21 @@ void game::run()
     case GAMEMODE_PLAYING:
     {
         if ((numPlayers() > 1) && (m2PlayerNumLives > 0)) {
-            if (mControls.getStartButton(0) && !mPlayers->mPlayer1->mJoined) {
-                mPlayers->mPlayer1->takeLife();
-                mPlayers->mPlayer1->initPlayerForGame();
+            if (mControls.getStartButton(0) && !getPlayer1()->mJoined) {
+                getPlayer1()->takeLife();
+                getPlayer1()->initPlayerForGame();
             }
-            if (mControls.getStartButton(1) && !mPlayers->mPlayer2->mJoined) {
-                mPlayers->mPlayer2->takeLife();
-                mPlayers->mPlayer2->initPlayerForGame();
+            if (mControls.getStartButton(1) && !getPlayer2()->mJoined) {
+                getPlayer2()->takeLife();
+                getPlayer2()->initPlayerForGame();
             }
-            if (mControls.getStartButton(2) && !mPlayers->mPlayer3->mJoined) {
-                mPlayers->mPlayer3->takeLife();
-                mPlayers->mPlayer3->initPlayerForGame();
+            if (mControls.getStartButton(2) && !getPlayer3()->mJoined) {
+                getPlayer3()->takeLife();
+                getPlayer3()->initPlayerForGame();
             }
-            if (mControls.getStartButton(3) && !mPlayers->mPlayer4->mJoined) {
-                mPlayers->mPlayer4->takeLife();
-                mPlayers->mPlayer4->initPlayerForGame();
+            if (mControls.getStartButton(3) && !getPlayer4()->mJoined) {
+                getPlayer4()->takeLife();
+                getPlayer4()->initPlayerForGame();
             }
         }
 
@@ -274,19 +274,19 @@ void game::run()
         mMusicSpeedTarget = 1;
 
         // Slow the music down when someone is respawning
-        if (mPlayers->mPlayer1->mJoined && (mPlayers->mPlayer1->getState() == entity::ENTITY_STATE_DESTROYED)) {
+        if (getPlayer1()->mJoined && (getPlayer1()->getState() == entity::ENTITY_STATE_DESTROYED)) {
             mMusicSpeedTarget = 0;
             mMusicSpeed = .5;
         }
-        if (mPlayers->mPlayer2->mJoined && (game::mPlayers->mPlayer2->getState() == entity::ENTITY_STATE_DESTROYED)) {
+        if (getPlayer2()->mJoined && (getPlayer2()->getState() == entity::ENTITY_STATE_DESTROYED)) {
             mMusicSpeedTarget = 0;
             mMusicSpeed = .5;
         }
-        if (mPlayers->mPlayer3->mJoined && (mPlayers->mPlayer3->getState() == entity::ENTITY_STATE_DESTROYED)) {
+        if (getPlayer3()->mJoined && (getPlayer3()->getState() == entity::ENTITY_STATE_DESTROYED)) {
             mMusicSpeedTarget = 0;
             mMusicSpeed = .5;
         }
-        if (mPlayers->mPlayer4->mJoined && (mPlayers->mPlayer4->getState() == entity::ENTITY_STATE_DESTROYED)) {
+        if (getPlayer4()->mJoined && (getPlayer4()->getState() == entity::ENTITY_STATE_DESTROYED)) {
             mMusicSpeedTarget = 0;
             mMusicSpeed = .5;
         }
@@ -307,7 +307,7 @@ void game::run()
         mHighscore.run();
         break;
     case GAMEMODE_HIGHSCORES_CHECK:
-        if (mHighscore.isHighScore(mPlayers->mPlayer1->mScore) == true) {
+        if (mHighscore.isHighScore(getPlayer1()->mScore) == true) {
             mGameMode = GAMEMODE_HIGHSCORES;
             mHighscore.init();
             break;
@@ -650,17 +650,17 @@ void game::startGame(GameType gameType)
     mSpawner.init();
 
     // Fire up the players
-    if (mPlayers->mPlayer1->mJoined) {
-        mPlayers->mPlayer1->initPlayerForGame();
+    if (getPlayer1()->mJoined) {
+        getPlayer1()->initPlayerForGame();
     }
-    if (mPlayers->mPlayer2->mJoined) {
-        mPlayers->mPlayer2->initPlayerForGame();
+    if (getPlayer2()->mJoined) {
+        getPlayer2()->initPlayerForGame();
     }
-    if (mPlayers->mPlayer3->mJoined) {
-        mPlayers->mPlayer3->initPlayerForGame();
+    if (getPlayer3()->mJoined) {
+        getPlayer3()->initPlayerForGame();
     }
-    if (mPlayers->mPlayer4->mJoined) {
-        mPlayers->mPlayer4->initPlayerForGame();
+    if (getPlayer4()->mJoined) {
+        getPlayer4()->initPlayerForGame();
     }
 
     if (numPlayers() > 1) {
@@ -698,15 +698,15 @@ void game::endGame()
     mSound.playTrack(SOUNDID_MENU_MUSICLOOP);
 
     // Kill all players
-    mPlayers->mPlayer1->setState(entity::ENTITY_STATE_INACTIVE);
-    mPlayers->mPlayer2->setState(entity::ENTITY_STATE_INACTIVE);
-    mPlayers->mPlayer3->setState(entity::ENTITY_STATE_INACTIVE);
-    mPlayers->mPlayer4->setState(entity::ENTITY_STATE_INACTIVE);
+    getPlayer1()->setState(entity::ENTITY_STATE_INACTIVE);
+    getPlayer2()->setState(entity::ENTITY_STATE_INACTIVE);
+    getPlayer3()->setState(entity::ENTITY_STATE_INACTIVE);
+    getPlayer4()->setState(entity::ENTITY_STATE_INACTIVE);
 
-    mPlayers->mPlayer1->deinitPlayerForGame();
-    mPlayers->mPlayer2->deinitPlayerForGame();
-    mPlayers->mPlayer3->deinitPlayerForGame();
-    mPlayers->mPlayer4->deinitPlayerForGame();
+    getPlayer1()->deinitPlayerForGame();
+    getPlayer2()->deinitPlayerForGame();
+    getPlayer3()->deinitPlayerForGame();
+    getPlayer4()->deinitPlayerForGame();
 
     // Kill all enemies
     mEnemies->disableAllEnemies();
@@ -779,18 +779,23 @@ int game::numPlayers() const
 {
     int numPlayers = 0;
 
-    if (mPlayers->mPlayer1->mJoined) {
+    if (getPlayer1()->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer2->mJoined) {
+    if (getPlayer2()->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer3->mJoined) {
+    if (getPlayer3()->mJoined) {
         ++numPlayers;
     }
-    if (mPlayers->mPlayer4->mJoined) {
+    if (getPlayer4()->mJoined) {
         ++numPlayers;
     }
 
     return numPlayers;
 }
+
+player* game::getPlayer1() const { return mPlayers->getPlayer1(); }
+player* game::getPlayer2() const { return mPlayers->getPlayer2(); }
+player* game::getPlayer3() const { return mPlayers->getPlayer3(); }
+player* game::getPlayer4() const { return mPlayers->getPlayer4(); }

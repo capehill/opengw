@@ -88,7 +88,7 @@ bool highscore::isHighScore(int score)
 
 void highscore::init()
 {
-    mScore = theGame->mPlayers->mPlayer1->mScore;
+    mScore = theGame->getPlayer1()->mScore;
     mEditCurrentPos = 0;
     strcpy(mEditName, "   ");
 }

@@ -22,6 +22,7 @@
 
 class camera;
 class stars;
+class player;
 class players;
 class enemies;
 
@@ -123,6 +124,11 @@ class game
     void startBomb();
 
     int numPlayers() const;
+
+    player* getPlayer1() const;
+    player* getPlayer2() const;
+    player* getPlayer3() const;
+    player* getPlayer4() const;
 
     static settings mSettings;
     static sound mSound;

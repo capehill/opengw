@@ -284,13 +284,13 @@ void entity::hit(entity* aEntity)
             if (mScoreValue) {
                 // Add points and display them at the destruction point
                 if (missile->mPlayerSource == 0)
-                    theGame->mPlayers->mPlayer1->addKillAtLocation(mScoreValue, getPos());
+                    theGame->getPlayer1()->addKillAtLocation(mScoreValue, getPos());
                 else if (missile->mPlayerSource == 1)
-                    theGame->mPlayers->mPlayer2->addKillAtLocation(mScoreValue, getPos());
+                    theGame->getPlayer2()->addKillAtLocation(mScoreValue, getPos());
                 else if (missile->mPlayerSource == 2)
-                    theGame->mPlayers->mPlayer3->addKillAtLocation(mScoreValue, getPos());
+                    theGame->getPlayer3()->addKillAtLocation(mScoreValue, getPos());
                 else if (missile->mPlayerSource == 3)
-                    theGame->mPlayers->mPlayer4->addKillAtLocation(mScoreValue, getPos());
+                    theGame->getPlayer4()->addKillAtLocation(mScoreValue, getPos());
             }
 
             game::mSound.playTrack(SOUNDID_ENEMYHIT);

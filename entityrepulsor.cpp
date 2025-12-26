@@ -195,8 +195,9 @@ void entityRepulsor::run()
     if (this->getEnabled()) {
         // Check for missiles around us to see if we need to activate our shield lines
         bool enable = false;
-        for (int i = 0; (i < entityPlayer1::mMaxMissiles) && !enable; i++) {
-            entityPlayerMissile* missile = &((entityPlayer1*)mGame.mPlayers->mPlayer1.get())->missiles[i];
+        const auto& missiles = mGame.getPlayer1()->missiles;
+        for (std::size_t i = 0; (i < missiles.size()) && !enable; i++) {
+            const entityPlayerMissile* missile = &missiles[i];
             if (missile->getEnabled()) {
                 // Test this missile to see if it's close to us
                 float distance = mathutils::calculate2dDistance(missile->getPos(), mPos);

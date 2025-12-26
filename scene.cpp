@@ -398,7 +398,7 @@ void scene::drawCredits()
 void scene::drawNumLives()
 {
     int overflow = 0;
-    int num = theGame->mPlayers->mPlayer1->getNumLives();
+    int num = theGame->getPlayer1()->getNumLives();
     if (num > 5) {
         overflow = num;
         num = 1;
@@ -408,11 +408,12 @@ void scene::drawNumLives()
         vector::pen pen(defaultFontPen, .75, 10);
         float scale = .017;
 
-        theGame->mPlayers->mPlayer1->getModel()->Identity();
-        theGame->mPlayers->mPlayer1->getModel()->Scale(Point3d(scale, scale * mAspect, 0));
-        theGame->mPlayers->mPlayer1->getModel()->Rotate(0);
-        theGame->mPlayers->mPlayer1->getModel()->Translate(Point3d(-.12 + (.04 * i), .9, 0));
-        theGame->mPlayers->mPlayer1->getModel()->draw(pen);
+        const auto& model = theGame->getPlayer1()->getModel();
+        model->Identity();
+        model->Scale(Point3d(scale, scale * mAspect, 0));
+        model->Rotate(0);
+        model->Translate(Point3d(-.12 + (.04 * i), .9, 0));
+        model->draw(pen);
     }
 
     if (overflow > 0) {
@@ -431,7 +432,7 @@ void scene::drawNumBombs()
         // 1 player display
 
         int overflow = 0;
-        int num = theGame->mPlayers->mPlayer1->getNumBombs();
+        int num = theGame->getPlayer1()->getNumBombs();
         if (num > 5) {
             overflow = num;
             num = 1;
@@ -471,14 +472,14 @@ void scene::drawScores()
         // Player 1 score display
         {
             char format[512];
-            sprintf(format, "%d", theGame->mPlayers->mPlayer1->mScore);
+            sprintf(format, "%d", theGame->getPlayer1()->mScore);
             char* s = font::formatStringWithCommas(format);
 
             vector::pen pen = defaultFontPen;
             if (gameover)
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score");
             else
-                font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", theGame->mPlayers->mPlayer1->mMultiplier);
+                font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", theGame->getPlayer1()->mMultiplier);
             font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.94, .82, &pen, s);
 
             pen.a = .1;
@@ -486,7 +487,7 @@ void scene::drawScores()
             if (gameover)
                 font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score");
             else
-                font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", theGame->mPlayers->mPlayer1->mMultiplier);
+                font::AlphanumericsPrint(font::ALIGN_LEFT, .016, -.94, .9, &pen, "Score x%d", theGame->getPlayer1()->mMultiplier);
             font::AlphanumericsPrint(font::ALIGN_LEFT, .02, -.94, .82, &pen, s);
         }
     } else {
@@ -497,19 +498,19 @@ void scene::drawScores()
             player* player;
             switch (i) {
             case 0:
-                player = theGame->mPlayers->mPlayer1.get();
+                player = theGame->getPlayer1();
                 pos = Point3d(-.7, .9, 0);
                 break;
             case 1:
-                player = theGame->mPlayers->mPlayer2.get();
+                player = theGame->getPlayer2();
                 pos = Point3d(.3, .9, 0);
                 break;
             case 2:
-                player = theGame->mPlayers->mPlayer3.get();
+                player = theGame->getPlayer3();
                 pos = Point3d(-.7, -.9, 0);
                 break;
             case 3:
-                player = theGame->mPlayers->mPlayer4.get();
+                player = theGame->getPlayer4();
                 pos = Point3d(.3, -.9, 0);
                 break;
             }
