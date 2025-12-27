@@ -2,6 +2,8 @@
 
 #include "SDL.h"
 
+#include <vector>
+
 class sound
 {
   public:
@@ -29,20 +31,20 @@ class sound
   private:
     static void bufferCallback(void* unused, Uint8* stream, int len);
 
-    typedef struct
+    struct TRACK
     {
-        Uint8* data;
-        bool loop;
-        bool playing;
-        bool paused;
-        float vol;
-        double speed;
-        double pos;
-        Uint32 len;
-    } TRACK;
+        std::vector<Uint8> data;
+        bool loop = false;
+        bool playing = false;
+        bool paused = false;
+        float vol = 0.0f;
+        double speed = 0.0;
+        double pos = 0.0;
+        Uint32 len = 0;
+    };
 
-    static TRACK* mTracks;
+    std::vector<TRACK> mTracks;
 
-    static float* mLeftSamples;
-    static float* mRightSamples;
+    std::vector<float> mLeftSamples;
+    std::vector<float> mRightSamples;
 };
