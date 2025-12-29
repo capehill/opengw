@@ -17,6 +17,11 @@ class controls
     bool getBackButton(int player);
     bool getPauseButton(int player);
 
+    // Hot-plugging support
+    void handleControllerAdded(int deviceIndex);
+    void handleControllerRemoved(SDL_JoystickID instanceId);
+    void scanForControllers();
+
   private:
     // Keyboard
     Point3d readKeyboardLeftStick(int player);
@@ -26,15 +31,14 @@ class controls
     bool readKeyboardBack(int player);
     bool readKeyboardPause(int player);
 
-    // XBox controller
-    Point3d readXBoxControllerLeftStick(int player);
-    Point3d readXBoxControllerRightStick(int player);
-    bool readXBoxControllerTrigger(int player);
-    bool readXBoxStart(int player);
-    bool readXBoxBack(int player);
-    bool readXBoxPause(int player);
+    // Controllers (modern API)
+    Point3d readControllerLeftStick(int player);
+    Point3d readControllerRightStick(int player);
+    bool readControllerTrigger(int player);
+    bool readControllerStart(int player);
+    bool readControllerBack(int player);
+    bool readControllerPause(int player);
 
-    SDL_Joystick* mControllers[4];
-
-    int mNumJoysticks;
+    SDL_GameController* mControllers[4];
+    int mNumControllers;
 };

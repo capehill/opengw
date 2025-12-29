@@ -66,9 +66,14 @@ static bool handleEvents()
             if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
                 // printf("%d %d\n", e.window.data1, e.window.data2);
                 OGLSize(e.window.data1, e.window.data2);
-                break;
             }
-        }
+        } break;
+        case SDL_CONTROLLERDEVICEADDED:
+            theGame->mControls->handleControllerAdded(e.cdevice.which);
+            break;
+        case SDL_CONTROLLERDEVICEREMOVED:
+            theGame->mControls->handleControllerRemoved(e.cdevice.which);
+            break;
         }
     }
 
@@ -79,7 +84,7 @@ static bool handleEvents()
 int main(int /*argc*/, char** /*argv*/)
 {
     printf("SDL_Init\n");
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0) {
         printf("SDL_Init failed: %s\n", SDL_GetError());
         return 0;
     }
