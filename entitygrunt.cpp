@@ -63,5 +63,5 @@ void entityGrunt::run()
 void entityGrunt::spawnTransition()
 {
     entity::spawnTransition();
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN4);
+    theGame->mSound->playTrack(SOUNDID_ENEMYSPAWN4);
 }

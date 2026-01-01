@@ -121,7 +121,7 @@ void entityPlayerMissile::run()
                 setState(ENTITY_STATE_DESTROY_TRANSITION);
                 mSpeed = Point3d(0, 0, 0);
 
-                game::mSound.playTrack(SOUNDID_MISSILEHITWALL);
+                theGame->mSound->playTrack(SOUNDID_MISSILEHITWALL);
             }
 
             // Here be an attractor

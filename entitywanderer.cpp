@@ -107,5 +107,5 @@ void entityWanderer::spawnTransition()
     mAngle = 0;
     mRotationRate = mFlipped ? -.12 : .12;
 
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN1);
+    theGame->mSound->playTrack(SOUNDID_ENEMYSPAWN1);
 }

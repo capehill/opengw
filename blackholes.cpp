@@ -79,7 +79,7 @@ void blackholes::run()
                                         // Kill the second one
                                         blackHole2->setState(entity::ENTITY_STATE_DESTROY_TRANSITION);
 
-                                        game::mSound.playTrack(SOUNDID_GRAVITYWELLHIT);
+                                        theGame->mSound->playTrack(SOUNDID_GRAVITYWELLHIT);
                                     } else if (distance < totalRadius) {
                                         // Push them away from each other if they get too close
 

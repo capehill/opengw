@@ -28,7 +28,7 @@ void menuSelectGameType::init(int player)
     theGame->getPlayer3()->mJoined = player == 2 ? true : false;
     theGame->getPlayer4()->mJoined = player == 3 ? true : false;
 
-    game::mSound.playTrack(SOUNDID_MENU_SELECT);
+    theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
 }
 
 void menuSelectGameType::run()
@@ -38,7 +38,7 @@ void menuSelectGameType::run()
     if (theGame->mControls->getBackButton(0) || theGame->mControls->getBackButton(1) || theGame->mControls->getBackButton(2) || theGame->mControls->getBackButton(3)) {
         // Exit the menu
         game::mGameMode = game::GAMEMODE_ATTRACT;
-        game::mSound.playTrack(SOUNDID_MENU_SELECT);
+        theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
         return;
     }
 
@@ -46,7 +46,7 @@ void menuSelectGameType::run()
         if (selection == 0) {
             if (theGame->mControls->getStartButton(0) || theGame->mControls->getStartButton(1) || theGame->mControls->getStartButton(2) || theGame->mControls->getStartButton(3)) {
                 theGame->startGame(game::GAMETYPE_SINGLEPLAYER);
-                game::mSound.playTrack(SOUNDID_MENU_SELECT);
+                theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
             }
         } else {
             if (theGame->mControls->getStartButton(0))
@@ -60,7 +60,7 @@ void menuSelectGameType::run()
 
             if (theGame->mControls->getTriggerButton(0) || theGame->mControls->getTriggerButton(1) || theGame->mControls->getTriggerButton(2) || theGame->mControls->getTriggerButton(3)) {
                 theGame->startGame(game::GAMETYPE_MULTIPLAYER_COOP);
-                game::mSound.playTrack(SOUNDID_MENU_SELECT);
+                theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
             }
 
             /*
@@ -124,12 +124,12 @@ void menuSelectGameType::run()
     if (dir < 0) {
         if (selection != 0) {
             selection = 0;
-            game::mSound.playTrack(SOUNDID_MENU_SELECT);
+            theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
         }
     } else if (dir > 0) {
         if (selection != 1) {
             selection = 1;
-            game::mSound.playTrack(SOUNDID_MENU_SELECT);
+            theGame->mSound->playTrack(SOUNDID_MENU_SELECT);
         }
     }
 

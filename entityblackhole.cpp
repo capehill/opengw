@@ -66,18 +66,18 @@ void entityBlackHole::run()
         mStrength += .0003;
 
         if (mHumLoopSoundId == -1)
-            mHumLoopSoundId = game::mSound.playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
+            mHumLoopSoundId = theGame->mSound->playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
         if (mHumLoopSoundId != -1)
-            game::mSound.setTrackSpeed(mHumLoopSoundId, mHumSpeed + .2);
+            theGame->mSound->setTrackSpeed(mHumLoopSoundId, mHumSpeed + .2);
 
         if (mStrength > 2.2) {
-            if (!game::mSound.isTrackPlaying(SOUNDID_GRAVITYWELLALERT))
-                game::mSound.playTrack(SOUNDID_GRAVITYWELLALERT);
+            if (!theGame->mSound->isTrackPlaying(SOUNDID_GRAVITYWELLALERT))
+                theGame->mSound->playTrack(SOUNDID_GRAVITYWELLALERT);
         }
         if (mStrength > 2.3) {
             // Explode and spawn a bunch of protons
             setState(ENTITY_STATE_DESTROY_TRANSITION);
-            game::mSound.playTrack(SOUNDID_GRAVITYWELLEXPLODE);
+            theGame->mSound->playTrack(SOUNDID_GRAVITYWELLEXPLODE);
 
             for (int i = 0; i < 20; i++) {
                 entity* enemy = theGame->mEnemies->getUnusedEnemyOfType(entity::ENTITY_TYPE_PROTON);
@@ -233,7 +233,7 @@ void entityBlackHole::spawnTransition()
     mHumSpeedTarget = mHumSpeed;
     mHumLoopSoundId = -1;
 
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN5);
+    theGame->mSound->playTrack(SOUNDID_ENEMYSPAWN5);
 }
 
 void entityBlackHole::destroyTransition()
@@ -242,7 +242,7 @@ void entityBlackHole::destroyTransition()
     entity::destroyTransition();
 
     if (mHumLoopSoundId != -1)
-        game::mSound.stopTrack(mHumLoopSoundId);
+        theGame->mSound->stopTrack(mHumLoopSoundId);
     mHumLoopSoundId = -1;
 
     // Throw out some particles
@@ -273,13 +273,13 @@ void entityBlackHole::indicateTransition()
     entity::indicateTransition();
 
     if (mHumLoopSoundId != -1)
-        game::mSound.stopTrack(mHumLoopSoundId);
+        theGame->mSound->stopTrack(mHumLoopSoundId);
     mHumLoopSoundId = -1;
 }
 
 void entityBlackHole::hit(entity* aEntity)
 {
-    game::mSound.playTrack(SOUNDID_GRAVITYWELLHIT);
+    theGame->mSound->playTrack(SOUNDID_GRAVITYWELLHIT);
 
     entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
     if (missile) {
@@ -289,7 +289,7 @@ void entityBlackHole::hit(entity* aEntity)
             if (mStrength < .7) {
                 // Destroy
                 setState(ENTITY_STATE_DESTROY_TRANSITION);
-                game::mSound.playTrack(SOUNDID_GRAVITYWELLDESTROYED);
+                theGame->mSound->playTrack(SOUNDID_GRAVITYWELLDESTROYED);
 
                 entityPlayerMissile* missile = dynamic_cast<entityPlayerMissile*>(aEntity);
                 if (missile) {
@@ -309,7 +309,7 @@ void entityBlackHole::hit(entity* aEntity)
 
             if (mGame.mGameMode == game::GAMEMODE_PLAYING) {
                 if (mHumLoopSoundId == -1)
-                    mHumLoopSoundId = game::mSound.playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
+                    mHumLoopSoundId = theGame->mSound->playTrackGroup(SOUNDID_GRAVITYWELL_HUMLOOPA, SOUNDID_GRAVITYWELL_HUMLOOPF);
             }
 
             mBalance = 1.6;

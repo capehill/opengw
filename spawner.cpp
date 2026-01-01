@@ -260,11 +260,11 @@ void spawner::run(void)
     // Run the mayfly sound loop
     // This is a dumb place for this to live
     if (theGame->mEnemies->getNumActiveEnemiesOfType(entity::ENTITY_TYPE_MAYFLY) > 0) {
-        if (!game::mSound.isTrackPlaying(SOUNDID_MAYFLIES))
-            game::mSound.playTrack(SOUNDID_MAYFLIES);
+        if (!theGame->mSound->isTrackPlaying(SOUNDID_MAYFLIES))
+            theGame->mSound->playTrack(SOUNDID_MAYFLIES);
     } else {
-        if (game::mSound.isTrackPlaying(SOUNDID_MAYFLIES))
-            game::mSound.stopTrack(SOUNDID_MAYFLIES);
+        if (theGame->mSound->isTrackPlaying(SOUNDID_MAYFLIES))
+            theGame->mSound->stopTrack(SOUNDID_MAYFLIES);
     }
 }
 

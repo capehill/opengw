@@ -131,7 +131,7 @@ class game
     player* getPlayer4() const;
 
     static settings mSettings;
-    static sound mSound;
+    std::unique_ptr<sound> mSound;
     std::unique_ptr<grid> mGrid;
     std::unique_ptr<enemies> mEnemies;
     std::unique_ptr<particle> mParticles;

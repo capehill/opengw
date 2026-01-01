@@ -89,7 +89,7 @@ void player::run()
                     mBombInterimTimer = 50;
 
                     game::mBomb.startBomb(mPos, 1, 6, 2, 200, vector::pen(1, 1, 1, .3, 4));
-                    game::mSound.playTrack(SOUNDID_BOMB);
+                    theGame->mSound->playTrack(SOUNDID_BOMB);
                     theGame->startBomb();
                 }
             }
@@ -165,10 +165,10 @@ void player::run()
             }
             mExhaustSpreadIndex += .18;
 
-            if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERTHRUST))
-                game::mSound.playTrack(SOUNDID_PLAYERTHRUST);
+            if (!theGame->mSound->isTrackPlaying(SOUNDID_PLAYERTHRUST))
+                theGame->mSound->playTrack(SOUNDID_PLAYERTHRUST);
         } else {
-            game::mSound.stopTrack(SOUNDID_PLAYERTHRUST);
+            theGame->mSound->stopTrack(SOUNDID_PLAYERTHRUST);
         }
 
         // Firing
@@ -183,38 +183,38 @@ void player::run()
             case 0:
                 firePattern1(rightStick, playerSpeed);
                 {
-                    if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE1))
-                        game::mSound.playTrack(SOUNDID_PLAYERFIRE1);
+                    if (!theGame->mSound->isTrackPlaying(SOUNDID_PLAYERFIRE1))
+                        theGame->mSound->playTrack(SOUNDID_PLAYERFIRE1);
 
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE2);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE3);
                 }
                 break;
             case 1:
                 firePattern2(rightStick, playerSpeed);
                 {
-                    if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE2))
-                        game::mSound.playTrack(SOUNDID_PLAYERFIRE2);
+                    if (!theGame->mSound->isTrackPlaying(SOUNDID_PLAYERFIRE2))
+                        theGame->mSound->playTrack(SOUNDID_PLAYERFIRE2);
 
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE1);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE3);
                 }
                 break;
             case 2:
                 firePattern3(rightStick, playerSpeed);
                 {
-                    if (!game::mSound.isTrackPlaying(SOUNDID_PLAYERFIRE3))
-                        game::mSound.playTrack(SOUNDID_PLAYERFIRE3);
+                    if (!theGame->mSound->isTrackPlaying(SOUNDID_PLAYERFIRE3))
+                        theGame->mSound->playTrack(SOUNDID_PLAYERFIRE3);
 
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
-                    game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE1);
+                    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE2);
                 }
                 break;
             }
         } else {
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
-            game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
+            theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE1);
+            theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE2);
+            theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE3);
         }
     }
 
@@ -231,7 +231,7 @@ void player::run()
         mDrawSheild = true;
 
     if (mSheildTimer == 60) {
-        game::mSound.playTrack(SOUNDID_SHIELDSLOST);
+        theGame->mSound->playTrack(SOUNDID_SHIELDSLOST);
     }
 
     if (mDrawSheild) {
@@ -327,7 +327,7 @@ void player::spawnTransition()
 
     mDrawSheild = true;
 
-    game::mSound.playTrack(SOUNDID_PLAYERSPAWN);
+    theGame->mSound->playTrack(SOUNDID_PLAYERSPAWN);
 }
 
 void player::spawn()
@@ -717,14 +717,14 @@ void player::destroyTransition()
 
     setState(ENTITY_STATE_DESTROYED);
 
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE1);
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE2);
-    game::mSound.stopTrack(SOUNDID_PLAYERFIRE3);
+    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE1);
+    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE2);
+    theGame->mSound->stopTrack(SOUNDID_PLAYERFIRE3);
 
     if (getNumLives() <= 1) {
         theGame->endGame();
     } else
-        game::mSound.playTrack(SOUNDID_PLAYERHIT);
+        theGame->mSound->playTrack(SOUNDID_PLAYERHIT);
 }
 
 void player::destroy()
@@ -766,12 +766,12 @@ void player::addKillAtLocation(int points, Point3d pos)
     if (mBombCounter >= 100000) {
         mBombCounter = 0;
         addBomb();
-        game::mSound.playTrack(SOUNDID_EXTRABOMB);
+        theGame->mSound->playTrack(SOUNDID_EXTRABOMB);
     }
     if (mLifeCounter >= 75000) {
         mLifeCounter = 0;
         addLife();
-        game::mSound.playTrack(SOUNDID_EXTRALIFE);
+        theGame->mSound->playTrack(SOUNDID_EXTRALIFE);
     }
 
     bool showMultiplier = false;
@@ -793,7 +793,7 @@ void player::addKillAtLocation(int points, Point3d pos)
         char message[256];
         sprintf(message, "Multiplier x%d", mMultiplier);
         game::showMessageAtLocation(message, pos, pen);
-        game::mSound.playTrack(SOUNDID_MULTIPLIERADVANCE);
+        theGame->mSound->playTrack(SOUNDID_MULTIPLIERADVANCE);
     } else {
         // Just display the point value
         char message[128];

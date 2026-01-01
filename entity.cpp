@@ -293,11 +293,11 @@ void entity::hit(entity* aEntity)
                     theGame->getPlayer4()->addKillAtLocation(mScoreValue, getPos());
             }
 
-            game::mSound.playTrack(SOUNDID_ENEMYHIT);
+            theGame->mSound->playTrack(SOUNDID_ENEMYHIT);
         } else if (aEntity && aEntity->getType() == entity::ENTITY_TYPE_BLACKHOLE) {
-            game::mSound.playTrack(SOUNDID_ENEMYHIT);
+            theGame->mSound->playTrack(SOUNDID_ENEMYHIT);
         } else if ((aEntity && (aEntity->getType() == entity::ENTITY_TYPE_PLAYER1)) || (aEntity->getType() == entity::ENTITY_TYPE_PLAYER2)) {
-            game::mSound.playTrack(SOUNDID_ENEMYHIT);
+            theGame->mSound->playTrack(SOUNDID_ENEMYHIT);
         }
     } else {
         // It must be either a bomb or the player getting destroyed

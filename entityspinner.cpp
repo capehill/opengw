@@ -118,5 +118,5 @@ void entitySpinner::hit(entity* aEntity)
 void entitySpinner::spawnTransition()
 {
     entity::spawnTransition();
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN2);
+    theGame->mSound->playTrack(SOUNDID_ENEMYSPAWN2);
 }

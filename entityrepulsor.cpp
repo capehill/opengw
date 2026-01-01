@@ -227,10 +227,10 @@ void entityRepulsor::run()
         // Do the sound loop
         if (mAIState == State_Charging) {
             if (mLoopSoundId == -1)
-                mLoopSoundId = game::mSound.playTrackGroup(SOUNDID_REPULSORA, SOUNDID_REPULSORD);
+                mLoopSoundId = theGame->mSound->playTrackGroup(SOUNDID_REPULSORA, SOUNDID_REPULSORD);
         } else {
             if (mLoopSoundId != -1)
-                game::mSound.stopTrack(mLoopSoundId);
+                theGame->mSound->stopTrack(mLoopSoundId);
             mLoopSoundId = -1;
         }
 
@@ -322,7 +322,7 @@ void entityRepulsor::spawnTransition()
 
     mAIState = State_Aiming;
 
-    game::mSound.playTrack(SOUNDID_ENEMYSPAWN1);
+    theGame->mSound->playTrack(SOUNDID_ENEMYSPAWN1);
 }
 
 void entityRepulsor::draw()
@@ -342,14 +342,14 @@ void entityRepulsor::indicateTransition()
     entity::indicateTransition();
 
     if (mLoopSoundId != -1)
-        game::mSound.stopTrack(mLoopSoundId);
+        theGame->mSound->stopTrack(mLoopSoundId);
     mLoopSoundId = -1;
 }
 
 void entityRepulsor::destroyTransition()
 {
     if (mLoopSoundId != -1)
-        game::mSound.stopTrack(mLoopSoundId);
+        theGame->mSound->stopTrack(mLoopSoundId);
     mLoopSoundId = -1;
 
     entity::destroyTransition();
