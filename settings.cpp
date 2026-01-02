@@ -1,5 +1,18 @@
 #include "settings.hpp"
 
+#include <memory>
+
+static std::unique_ptr<settings> instance;
+
+const settings& settings::get()
+{
+    if (!instance) {
+        instance = std::make_unique<settings>();
+    }
+
+    return *instance;
+}
+
 settings::settings()
 {
     mCreditsPerGame = false; // false = Freeplay
@@ -19,8 +32,4 @@ settings::settings()
 
     displayWidth = 800;
     displayHeight = 600;
-}
-
-settings::~settings()
-{
 }

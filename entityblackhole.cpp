@@ -3,6 +3,7 @@
 #include "game.hpp"
 #include "players.hpp"
 #include "sincos.hpp"
+#include "settings.hpp"
 
 #include "SDL_opengl.h"
 
@@ -600,7 +601,7 @@ void entityBlackHole::drawRing()
         glLineWidth(mPen.lineRadius);
     }
 
-    if (!mGame.mSettings.mEnemySmoothing) {
+    if (!settings::get().mEnemySmoothing) {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_MULTISAMPLE);
     }
@@ -613,7 +614,7 @@ void entityBlackHole::drawRing()
 
     glEnd();
 
-    if (!mGame.mSettings.mEnemySmoothing) {
+    if (!settings::get().mEnemySmoothing) {
         glDisable(GL_MULTISAMPLE);
         glDisable(GL_LINE_SMOOTH);
     }

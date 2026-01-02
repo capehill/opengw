@@ -1,5 +1,6 @@
 #pragma once
 
+// TODO: remove unneeded headers
 #include "attractor.hpp"
 #include "blackholes.hpp"
 #include "bomb.hpp"
@@ -13,7 +14,6 @@
 #include "particle.hpp"
 #include "point3d.hpp"
 #include "scene.hpp"
-#include "settings.hpp"
 #include "sound.hpp"
 #include "spawner.hpp"
 
@@ -130,7 +130,6 @@ class game
     player* getPlayer3() const;
     player* getPlayer4() const;
 
-    static settings mSettings;
     std::unique_ptr<sound> mSound;
     std::unique_ptr<grid> mGrid;
     std::unique_ptr<enemies> mEnemies;

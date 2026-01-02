@@ -1,7 +1,7 @@
 #include "defines.hpp"
 #include "game.hpp"
 #include "scene.hpp"
-
+#include "settings.hpp"
 #include "blur.hpp"
 #include "sincos.hpp"
 
@@ -95,7 +95,7 @@ int main(int /*argc*/, char** /*argv*/)
     }
 
     window = SDL_CreateWindow("OpenGL SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              theGame->mSettings.displayWidth, theGame->mSettings.displayHeight, flags);
+                              settings::get().displayWidth, settings::get().displayHeight, flags);
 
     if (window) {
         srand(SDL_GetTicks());
@@ -127,7 +127,7 @@ static void OGLCreate()
         printf("SDL_GL_CreateContext failed: %s\n", SDL_GetError());
     }
 
-    OGLSize(theGame->mSettings.displayWidth, theGame->mSettings.displayHeight);
+    OGLSize(settings::get().displayWidth, settings::get().displayHeight);
 
     // Do stuff with the context here if needed...
     createOffscreens();
@@ -180,7 +180,7 @@ static void drawOffscreens()
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, (int*)viewport);
 
-    if (theGame->mSettings.mEnableGlow) {
+    if (settings::get().mEnableGlow) {
         // Draw to the blur texture
         {
             glViewport(0, 0, blurBufferWidth, blurBufferHeight);
@@ -198,7 +198,7 @@ static void drawOffscreens()
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     oglScene->draw(scene::RENDERPASS_PRIMARY);
 
-    if (theGame->mSettings.mEnableGlow) {
+    if (settings::get().mEnableGlow) {
         ////////////////////////////////////////////////
         // Do blur
 

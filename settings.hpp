@@ -4,7 +4,9 @@ class settings
 {
   public:
     settings();
-    ~settings();
+    ~settings() = default;
+
+    const static settings& get();
 
     bool mCreditsPerGame;
 

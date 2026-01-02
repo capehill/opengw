@@ -1,11 +1,12 @@
 #include "attractor.hpp"
 #include "game.hpp"
 #include "mathutils.hpp"
+#include "settings.hpp"
 
 attractor::attractor()
 {
     // PERFORMANCE: If you set this too high things will start to slow down in grid::run()!!
-    mAttractors.resize(theGame->mSettings.mAttractors);
+    mAttractors.resize(settings::get().mAttractors);
 }
 
 attractor::Attractor* attractor::getAttractor()

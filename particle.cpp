@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "mathutils.hpp"
 #include "profiler.hpp"
+#include "settings.hpp"
 
 #include <atomic>
 #include <cstdio>
@@ -115,7 +116,7 @@ particle::particle()
     mIndex = 0;
 
     // PERFORMANCE: The larger this number is, the larger the performance hit!
-    mParticles.resize(theGame->mSettings.mParticles);
+    mParticles.resize(settings::get().mParticles);
 
     for (auto& p: mParticles) {
         p.timeToLive = 0;

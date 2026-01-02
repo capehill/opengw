@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "menuSelectGameType.hpp"
 #include "players.hpp"
-
+#include "settings.hpp"
 #include "game.hpp"
 
 #include "SDL_opengl.h"
@@ -375,7 +375,7 @@ void scene::draw(int pass)
 
 void scene::drawCredits()
 {
-    if (game::mSettings.mCreditsPerGame == 0) {
+    if (settings::get().mCreditsPerGame == 0) {
         /*
                 vector::pen pen = defaultFontPen;
                 font::AlphanumericsPrint(font::ALIGN_CENTER, .01, 0, -.9, &pen, "FREE PLAY");
@@ -575,7 +575,7 @@ void scene::glDisable2D()
 
 void scene::showHighScores()
 {
-    if (game::mSettings.mCreditsPerGame == 0 || game::mCredits) {
+    if (settings::get().mCreditsPerGame == 0 || game::mCredits) {
         game::mGameMode = game::GAMEMODE_CREDITED;
     } else {
         game::mGameMode = game::GAMEMODE_ATTRACT;
