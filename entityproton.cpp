@@ -1,3 +1,4 @@
+#include "defines.hpp"
 #include "entityproton.hpp"
 #include "game.hpp"
 #include "players.hpp"

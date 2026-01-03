@@ -1,5 +1,7 @@
-#include "menuSelectGameType.hpp"
+#include "controls.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "menuSelectGameType.hpp"
 #include "players.hpp"
 
 #include "SDL_opengl.h"

@@ -1,3 +1,4 @@
+#include "defines.hpp"
 #include "mathutils.hpp"
 #include "sincos.hpp"
 

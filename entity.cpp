@@ -1,5 +1,5 @@
+#include "defines.hpp"
 #include "entity.hpp"
-
 #include "enemies.hpp"
 #include "entityPlayer1.hpp"
 #include "entityPlayer2.hpp"
@@ -16,6 +16,8 @@
 #include "entitywanderer.hpp"
 #include "entityweaver.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "particle.hpp"
 #include "players.hpp"
 
 #include "SDL_opengl.h"

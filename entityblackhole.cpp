@@ -1,9 +1,14 @@
+#include "attractor.hpp"
+#include "defines.hpp"
 #include "entityblackhole.hpp"
 #include "enemies.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "particle.hpp"
 #include "players.hpp"
-#include "sincos.hpp"
+#include "scene.hpp"
 #include "settings.hpp"
+#include "sincos.hpp"
 
 #include "SDL_opengl.h"
 

@@ -1,8 +1,12 @@
+#include "attractor.hpp"
+#include "defines.hpp"
 #include "entityplayermissile.hpp"
 #include "enemies.hpp"
 #include "entityblackhole.hpp"
 #include "entityrepulsor.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "particle.hpp"
 #include "players.hpp"
 
 entityPlayerMissile::entityPlayerMissile()

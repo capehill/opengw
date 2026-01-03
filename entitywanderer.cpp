@@ -1,5 +1,7 @@
+#include "defines.hpp"
 #include "entitywanderer.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 
 entityWanderer::entityWanderer()
     : entity()

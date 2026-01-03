@@ -1,10 +1,13 @@
-#include "particle.hpp"
+#include "attractor.hpp"
 #include "enemies.hpp"
 #include "entityblackhole.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "mathutils.hpp"
+#include "particle.hpp"
 #include "profiler.hpp"
 #include "settings.hpp"
+#include "scene.hpp"
 
 #include <atomic>
 #include <cstdio>

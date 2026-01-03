@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "players.hpp"
 
 static const int zoomedIn = 46;  // 50

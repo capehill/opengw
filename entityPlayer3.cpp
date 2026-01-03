@@ -1,6 +1,7 @@
 #include "entityPlayer3.hpp"
 #include "entityplayermissile.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 
 entityPlayer3::entityPlayer3()
     : player()

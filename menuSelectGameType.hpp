@@ -1,8 +1,5 @@
 #pragma once
 
-#include "defines.hpp"
-#include "scene.hpp"
-
 class menuSelectGameType
 {
   public:

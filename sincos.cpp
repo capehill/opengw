@@ -1,6 +1,7 @@
-#define _USE_MATH_DEFINES
-#include "sincos.hpp"
+#include "defines.hpp"
 #include "mathutils.hpp"
+#include "sincos.hpp"
+
 #include <cmath>
 
 #define NUM_ENTRIES (2046)

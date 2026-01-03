@@ -1,7 +1,9 @@
 #include "bomb.hpp"
+#include "defines.hpp"
 #include "spawner.hpp"
 #include "enemies.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "players.hpp"
 
 #include <algorithm>

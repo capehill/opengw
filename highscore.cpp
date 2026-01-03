@@ -1,6 +1,9 @@
-#include "highscore.hpp"
+#include "controls.hpp"
+#include "font.hpp"
 #include "game.hpp"
+#include "highscore.hpp"
 #include "players.hpp"
+#include "scene.hpp"
 
 #include <cstdio>
 

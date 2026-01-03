@@ -1,12 +1,9 @@
 #pragma once
 
-#include "defines.hpp"
 #include "mathutils.hpp"
 #include "model.hpp"
 #include "point3d.hpp"
 #include "vector.hpp"
-
-#include "point3d.hpp"
 
 class game;
 

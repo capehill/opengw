@@ -1,8 +1,10 @@
-#include "scene.hpp"
+#include "defines.hpp"
+#include "font.hpp"
 #include "game.hpp"
 #include "highscore.hpp"
 #include "menuSelectGameType.hpp"
 #include "players.hpp"
+#include "scene.hpp"
 #include "settings.hpp"
 
 #include "SDL_opengl.h"

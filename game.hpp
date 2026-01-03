@@ -1,27 +1,23 @@
 #pragma once
 
-// TODO: remove unneeded headers
-#include "attractor.hpp"
-#include "controls.hpp"
-#include "defines.hpp"
-#include "entity.hpp"
-#include "font.hpp"
-#include "grid.hpp"
-#include "mathutils.hpp"
-#include "particle.hpp"
 #include "point3d.hpp"
-#include "scene.hpp"
 #include "sound.hpp"
+#include "vector.hpp"
 
 #include <memory>
 #include <vector>
 
 // Forward declare pointers
+class attractor;
 class blackholes;
 class bomb;
 class camera;
+class controls;
 class enemies;
+class entity;
+class grid;
 class highscore;
+class particle;
 class player;
 class players;
 class spawner;

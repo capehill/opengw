@@ -1,5 +1,6 @@
 #include "enemies.hpp"
 #include "entityblackhole.hpp"
+#include "entityline.hpp"
 #include "game.hpp"
 
 #include <cstdio>

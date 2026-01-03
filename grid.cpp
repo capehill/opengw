@@ -4,8 +4,10 @@
 // Greatly expanded upon (added attractors, non-rectangular grids, etc) by Peter Hirschberg
 //
 
-#include "grid.hpp"
+#include "attractor.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "mathutils.hpp"
 #include "point3d.hpp"
 #include "profiler.hpp"
 #include "settings.hpp"

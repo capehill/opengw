@@ -1,3 +1,4 @@
+#include "attractor.hpp"
 #include "blackholes.hpp"
 #include "enemies.hpp"
 #include "entityblackhole.hpp"

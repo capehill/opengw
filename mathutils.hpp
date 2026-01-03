@@ -1,6 +1,5 @@
 #pragma once
 
-#include "defines.hpp"
 #include "point3d.hpp"
 
 namespace mathutils

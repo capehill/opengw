@@ -1,4 +1,6 @@
+#include "attractor.hpp"
 #include "bomb.hpp"
+#include "defines.hpp"
 #include "enemies.hpp"
 #include "game.hpp"
 

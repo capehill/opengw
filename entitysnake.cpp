@@ -1,6 +1,10 @@
+#include "defines.hpp"
 #include "entitysnake.hpp"
 #include "enemies.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "particle.hpp"
+#include "scene.hpp"
 
 #include "SDL_opengl.h"
 

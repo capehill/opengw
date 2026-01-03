@@ -2,6 +2,7 @@
 #include "enemies.hpp"
 #include "entitytinyspinner.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "players.hpp"
 #include "sincos.hpp"
 

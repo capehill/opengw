@@ -1,6 +1,7 @@
 #include "entitymayfly.hpp"
 #include "game.hpp"
 #include "players.hpp"
+#include "scene.hpp"
 
 #include "SDL_opengl.h"
 

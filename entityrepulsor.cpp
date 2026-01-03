@@ -1,8 +1,10 @@
+#include "defines.hpp"
 #include "entityrepulsor.hpp"
 #include "enemies.hpp"
 #include "entityPlayer1.hpp"
 #include "entityline.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "players.hpp"
 
 class entityRepulsorShieldLine : public entity

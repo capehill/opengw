@@ -1,18 +1,10 @@
 #pragma once
 
-#include "attractor.hpp"
-#include "camera.hpp"
-#include "controls.hpp"
-#include "defines.hpp"
 #include "entity.hpp"
-#include "entityline.hpp"
-#include "grid.hpp"
-#include "mathutils.hpp"
-#include "particle.hpp"
-#include "player.hpp"
-#include "point3d.hpp"
 
+class entityLine;
 class game;
+class Point3d;
 
 const int numEnemyWanderer = 100;
 const int numEnemyGrunt = 200;

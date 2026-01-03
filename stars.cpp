@@ -1,5 +1,7 @@
-#include "stars.hpp"
 #include "game.hpp"
+#include "grid.hpp"
+#include "mathutils.hpp"
+#include "stars.hpp"
 
 #include "SDL_opengl.h"
 

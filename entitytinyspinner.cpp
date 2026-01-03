@@ -1,5 +1,6 @@
 #include "entitytinyspinner.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 #include "players.hpp"
 
 entityTinySpinner::entityTinySpinner(const game& gameRef)

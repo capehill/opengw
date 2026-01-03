@@ -1,6 +1,7 @@
 #include "entityPlayer1.hpp"
 #include "entityplayermissile.hpp"
 #include "game.hpp"
+#include "grid.hpp"
 
 entityPlayer1::entityPlayer1(const game& gameRef)
     : player(), mGame(gameRef)
