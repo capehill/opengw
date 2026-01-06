@@ -4,7 +4,7 @@
 
 class entityLine;
 class game;
-class Point3d;
+struct Point3d;
 
 const int numEnemyWanderer = 100;
 const int numEnemyGrunt = 200;
