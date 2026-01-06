@@ -2,7 +2,6 @@
 #include "entityproton.hpp"
 #include "game.hpp"
 #include "players.hpp"
-#include "sincos.hpp"
 
 entityProton::entityProton(void)
 {

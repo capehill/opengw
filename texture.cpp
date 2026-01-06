@@ -1,5 +1,4 @@
 #include "texture.hpp"
-#include "game.hpp"
 #include "lodepng.h"
 
 #include <SDL3/SDL_opengl.h>

@@ -3,7 +3,6 @@
 #include "enemies.hpp"
 #include "entityblackhole.hpp"
 #include "game.hpp"
-#include "particle.hpp"
 #include "players.hpp"
 
 #include <algorithm>
