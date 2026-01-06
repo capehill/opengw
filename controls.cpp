@@ -1,10 +1,7 @@
 #include "controls.hpp"
-#include "mathutils.hpp"
-#include "scene.hpp"
 
 #include <SDL.h>
 
-#include <algorithm>
 #include <cstdio>
 
 extern const Uint8* keyboardState;

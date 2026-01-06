@@ -1,5 +1,4 @@
 #include "sound.hpp"
-#include "game.hpp"
 
 #include <cstdio>
 

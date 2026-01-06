@@ -1,5 +1,4 @@
 #include "controls.hpp"
-#include "defines.hpp"
 #include "game.hpp"
 #include "scene.hpp"
 #include "settings.hpp"

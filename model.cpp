@@ -1,5 +1,4 @@
 #include "model.hpp"
-#include "mathutils.hpp"
 
 #include "SDL_opengl.h"
 

@@ -6,6 +6,8 @@
 #include "entityPlayer4.hpp"
 #include "game.hpp"
 
+#include <cstdio>
+
 std::unique_ptr<player> players::mPlayer1;
 std::unique_ptr<player> players::mPlayer2;
 std::unique_ptr<player> players::mPlayer3;

@@ -1,5 +1,4 @@
 #include "entityweaver.hpp"
-#include "entityPlayer1.hpp"
 #include "game.hpp"
 #include "players.hpp"
 

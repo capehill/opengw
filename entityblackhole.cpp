@@ -4,7 +4,6 @@
 #include "enemies.hpp"
 #include "game.hpp"
 #include "grid.hpp"
-#include "particle.hpp"
 #include "players.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
