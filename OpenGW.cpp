@@ -5,7 +5,14 @@
 #include "blur.hpp"
 #include "sincos.hpp"
 
+#include <SDL3/SDL_opengl.h>
+
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
+
 #include <SDL3/SDL.h>
 
 #include <cstdio>
